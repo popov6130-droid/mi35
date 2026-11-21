@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1012"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Ми-35М — системы в 3D</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
@@ -169,15 +169,102 @@ body.fs .top,body.fs .seg,body.fs .tabbar{display:none}
 body.fs .stage{margin:0;border-radius:0;border:0}
 body.fs .fabs{top:calc(8px + var(--sat))}
 @media (min-width:760px){.stage{margin:0 16px}.seg,.top{max-width:none}.sheet{left:auto;width:420px;right:12px;bottom:12px;border-radius:22px;height:calc(var(--sh,40%) - 12px)}.scroll{padding-left:max(14px,calc(50% - 380px));padding-right:max(14px,calc(50% - 380px))}}
+
+/* Технический атлас */
+:root{
+  --bg:#101718;--bg2:#0b1213;--surf:#182325;--surf2:#1c2a2a;--surf3:#243634;
+  --line:#2b3b39;--line2:#3d514d;--ink:#f1f7f4;--ink2:#b6c7bf;--ink3:#9bafa7;
+  --amber:#82ffcf;--amber2:#acf9d9;--amber-ink:#092319;
+}
+.top{padding-inline:16px;min-height:56px}
+.logo{font-size:16px;color:var(--ink2)}
+.logo b{display:none}
+.syspick{min-height:44px;padding-inline:12px;font-size:13px}
+.scene-header{margin:0 16px 10px}
+.scene-header h1{font-size:clamp(26px,7vw,34px);line-height:1.08;letter-spacing:-.035em;margin:0;overflow-wrap:anywhere}
+.scene-header p{font-size:13px;color:var(--ink2);margin:4px 0 0}
+.scene-bar{margin:0 16px 9px;display:grid;gap:7px}
+.scene-bar .seg{margin:0;border-radius:11px;background:none;border:0;padding:0;gap:5px}
+.scene-bar .seg button{background:var(--surf);border:1px solid var(--line);min-height:42px;border-radius:9px}
+.scene-bar .seg button.on,.hull-controls button[aria-pressed="true"]{background:#19362c;color:var(--amber);border-color:#4e9b7d;box-shadow:none}
+.hull-controls{display:flex;gap:5px;padding:3px;border:1px solid var(--line);border-radius:11px;background:var(--bg2)}
+.hull-controls button{flex:1;min-height:38px;border-radius:8px;border:1px solid transparent;font-size:13px;font-weight:700;color:var(--ink2)}
+.stage{
+  margin:0 12px;border-color:#2b3e39;
+  background:radial-gradient(circle,rgba(147,193,178,.18) .75px,transparent 1px) 0 0/20px 20px,
+             radial-gradient(90% 80% at 49% 37%,#142421,#0b1112 76%);
+}
+.stage::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(6,12,13,.34),transparent 55%)}
+.sheet{background:rgba(20,31,32,.97);border-color:#3a5049;box-shadow:0 -8px 28px #0005}
+.stage.exterior .sheet{display:none}
+.fabs{right:7px;top:7px;gap:4px;flex-direction:row}
+.viewmenu{top:56px;right:7px}
+.fab{width:44px;height:44px;border-radius:10px;background:rgba(20,32,32,.88)}
+.hint{left:10px;right:10px;top:59px;color:var(--ink3);font-size:11.5px;line-height:1.3}
+.chip.on{background:#19362c;color:var(--amber);border-color:#4e9b7d}
+.chip.sub.on{background:#19362c;color:var(--amber)}
+.list .bt.li.on,.sgrid button.on{background:#19362c;border-color:#4e9b7d}
+.tabbar{margin:8px 12px 0;padding:5px 6px calc(6px + var(--sab));border:1px solid var(--line);border-radius:17px 17px 0 0;background:var(--surf);gap:4px}
+.tabbar button{min-height:49px}
+.tabbar button.on{background:#19362c;color:var(--amber)}
+.tabbar button svg{width:20px;height:20px}
+.scroll{padding-inline:16px}
+.h1{font-size:34px;letter-spacing:-.035em}
+.theory{max-width:70ch;line-height:1.65}
+.theory h2{font-size:22px;color:var(--ink)}
+.theory-hero{padding:16px;border:1px solid var(--line2);background:var(--surf);border-radius:16px}
+.theory-hero h2{margin-top:0}
+.theory-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.theory-actions .bt{padding:0 11px;font-size:13px}
+.theory table{table-layout:fixed}
+.theory td:first-child{overflow-wrap:anywhere}
+.theory td:last-child{width:33%;white-space:normal;font-variant-numeric:tabular-nums}
+.qcard{background:var(--bg);border:1px solid var(--line);border-radius:17px}
+.qtext{font-size:clamp(20px,5.7vw,27px);letter-spacing:-.025em;line-height:1.23}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.opt{min-height:68px;padding:7px 8px;gap:7px;line-height:1.35;overflow-wrap:anywhere}
+.opt .k{width:24px;height:24px;align-self:flex-start}
+.opt.ok{background:#19362c;border-color:#82ffcf}
+.opt.ok .k{background:#82ffcf;color:var(--amber-ink)}
+.nstat div{padding:8px 9px}
+.nstat b{font-size:21px}
+body.fs .scene-header,body.fs .scene-bar{display:none}
+@media (min-width:760px){
+  .scene-header,.scene-bar{margin-inline:20px}
+  .scene-bar{grid-template-columns:2fr 1fr;max-width:645px}
+  .stage{margin-inline:16px}
+  .scroll{padding-inline:max(16px,calc(50% - 380px))}
+  .tabbar{align-self:center;width:min(calc(100% - 32px),660px)}
+}
+@media (max-height:720px){
+  .top{min-height:47px;padding-bottom:5px}
+  .scene-header{margin-bottom:7px}
+  .scene-header h1{font-size:24px}
+  .scene-header p{display:none}
+  .scene-bar{gap:4px;margin-bottom:5px}
+  .scene-bar .seg button,.hull-controls button{min-height:34px}
+  .fabs{gap:2px}
+  .fab{width:36px;height:36px}
+  .hint{top:48px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
 </style></head><body>
 <div id="app">
 <!-- 3D -->
 <section class="page" id="p3d">
 <header class="top"><div class="logo">Ми‑35М <b>3D</b></div><button class="syspick" data-open="sys" aria-label="Выбрать систему"><i class="dot" id="sysDot"></i><span id="sysName">Все системы</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button></header>
+<div class="scene-header"><h1 id="sceneName"></h1><p id="sceneContext"></p></div>
+<div class="scene-bar">
 <nav class="seg" id="modes"><button data-mode="scheme">Схема</button><button data-mode="steps">Шаги</button><button data-mode="fails">Отказы</button><button data-mode="quiz">Тест</button></nav>
+<div class="hull-controls" id="hullControls" role="group" aria-label="Вид корпуса">
+<button id="hullOutside" type="button" aria-pressed="false">Корпус</button>
+<button id="hullInside" type="button" aria-pressed="true">Внутри</button>
+</div></div>
 <div class="stage" id="stage">
 <div id="wrap"><canvas id="cv"></canvas></div>
-<div class="hint" id="hint">Один палец — вращать, два — приблизить и сдвинуть. Нажми на шарик агрегата.</div>
+<div class="hint" id="hint">Поверни модель пальцем. Нажми на узел для приближения.</div>
 <div class="fabs">
 <button class="fab" id="vbtn" aria-label="Вид"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></button>
 <button class="fab" data-v="in" aria-label="Приблизить">＋</button>
@@ -194,7 +281,7 @@ body.fs .fabs{top:calc(8px + var(--sat))}
 <div id="ov" class="hide"><button id="ovX" aria-label="Закрыть">✕</button><div id="ovT"></div><div id="ovB"></div><div id="ovN"><button class="bt" id="prev">‹ Назад</button><span id="ovC"></span><button class="bt on" id="next">Далее ›</button></div></div>
 <div id="pn"></div>
 <details class="leg" id="legW"><summary>Условные обозначения</summary><div id="lg"></div></details>
-<p class="note">Схемы учебные: расположение агрегатов условное, связи — по книге (гл. 7, 11) и РЛЭ Ми‑35М. При расхождении цифр верь РЛЭ.</p>
+<p class="note">Расположение агрегатов на учебной модели условное. Описания систем и числовые данные сверяются с РЛЭ Ми‑35М.</p>
 </div></div>
 </div>
 </section>
@@ -291,6 +378,24 @@ const F_TH="<h2>Общий принцип работы</h2>\n<p>Двигател
 const O_TH="<h2>Общий принцип работы</h2>\n<p>У каждого двигателя своя отдельная маслосистема. Масло Б-3В ходит по кругу: <b>бак → насос → фильтр → опоры и приводы → откачка → радиатор → бак</b>. Оно смазывает, охлаждает, выносит продукты износа, снижает шум и защищает от коррозии.</p>\n<h2>Нагнетание (жёлтые трубы)</h2>\n<ol>\n<li>Из маслобака масло самотёком идёт к нагнетающему насосу агрегата МА-78.</li>\n<li>Насос подаёт его через запорный клапан ЗК-2 в фильтр (сетка 0,063 мм).</li>\n<li>Редукционный клапан в насосе держит давление 3–4 кгс/см².</li>\n<li>Из фильтра масло расходится: по каналам коробки приводов — на коробку, центральный привод и 1-ю опору; по внешним трубам — на стартер, 2-ю и 3-ю опоры; через отсечной клапан — на 4-ю и 5-ю опоры.</li>\n<li>Каждая линия кончается форсункой с жиклёром, он дозирует масло на узел.</li>\n</ol>\n<h2>Откачка (красные и синяя трубы)</h2>\n<ul>\n<li><b>Опоры 2, 3, 4, 5:</b> три откачивающих насоса МА-78 → ЗК-1 → сигнализатор стружки СС-78 → радиатор → бак.</li>\n<li><b>1-я опора и центральный привод:</b> два насоса МА-78 → прямо в бак, мимо радиатора.</li>\n<li><b>Коробка приводов:</b> насос НМО-78 → прямо в бак.</li>\n</ul>\n<p>Откачивающих насосов пять, а нагнетающий один: масло возвращается вспененным, с воздухом, и его объём больше.</p>\n<h2>Что защищает систему</h2>\n<ul>\n<li><b>ЗК-1 и ЗК-2</b> — на стоящем двигателе не дают маслу стечь из радиатора и бака в двигатель.</li>\n<li><b>Отсечной клапан</b> — при оборотах ТК ниже 15 % закрывает масло к 4-й и 5-й опорам, чтобы оно не ушло в выхлопной патрубок.</li>\n<li><b>Перепускной клапан</b> — при давлении в откачке выше 1,25 кгс/см² пускает масло мимо радиатора.</li>\n<li><b>Термоклапан радиатора</b> — на холодном масле открыт (мимо сот), закрывается при 60 ± 5 °C.</li>\n<li><b>Сапун</b> — держит разрежение в коробке приводов для работы уплотнений.</li>\n</ul>\n<h2>Контроль в кабине</h2>\n<ul>\n<li><b>Давление</b> — датчик ИДТ-8К на подводе к 4-й и 5-й опорам.</li>\n<li><b>Температура</b> — датчик П-2Т на откачке перед радиатором (самое горячее масло).</li>\n<li><b>Стружка</b> — СС-78, жёлтые табло СТРУЖКА В МАСЛЕ левого и правого двигателя.</li>\n</ul>\n<h2>Цифры</h2>\n<div class=\"card\"><table>\n<tr><td>Давление на малом газе</td><td>не менее 2 кгс/см²</td></tr>\n<tr><td>Давление на прогреве (МГ), допускается</td><td>до 4,8 кгс/см²</td></tr>\n<tr><td>Давление на рабочих режимах</td><td>3–4 кгс/см²</td></tr>\n<tr><td>Запуск без подогрева, t масла</td><td>не ниже −40 °C</td></tr>\n<tr><td>Выход на режим выше МГ</td><td>не ниже +30 °C</td></tr>\n<tr><td>Длительная работа на II крейсерском и выше</td><td>не ниже +70 °C</td></tr>\n<tr><td>Рекомендуемая температура</td><td>+80…140 °C</td></tr>\n<tr><td>Максимальная температура</td><td>+150 °C</td></tr>\n<tr><td>Расход масла</td><td>не более 0,3 л/ч</td></tr>\n<tr><td>Вместимость маслобака</td><td>13 л</td></tr>\n<tr><td>Заправка маслобака</td><td>8–11 л</td></tr>\n</table></div>\n<p class=\"note\">Схема учебная: расположение агрегатов и труб условное, связи — по главе 11 книги (рис. 11.1). При расхождении цифр верь РЛЭ.</p>\n";
 const P_TH="<h2>Общий принцип</h2>\n<p>Система не даёт льду нарастать на лопастях несущего и рулевого винтов, передних стёклах кабин, ПЗУ и входных устройствах двигателей. В разных местах лёд убирают разным теплом:</p>\n<div class=\"card\"><table>\n<tr><td>Лопасти НВ и РВ</td><td>электричество</td></tr>\n<tr><td>Передние стёкла</td><td>электричество</td></tr>\n<tr><td>ПЗУ</td><td>горячий воздух + электричество</td></tr>\n<tr><td>Вход двигателя: ВНА, кок, горизонтальные стойки</td><td>горячий воздух</td></tr>\n<tr><td>Вертикальные стойки 1-й опоры</td><td>горячее масло</td></tr>\n</table></div>\n<p>Лопастями управляет автомат <b>КВАНТ-2</b>: сам замечает лёд и сам включает обогрев. Обогрев двигателей и ПЗУ и обогрев стёкол лётчик включает вручную.</p>\n\n<h2>Автомат КВАНТ-2</h2>\n<ul>\n<li><b>Состав:</b> датчик толщины льда ДТЛ-2, датчик температуры ДКТ-1 и электронный преобразователь ПЭ-41. Оба датчика стоят в воздухозаборнике вентилятора.</li>\n<li><b>ДТЛ-2</b> — шпилька-вибратор с пьезоэлементами. Лёд на шпильке делает её тяжелее, и частота колебаний падает. Это сигнал: загорается красное табло ОБЛЕДЕНЕНИЕ, включается обогрев лопастей. При льде около 3 мм датчик включает собственный нагрев и сбрасывает лёд, чтобы мерить заново. Чувствительность по РЛЭ — не более 1 мм.</li>\n<li><b>ДКТ-1</b> — цифровой термометр наружного воздуха. По его температуре автомат выбирает длительность и частоту обогрева. При температуре выше +20 °C система отключается сама.</li>\n<li><b>ПЭ-41</b> включает секции лопастей по очереди, а не все сразу — так экономится мощность генераторов.</li>\n<li>После выхода из зоны обледенения автомат снимает сигнал и, доработав заключительные циклы, выключает обогрев.</li>\n</ul>\n\n<h2>Лопасти несущего и рулевого винтов</h2>\n<ul>\n<li><b>НВ:</b> на носке каждой лопасти приклеена нагревательная накладка из токопроводящей ткани, 4 секции. Секции включаются поочерёдно и обогревают носок по всему периметру. Накладка идёт по всей длине лопасти, на 20 % хорды.</li>\n<li><b>РВ:</b> по 2 секции на лопасти, верхняя и нижняя, из тонких полосок нержавеющей стали.</li>\n<li><b>Токосъёмники</b> передают ток с неподвижного вертолёта на вращающийся винт. У НВ токосъёмник стоит над втулкой: коллектор с кольцами и щёткодержатели, сверху колпак. У РВ корпус со щётками неподвижен на хвостовом редукторе, коллектор вращается с валом.</li>\n<li><b>Цикл:</b> 6 импульсов по 5 с. При проверке табло СЕКЦИИ ЛОПАСТЕЙ НВ загораются в порядке 1, 2, 3, 4, 1, 2; одновременно работают РВ1 и РВ2.</li>\n<li><b>Защита от перегрева:</b> автомат отключает обогрев, если секция греется дольше 30 с.</li>\n<li><b>Режимы:</b> переключатель ВКЛ ПОС — АВТ (включает КВАНТ-2 по датчику) или РУЧН (включено постоянно).</li>\n</ul>\n<p>Почему греют не постоянно, а импульсами: лёд не нужно растапливать целиком. Достаточно подплавить слой у поверхности, и центробежная сила с потоком воздуха сбросят корку. Это общий принцип таких систем, в книге он не расписан.</p>\n\n<h2>Передние стёкла</h2>\n<ul>\n<li>Два обогреваемых бронестекла: у лётчика и у оператора. Стекло — два силикатных слоя, склеенных плёнкой. На внутренней поверхности нанесена прозрачная токопроводящая плёнка — это и есть нагреватель.</li>\n<li>Регулятор ТЭР-1М с термодатчиком включает нагрев, когда стекло остыло, и отключает при 30 °C.</li>\n<li>Переключатель ОБОГРЕВ СТЕКОЛ: СЛАБО — СИЛЬНО, выключение — нейтральное положение.</li>\n<li>Дополнительно: стеклоочистители с электромеханизмами ЭПК-2Т-60 и спиртовая система омыва.</li>\n</ul>\n\n<h2>ПЗУ и входные устройства двигателей</h2>\n<p>Горячий воздух отбирается от последней ступени компрессора и делится на два потока, на каждом стоит электрозаслонка 1919Т.</p>\n<ul>\n<li><b>Первый поток</b> идёт через терморегулятор и заслонку на обогрев. Чем горячее воздух, тем сильнее терморегулятор прикрывает сечение.</li>\n<li><b>У ПЗУ воздухом греются:</b> входная губа, стенки тоннеля, сепаратор и эжекторное устройство вывода пыли. Воздух попадает в кольцевой коллектор внутри губы, выходит через отверстия-сопла и кольцевую щель, обтекает губу и греет пристеночную зону тоннеля.</li>\n<li><b>У двигателя воздухом греются:</b> горизонтальные стойки первой опоры, лопатки ВНА, носовой кок и воздухозаборник термопатрона насоса-регулятора.</li>\n<li><b>Второй поток</b> идёт через свою заслонку на эжектор ПЗУ (отсос пыли). Это не обогрев, а работа самого ПЗУ.</li>\n<li><b>Электричеством у ПЗУ греются:</b> передний и задний обтекатели, носки стоек коллектора, кожух трубопровода и раструб выхода пыли. На них приклеены накладки из стеклоткани с нагревателями из нержавеющей сетки. Температуру держат регуляторы ТЭР-1М.</li>\n<li><b>Маслом греются</b> вертикальные стойки первой опоры: через них проходит горячее масло системы смазки.</li>\n</ul>\n<p>Включение — выключателями ОБОГРЕВ ДВИГ И ПЗУ ЛЕВ и ПРАВ. Открывается заслонка 1919Т — горят табло ОБОГРЕВ ЛЕВ (ПРАВ) ДВИГ ВКЛ. Одновременно подаётся питание на электрообогрев ПЗУ — горят ОБОГРЕВ ЛЕВ (ПРАВ) ПЗУ ВКЛ.</p>\n\n<h2>Правила эксплуатации (РЛЭ)</h2>\n<ul>\n<li><span class=\"q\">+5 °C и ниже.</span> Все полёты — только с включённым вручную обогревом двигателей и ПЗУ и обогревом ППД. Обогрев стёкол — в положение СЛАБО.</li>\n<li><span class=\"q\">Обледенение разрешено до −20 °C.</span> При условиях обледенения ниже −20 °C — выходить из зоны.</li>\n<li><span class=\"q\">Обогрев двигателей в полёте включать по одному.</span> Включил один, убедился, что двигатель работает устойчиво, — включай второй. Причина: при включении лёд может сорваться во вход двигателя и остановить его. Если двигатель остановился — ПОС второго не включать, выйти из зоны обледенения.</li>\n<li><span class=\"q\">Позднее включение опасно.</span> Лёд, наросший на входе, при включении сбрасывается в двигатель.</li>\n<li><span class=\"q\">Есть лёд на стёклах, а табло ОБЛЕДЕНЕНИЕ не горит.</span> Включить ПОС винтов вручную: ВКЛ ПОС — в РУЧН.</li>\n<li><span class=\"q\">Стёкла.</span> Сначала СЛАБО, СИЛЬНО — не раньше чем через 5 мин. Если СЛАБО было включено до взлёта, СИЛЬНО можно сразу. Причина по логике: холодное стекло от резкого нагрева может треснуть.</li>\n<li><span class=\"q\">Включение обогрева двигателей на земле</span> — на режиме не выше правой коррекции, а при температуре выше +15 °C не дольше 1 мин (перегрев ПЗУ). Одновременно включать ПЗУ и обогрев двигателей на малом газе запрещено.</li>\n<li><span class=\"q\">Снег при −5 °C и ниже.</span> Рулить по снегу и в снегопад с выключенной ПОС ПЗУ и двигателей, включать её перед взлётом.</li>\n<li><span class=\"q\">Снижение в условиях обледенения</span> — при оборотах ТК не ниже 86 %, чтобы хватало горячего воздуха.</li>\n<li><span class=\"q\">Отказ одного генератора.</span> ПОС лопастей НВ отключается — выходить из зоны обледенения.</li>\n<li><span class=\"q\">Что меняется при включении.</span> Температура газов растёт до 50–60 °C, обороты ТК — до 2 %: часть воздуха уходит на обогрев. Возможны лёгкие подёргивания ручки в такт переключению секций и пропадание позывных приводной станции дальше 50 км.</li>\n<li><span class=\"q\">После выхода из зоны</span> при температуре выше +5 °C ручной обогрев винтов выключить через 2–3 мин, иначе нагреватели выйдут из строя.</li>\n</ul>\n\n<h2>Отказы КВАНТ-2</h2>\n<ul>\n<li><b>Отказ ПЭ-41</b> (табло КВАНТ НЕИСПР, ПРЕОБРАЗ, ПОС НВ РВ НЕИСПР, речь «ПОС отказ»): выйти из зоны обледенения, при условиях обледенения — прекратить задание и садиться.</li>\n<li><b>Отказ ДТЛ-2</b> (табло ДАТЧИК ОБЛЕДЕН): включить обогрев вручную, РУЧН, задание продолжать.</li>\n<li><b>Отказ ДКТ-1</b> (табло ДАТЧИК ТЕМПЕР): задание продолжать, автомат греет секции импульсами по 30 с.</li>\n</ul>\n\n<h2>Цифры</h2>\n<div class=\"card\"><table>\n<tr><td>Ток секции лопасти НВ</td><td>23–35 А</td></tr>\n<tr><td>Ток пары лопастей РВ</td><td>20–30 А</td></tr>\n<tr><td>Ток электрообогрева ПЗУ</td><td>35–50 А</td></tr>\n<tr><td>Ток обогрева стёкол</td><td>15–30 А</td></tr>\n<tr><td>Цикл обогрева лопастей</td><td>6 импульсов по 5 с</td></tr>\n<tr><td>Отключение секции при перегреве</td><td>более 30 с</td></tr>\n<tr><td>КВАНТ ИСПРАВЕН после включения</td><td>до 40 с</td></tr>\n<tr><td>Система отключается при температуре</td><td>выше +20 °C</td></tr>\n<tr><td>Стекло: отключение нагрева</td><td>30 °C</td></tr>\n<tr><td>Нагреватель лопасти по хорде</td><td>20 %</td></tr>\n<tr><td>Проверка ПОС: обороты НВ</td><td>95 ± 2 %</td></tr>\n<tr><td>Повтор кнопки КОНТРОЛЬ КВАНТ</td><td>через 2 мин, далее 15 мин</td></tr>\n<tr><td>Непрерывная работа КВАНТ-2</td><td>не более 4 ч</td></tr>\n</table></div>\n<p class=\"note\">Схема учебная: расположение агрегатов и проводки условное, связи — по разделу 7.8 книги (рис. 7.33, 7.34) и РЛЭ (пп. 4.33, 8.4.4). Электрические линии показывают только, что откуда питается; откуда именно берётся питание стёкол и ПЗУ, в книге не указано. Анимация секций ускорена. При расхождении цифр верь РЛЭ.</p>\n";
 
+/* Привязки к сетке shell.json. Единицы и координаты относятся к этой учебной модели. */
+const MODEL_LAYOUT = {
+  mainRotorFoot: [-.93, 3.10, 0],
+  mainRotorHub: [-.95, 3.85, .01],
+  tailRotorHub: [11.65, 4.06, .96],
+  tailRotorMount: [11.65, 4.06, .37],
+  tailGearbox: [11.65, 4.06, -.08],
+  intermediateGearbox: [9.90, 2.31, -.08],
+  accessoryGearbox: [.75, 2.31, -.08],
+  generatorOffset: .51,
+  coolingFan: [-1.75, 3.05, 0],
+  gearboxOilCoolers: [[-2.05, 3.0, .42], [-2.05, 3.0, -.42]],
+  mainGear: [
+    {strutTop:[.57,.36,.77], strutBottom:[.59,-.18,1.54], brake:[.59,-.19,1.31]},
+    {strutTop:[.58,.35,-.84], strutBottom:[.60,-.19,-1.62], brake:[.60,-.21,-1.39]}
+  ]
+};
+
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');let Wd=360,H=480;
 function size(){Wd=cv.clientWidth||360;H=cv.clientHeight||480;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Wd*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
 addEventListener('resize',size);
@@ -307,7 +412,7 @@ const invT=T=>({s:[1/T.s[0],1/T.s[1],1/T.s[2]],t:[-T.t[0]/T.s[0],-T.t[1]/T.s[1],
 function poly(w,fill,alpha,stroke,bias){CUR.push({w:XF?w.map(xf):w,fill,a:alpha==null?1:alpha,s:stroke,b:bias||0});}
 const SHC={b:['#9fb8b6',.3],g:['#7fb6e6',.3],w:['#565e5f',.75],n:['#6a7475',.75],r:['#8a9a99',.45],t:['#8a9a99',.45]};let SHT=null;
 function shell(o){o=o||{};if(!SHT){SHT=[];for(const p of SHELL){const v=p.v,f=p.f;for(let i=0;i<f.length;i+=3){const w=[0,1,2].map(k=>{const j=f[i+k]*3;return[v[j]/100,v[j+1]/100,v[j+2]/100];});const n=nrm(crs(sub3(w[1],w[0]),sub3(w[2],w[0])));SHT.push({m:p.m,w,l:lit(n)});}}}
-for(const t of SHT){if(o.skip&&o.skip.includes(t.m))continue;const c=SHC[t.m];CUR.push({w:XF?t.w.map(xf):t.w,fill:shade(c[0],t.l),a:c[1]*(o.k||1),s:t.m==='b'?'rgba(205,228,225,.13)':null,b:-.3,c:1});}}
+for(const t of SHT){if(o.skip&&o.skip.includes(t.m))continue;const c=SHC[t.m];CUR.push({w:XF?t.w.map(xf):t.w,fill:shade(c[0],t.l),a:c[1]*(o.k||1),s:null,b:-.3,c:1,shell:true,material:t.m});}}
 const sub3=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],crs=(u,v)=>[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],nrm=v=>{const l=Math.hypot(v[0],v[1],v[2])||1;return[v[0]/l,v[1]/l,v[2]/l];};
 const cen=s=>{const c=[0,0,0];for(const p of s){c[0]+=p[0];c[1]+=p[1];c[2]+=p[2];}return[c[0]/s.length,c[1]/s.length,c[2]/s.length];};
 function loft(secs,col,alpha,o){o=o||{};const cs2=secs.map(cen);
@@ -345,7 +450,7 @@ let pipes=[];
 function rpath(pts,r){const out=[pts[0]];for(let i=1;i<pts.length-1;i++){const p=pts[i],a=pts[i-1],b=pts[i+1];const la=Math.hypot(...sub3(a,p)),lb=Math.hypot(...sub3(b,p));const rr=Math.min(r,la/2,lb/2);const A=[0,1,2].map(k=>p[k]+(a[k]-p[k])*rr/la),B=[0,1,2].map(k=>p[k]+(b[k]-p[k])*rr/lb);for(let k=0;k<=5;k++){const t=k/5,m=1-t;out.push([0,1,2].map(q=>m*m*A[q]+2*m*t*p[q]+t*t*B[q]));}}out.push(pts[pts.length-1]);return out;}
 function pipe(pts,col,g,o){o=o||{};const S=XF?Math.abs(XF.s[0]):1;if(XF)pts=pts.map(xf);const rp=rpath(pts,(o.r||.14)*S);const sub=[];let len=0;for(let i=0;i<rp.length-1;i++){const a=rp[i],b=rp[i+1];const l=Math.hypot(...sub3(b,a));const n=Math.max(1,Math.ceil(l/(.3*Math.max(S,.5))));for(let k=0;k<n;k++)sub.push([0,1,2].map(q=>a[q]+(b[q]-a[q])*k/n));len+=l;}sub.push(rp[rp.length-1]);pipes.push({sub,col,g,w:(o.w||.08)*S,arrow:o.arrow!==false,len});}
 
-const SYSS={};let CULL=1;const vis=o=>!(st.x.show&&o.sys&&!st.x.show.includes(o.sys));let SYS=null,mode='scheme',st=null,STATIC=[],sel=null,HL=null,T=0,paused=false,lbm=1,stepI=0,failI=-1,filtI=0,quiz=null,frameN=0;
+const SYSS={};let CULL=1;const vis=o=>(!o.detail||o.detail===st.x.detail)&&!(st.x.show&&o.sys&&!st.x.show.includes(o.sys));let labelHits=[],exterior=false,exteriorMesh=[],SYS=null,mode='scheme',st=null,STATIC=[],sel=null,HL=null,T=0,paused=false,lbm=1,stepI=0,failI=-1,filtI=0,quiz=null,frameN=0;
 const $=id=>document.getElementById(id);
 const BALL={v:'#c0392b',c:'#c9a21a',d:'#2e9e6a',e:'#3b82c4',f:'#8a8880'};
 const comp=n=>SYS.comps.find(c=>c.n===n);
@@ -358,35 +463,43 @@ function showOv(t,h,nav){if(!(mode==='quiz'))$('ov').classList.remove('big');$('
 function hideOv(){$('ov').classList.add('hide');$('ov').classList.remove('big');}
 function renderTab(){const el=$('tab');if(!SYS.tabs||!SYS.tabs.length){el.innerHTML='';return;}el.innerHTML=SYS.tabs.map(t=>'<div class="tb '+t.c+(st.tab.has(t.id)?' lit':'')+'" data-id="'+t.id+'">'+(st.gauge[t.id]||t.t)+'</div>').join('');}
 function tabDyn(){if(!SYS.tabDyn)return;const m=SYS.tabDyn(T,st);if(!m)return;for(const id in m){const e=document.querySelector('.tb[data-id="'+id+'"]');if(e)e.classList.toggle('lit',!!m[id]);}}
-function tween(){const k=.14;for(let i=0;i<3;i++)V.tg[i]+=(VT.tg[i]-V.tg[i])*k;V.yaw+=(VT.yaw-V.yaw)*k;V.pitch+=(VT.pitch-V.pitch)*k;V.zoom+=(VT.zoom-V.zoom)*k;const shp=SHEETPX();CYF+=(Math.max(.22,Math.min(.5,(H-shp)/(2*H)+.02))-CYF)*k;}
-function pill(text,x,y,hl){ctx.font=(hl?'600 ':'')+'11px sans-serif';const w=ctx.measureText(text).width+8;ctx.globalAlpha=.92;ctx.fillStyle=SURF;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x-w/2,y-8,w,16,4);else ctx.rect(x-w/2,y-8,w,16);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=hl?'#f2b01e':'rgba(150,175,175,.6)';ctx.lineWidth=hl?1.3:.6;ctx.stroke();ctx.fillStyle=TXT;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y+.5);}
+function tween(){const k=.14;for(let i=0;i<3;i++)V.tg[i]+=(VT.tg[i]-V.tg[i])*k;V.yaw+=(VT.yaw-V.yaw)*k;V.pitch+=(VT.pitch-V.pitch)*k;V.zoom+=(VT.zoom-V.zoom)*k;const shp=exterior?0:SHEETPX();CYF+=(Math.max(.22,Math.min(.5,(H-shp)/(2*H)+.02))-CYF)*k;}
+function pill(text,x,y,hl){ctx.font=(hl?'600 ':'')+'11px sans-serif';const w=ctx.measureText(text).width+8;ctx.globalAlpha=.92;ctx.fillStyle=SURF;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x-w/2,y-8,w,16,4);else ctx.rect(x-w/2,y-8,w,16);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=hl?'#82ffcf':'rgba(150,175,175,.6)';ctx.lineWidth=hl?1.3:.6;ctx.stroke();ctx.fillStyle=TXT;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y+.5);}
 function badge(n,p,hl){const q=P(xf(p));ctx.beginPath();ctx.arc(q[0],q[1],8.5,0,7);ctx.fillStyle=hl?'#E8A020':'#3a3936';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='#fff';ctx.font='600 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n,q[0],q[1]+.5);}
 function frame(){requestAnimationFrame(frame);if(!SYS||!st)return;if(!paused)T+=.016;frameN++;tween();ctx.clearRect(0,0,Wd,H);
-CUR=[];SYS.dyn(T,st);const all=STATIC.concat(CUR);const items=[];
+CUR=[];
+if(!exterior)SYS.dyn(T,st);
+const all=exterior?exteriorMesh:STATIC.concat(CUR);
+const items=[];
 for(const m of all){const q=m.w.map(P);if(m.c&&((q[1][0]-q[0][0])*(q[2][1]-q[0][1])-(q[1][1]-q[0][1])*(q[2][0]-q[0][0]))*CULL>0)continue;let z=0;for(const p of q)z+=p[2];items.push({z:z/q.length+m.b,t:0,m,q});}
-for(const f of pipes){if(!vis(f))continue;const stat=SYS.staticG.includes(f.g);const on=!stat&&st.on.has(f.g);let al=(on||stat)?1:.17;if(HL&&!HL.has(f.g))al*=.35;const pr=f.sub.map(P);let cum=0;for(let i=1;i<pr.length;i++){const a=pr[i-1],b=pr[i];const sl=Math.hypot(b[0]-a[0],b[1]-a[1]);items.push({z:(a[2]+b[2])/2+.04,t:1,a,b,c0:cum,f,on,al,w:Math.max(1.8,f.w*(a[3]+b[3])/2)});cum+=sl;}
+if(!exterior)for(const f of pipes){if(!vis(f))continue;const stat=SYS.staticG.includes(f.g);const on=!stat&&st.on.has(f.g);let al=(on||stat)?1:.17;if(HL&&!HL.has(f.g))al*=.35;const pr=f.sub.map(P);let cum=0;for(let i=1;i<pr.length;i++){const a=pr[i-1],b=pr[i];const sl=Math.hypot(b[0]-a[0],b[1]-a[1]);items.push({z:(a[2]+b[2])/2+.04,t:1,a,b,c0:cum,f,on,al,w:Math.max(1.8,f.w*(a[3]+b[3])/2)});cum+=sl;}
 if(on&&f.arrow&&f.len>.9){const m=Math.floor(pr.length/2);items.push({z:(pr[m-1][2]+pr[m][2])/2+.06,t:2,a:pr[m-1],b:pr[m],f,al});}}
-for(const c of SYS.comps){if(!c.k||!vis(c))continue;const q=P(c.p);items.push({z:q[2]+.1,t:3,q,c});}
+if(!exterior)for(const c of SYS.comps){if(!c.k||!vis(c))continue;const q=P(c.p);items.push({z:q[2]+.1,t:3,q,c});}
 items.sort((a,b)=>a.z-b.z);
-for(const it of items){if(it.t===0){const m=it.m,q=it.q;ctx.globalAlpha=m.a;ctx.beginPath();ctx.moveTo(q[0][0],q[0][1]);for(let i=1;i<q.length;i++)ctx.lineTo(q[i][0],q[i][1]);ctx.closePath();ctx.fillStyle=m.fill;ctx.fill();if(m.s){ctx.strokeStyle=m.s;ctx.lineWidth=.6;ctx.stroke();}else if(m.a===1){ctx.strokeStyle=m.fill;ctx.lineWidth=.7;ctx.stroke();}ctx.globalAlpha=1;}
+for(const it of items){if(it.t===0){const m=it.m,q=it.q;ctx.globalAlpha=m.shell?(exterior?(m.material==='g'?.86:.98):m.a*.39):m.a;ctx.beginPath();ctx.moveTo(q[0][0],q[0][1]);for(let i=1;i<q.length;i++)ctx.lineTo(q[i][0],q[i][1]);ctx.closePath();ctx.fillStyle=m.fill;ctx.fill();if(m.s){ctx.strokeStyle=m.s;ctx.lineWidth=.6;ctx.stroke();}else if(m.a===1){ctx.strokeStyle=m.fill;ctx.lineWidth=.7;ctx.stroke();}ctx.globalAlpha=1;}
 else if(it.t===1){const{a,b,f,w}=it;ctx.globalAlpha=it.al;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=w+1.8;ctx.stroke();ctx.strokeStyle=f.col;ctx.lineWidth=w;ctx.stroke();ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=Math.max(.8,w*.3);ctx.beginPath();ctx.moveTo(a[0],a[1]-w*.22);ctx.lineTo(b[0],b[1]-w*.22);ctx.stroke();if(it.on){ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.lineCap='butt';ctx.setLineDash([5,9]);ctx.lineDashOffset=it.c0-T*40;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=Math.max(1.1,w*.36);ctx.stroke();ctx.setLineDash([]);}ctx.globalAlpha=1;}
 else if(it.t===2){const{a,b,f}=it;const an=Math.atan2(b[1]-a[1],b[0]-a[0]);const s=Math.max(5,f.w*a[3]*1.4);ctx.globalAlpha=it.al;ctx.save();ctx.translate(b[0],b[1]);ctx.rotate(an);ctx.beginPath();ctx.moveTo(s,0);ctx.lineTo(-s*.6,s*.75);ctx.lineTo(-s*.6,-s*.75);ctx.closePath();ctx.fillStyle=f.col;ctx.fill();ctx.strokeStyle='rgba(0,0,0,.55)';ctx.lineWidth=.8;ctx.stroke();ctx.restore();ctx.globalAlpha=1;}
 else{const q=it.q,r=Math.max(4,(it.c.br||.075)*q[3]);const col=BALL[it.c.k]||'#888888';const g=ctx.createRadialGradient(q[0]-r*.35,q[1]-r*.4,r*.1,q[0],q[1],r);g.addColorStop(0,'#ffffff');g.addColorStop(.35,col);g.addColorStop(1,hx(col,.55));ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='rgba(0,0,0,.6)';ctx.lineWidth=1;ctx.stroke();}}
+labelHits=[];
+if(exterior)return;
 if(SYS.over)SYS.over(T,st);
 for(const n of st.broken){const c=comp(n);if(!c)continue;const q=P(c.p),r=13+2*Math.sin(T*6);ctx.strokeStyle='#e5342b';ctx.lineWidth=3;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(q[0]-6,q[1]-6);ctx.lineTo(q[0]+6,q[1]+6);ctx.moveTo(q[0]+6,q[1]-6);ctx.lineTo(q[0]-6,q[1]+6);ctx.stroke();}
-const sc=sel&&comp(sel);if(sc){const q=P(sc.p),r=15+3*Math.sin(T*5);ctx.strokeStyle='rgba(232,160,32,.35)';ctx.lineWidth=7;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke();ctx.strokeStyle='#E8A020';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke();}
-const hideNames=quiz&&mode==='quiz';const L=[];for(const c of SYS.comps){const isS=c.n===sel;if(hideNames||!vis(c))continue;if(!(isS||(lbm&&c.m)))continue;const a=P(c.p),q=P(c.lp||[c.p[0],c.p[1]+.3,c.p[2]]);L.push({c,isS,ax:a[0],ay:a[1],x:q[0],y:q[1]-6,t:isS?c.n:(c.s||c.n)});}
-L.sort((a,b)=>(b.isS-a.isS)||a.y-b.y);const placed=[];ctx.font='11px sans-serif';for(const l of L){const w=ctx.measureText(l.t).width+12;let tries=0;while(tries<6&&placed.some(p=>Math.abs(p.x-l.x)<(p.w+w)/2&&Math.abs(p.y-l.y)<17)){l.y-=17;tries++;}placed.push({x:l.x,y:l.y,w});ctx.strokeStyle='rgba(170,195,195,.75)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(l.ax,l.ay);ctx.lineTo(l.x,l.y+8);ctx.stroke();pill(l.t,l.x,l.y,l.isS);}
+const sc=sel&&comp(sel);if(sc){const q=P(sc.p),r=15+3*Math.sin(T*5);ctx.strokeStyle='rgba(130,255,207,.28)';ctx.lineWidth=7;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke();ctx.strokeStyle='#82ffcf';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(q[0],q[1],r,0,7);ctx.stroke();}
+const hideNames=quiz&&mode==='quiz';const L=[];for(const c of SYS.comps){const isS=c.n===sel;if(hideNames||!vis(c))continue;if(!(isS||(lbm&&c.m)))continue;const a=P(c.p),q=P(c.lp||[c.p[0],c.p[1]+.3,c.p[2]]);if(a[0]<-12||a[0]>Wd+12||a[1]<72||a[1]>H-SHEETPX())continue;L.push({c,isS,ax:a[0],ay:a[1],x:q[0],y:q[1]-6,t:isS?c.n:(c.s||c.n)});}
+L.sort((a,b)=>(b.isS-a.isS)||a.y-b.y);const placed=labelHits;ctx.font='11px sans-serif';for(const l of L){const w=ctx.measureText(l.t).width+12;l.x=Math.max(w/2+4,Math.min(Wd-w/2-4,l.x));l.y=Math.max(77,l.y);let tries=0;while(tries<6&&placed.some(p=>Math.abs(p.x-l.x)<(p.w+w)/2&&Math.abs(p.y-l.y)<17)){l.y-=17;tries++;}if(l.y<72&&!l.isS)continue;placed.push({x:l.x,y:l.y,w,c:l.c});ctx.strokeStyle='rgba(170,195,195,.75)';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(l.ax,l.ay);ctx.lineTo(l.x,l.y+8);ctx.stroke();pill(l.t,l.x,l.y,l.isS);}
 if(frameN%6===0)tabDyn();}
 /* interaction */
 let drag=null,moved=0,pinch=null;const pts=new Map();
 function sync(){for(const k of['yaw','pitch','zoom'])VT[k]=V[k];VT.tg=V.tg.slice();}
 cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId);}catch(_){ }pts.set(e.pointerId,[e.clientX,e.clientY]);drag=[e.clientX,e.clientY];moved=0;if(pts.size===2){const[a,b]=[...pts.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:V.zoom,m:[(a[0]+b[0])/2,(a[1]+b[1])/2]};sync();}});
-cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);if(pts.size===2&&pinch){const[a,b]=[...pts.values()];V.zoom=Math.max(.5,Math.min(8,pinch.z*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch.d));const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];const k=Math.min(Wd,H)*BASE*V.zoom/DD;const dx=(m[0]-pinch.m[0])/k,dy=(m[1]-pinch.m[1])/k;V.tg[0]-=dx*Math.cos(V.yaw);V.tg[2]-=dx*Math.sin(V.yaw);V.tg[1]+=dy;pinch.m=m;moved=99;sync();return;}if(!drag)return;const dx=e.clientX-drag[0],dy=e.clientY-drag[1];moved+=Math.abs(dx)+Math.abs(dy);if(e.shiftKey){const k=Math.min(Wd,H)*BASE*V.zoom/DD;V.tg[0]-=dx/k*Math.cos(V.yaw);V.tg[2]-=dx/k*Math.sin(V.yaw);V.tg[1]+=dy/k;}else{V.yaw+=dx*.01;V.pitch=Math.max(-1.45,Math.min(1.45,V.pitch+dy*.01));}sync();drag=[e.clientX,e.clientY];});
-function pick(mx,my){let best=null,bd=28;for(const c of SYS.comps){if(!vis(c))continue;for(const p of[c.p].concat(c.pp||[])){const q=P(p);const d=Math.hypot(q[0]-mx,q[1]-my)*(c.k?.85:1);if(d<bd){bd=d;best=c;}}}return best;}
-function up(e){pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(e.type==='pointerup'&&moved<6){const r=cv.getBoundingClientRect();const c=pick(e.clientX-r.left,e.clientY-r.top);if(mode==='quiz'&&quiz&&quiz.type==='find'&&!quiz.done){if(c)answer((c.q||c.n)===(quiz.c.q||quiz.c.n),c);}else if(c){focus(c.n,true);if(mode!=='quiz')showComp(c);}}drag=null;}
+cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);if(pts.size===2&&pinch){const[a,b]=[...pts.values()];V.zoom=Math.max(exterior?.24:.5,Math.min(8,pinch.z*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch.d));const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];const k=Math.min(Wd,H)*BASE*V.zoom/DD;const dx=(m[0]-pinch.m[0])/k,dy=(m[1]-pinch.m[1])/k;V.tg[0]-=dx*Math.cos(V.yaw);V.tg[2]-=dx*Math.sin(V.yaw);V.tg[1]+=dy;pinch.m=m;moved=99;sync();return;}if(!drag)return;const dx=e.clientX-drag[0],dy=e.clientY-drag[1];moved+=Math.abs(dx)+Math.abs(dy);if(e.shiftKey){const k=Math.min(Wd,H)*BASE*V.zoom/DD;V.tg[0]-=dx/k*Math.cos(V.yaw);V.tg[2]-=dx/k*Math.sin(V.yaw);V.tg[1]+=dy/k;}else{V.yaw+=dx*.01;V.pitch=Math.max(-1.45,Math.min(1.45,V.pitch+dy*.01));}sync();drag=[e.clientX,e.clientY];});
+function pick(mx,my){
+const hit=labelHits.find(l=>Math.abs(l.x-mx)<=l.w/2&&Math.abs(l.y-my)<=10);
+if(hit)return hit.c;
+let best=null,bd=28;for(const c of SYS.comps){if(!vis(c))continue;for(const p of[c.p].concat(c.pp||[])){const q=P(p);const d=Math.hypot(q[0]-mx,q[1]-my)*(c.k?.85:1);if(d<bd){bd=d;best=c;}}}return best;}
+function up(e){pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!exterior&&e.type==='pointerup'&&moved<6){const r=cv.getBoundingClientRect();const c=pick(e.clientX-r.left,e.clientY-r.top);if(mode==='quiz'&&quiz&&quiz.type==='find'&&!quiz.done){if(c)answer((c.q||c.n)===(quiz.c.q||quiz.c.n),c);}else if(c){focus(c.n,mode!=='scheme');if(mode!=='quiz')showComp(c);}}drag=null;}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
-cv.addEventListener('wheel',e=>{e.preventDefault();V.zoom=Math.max(.5,Math.min(8,V.zoom*(e.deltaY<0?1.1:.9)));sync();},{passive:false});
+cv.addEventListener('wheel',e=>{e.preventDefault();V.zoom=Math.max(exterior?.24:.5,Math.min(8,V.zoom*(e.deltaY<0?1.1:.9)));sync();},{passive:false});
 
 (function(){
 const FU='#E8A020',XFC='#378ADD',PT='#1D9E75',GV='#7F77DD',CM='#D4537E',GR='#9a9890';
@@ -552,9 +665,20 @@ theory:O_TH};
 const EL='#E8C020',AIR='#D8452E',OIL='#E8862A',HOT='#ff7a1a';
 const XT=[['Преобразователь',{g:['busr','rotN','rotT']}],['Датчик толщины',{k:'d',br:.06}],['Датчик температуры',{k:'d',br:.06}],['Токосъёмник НВ',{g:['rotN']}],['Токосъёмник РВ',{g:['rotT']}],['Лопасть несущего',{g:['rotN'],fz:1.4}],['Лопасть рулевого',{g:['rotT']}],['Генераторы',{g:['gen']}],['Стекло лётчика',{g:['gl'],q:'Обогреваемое стекло',fy:.75}],['Стекло оператора',{g:['gl'],q:'Обогреваемое стекло',fy:.75}],['Регулятор ТЭР-1М (стекло лётчика)',{k:'e',g:['gl'],q:'Регулятор ТЭР-1М',fy:.75}],['Регулятор ТЭР-1М (стекло оператора)',{k:'e',g:['gl'],q:'Регулятор ТЭР-1М',fy:.75}],
 ['ПЗУ левого',{g:['pzuL','airL','ejL'],q:'ПЗУ',fy:-.3}],['ПЗУ правого',{g:['pzuR','airR','ejR'],q:'ПЗУ',m:0}],['Вход двигателя',{g:['airL','oil'],fy:-.3,q:'Вход двигателя: ВНА, кок, стойки'}],['Электрозаслонка 1919Т (обогрев), правая',{k:'e',g:['airR'],q:'Электрозаслонка 1919Т (обогрев)'}],['Электрозаслонка 1919Т (обогрев)',{k:'e',g:['airL'],q:'Электрозаслонка 1919Т (обогрев)',fy:-.3}],['Терморегулятор',{k:'c',g:['airL'],fy:-.3}],['Электрозаслонка 1919Т (эжектор',{k:'e',g:['ejL'],fy:-.3}],['Отбор воздуха',{k:'f',g:['airL','ejL'],fy:-.3}],['Обогрев стоек',{k:'c',g:['oil'],fy:-.3}],['Вентилятор',{}],['Электросеть',{g:['gen','busr','gl','pzuL','pzuR']}]];
-const MV={'Стекло лётчика':[[-3.05,.36,0],[-3.05,1.0,0]],'Стекло оператора':[[-4.0,-.25,0]],'Регулятор ТЭР-1М (стекло лётчика)':[[-2.9,-.28,0]],'Регулятор ТЭР-1М (стекло оператора)':[[-3.85,-.78,0]],'Токосъёмник РВ':[[12.0,2.46,.68],[12.0,3.3,.68]],'Лопасть рулевого винта':[[12.0,3.5,.8]],'Лопасть несущего винта':[[1.2+4,2.45,0]]};
+const EY=1.2,EYE=1.043;
+const TP={s:[1.15,1.15,1.15],t:[-2.12,1.22,0]};
+const local=p=>xfT(invT(TP),p);
+const RN=local(MODEL_LAYOUT.mainRotorHub);
+const TR=local(MODEL_LAYOUT.tailRotorHub);
+const tailMount=local(MODEL_LAYOUT.tailRotorMount);
+const tailGearbox=local(MODEL_LAYOUT.tailGearbox);
+const intermediate=local(MODEL_LAYOUT.intermediateGearbox);
+const drive=local(MODEL_LAYOUT.accessoryGearbox);
+const generator=s=>[drive[0],drive[1],drive[2]+s*MODEL_LAYOUT.generatorOffset/TP.s[2]];
+const RX=RN[0];
+const MV={'Стекло лётчика':[[-3.05,.36,0],[-3.05,1.0,0]],'Стекло оператора':[[-4.0,-.25,0]],'Регулятор ТЭР-1М (стекло лётчика)':[[-2.9,-.28,0]],'Регулятор ТЭР-1М (стекло оператора)':[[-3.85,-.78,0]],'Генераторы ГТ40ПЧ6':[generator(1)],'Токосъёмник НВ':[[RX,RN[1]+.07,RN[2]]],'Токосъёмник РВ':[tailMount,[TR[0],TR[1]+.7,TR[2]]],'Лопасть рулевого винта':[TR,[TR[0]+.65,TR[1]+.28,TR[2]]],'Лопасть несущего винта':[[RX+4,RN[1],RN[2]]]};
 const comps=P_COMPS.map(c=>{const x=XT.find(([k])=>c.n.startsWith(k));const o=Object.assign({},c,x?x[1]:{});const mv=MV[c.n];if(mv){o.p=mv[0];o.lp=mv[1]||null;}return o;});
-const RX=1.017,EY=1.2,EYE=1.043;const TP={s:[1.15,1.15,1.15],t:[-2.12,1.22,0]};const TR=[12.0,2.46];
+
 const ALL=['gen','busr','rotN','rotT','gl','pzuL','pzuR','airL','airR','ejL','ejR','oil'];
 const ENGH=['pzuL','pzuR','airL','airR','ejL','ejR','oil'];
 const N={pe:'Преобразователь ПЭ-41 (КВАНТ-2)',dtl:'Датчик толщины льда ДТЛ-2',dkt:'Датчик температуры ДКТ-1',tn:'Токосъёмник НВ',tr:'Токосъёмник РВ',gen:'Генераторы ГТ40ПЧ6',gl:'Стекло лётчика',pzu:'ПЗУ левого двигателя',vna:'Вход двигателя: ВНА, кок, стойки',zs:'Электрозаслонка 1919Т (обогрев)',ot:'Отбор воздуха от компрессора'};
@@ -566,36 +690,39 @@ tabs:[{id:'obl',t:'ОБЛЕДЕНЕНИЕ',c:'r'},{id:'pv',t:'ПРОТИВООБ
 tabNorm:['obl','pv','dl','dr','pl','pr'],
 tabDyn(T,st){const on=st.on.has('rotN'),sp=st.x.slow?3:1;const k=Math.floor(T/sp)%6,sn=[0,1,2,3,0,1][k];const m={};for(let i=0;i<4;i++)m['s'+(i+1)]=on&&i===sn;const ot=st.on.has('rotT');m.r1=ot&&k%2===0;m.r2=ot&&k%2===1;return m;},
 mkPipes(){for(const s of[1,-1]){const d=s>0?'L':'R';
-pipe([[1.8,1.07,s*.3],[1.8,.25,s*.3],[1.4,.25,s*.3]],EL,'gen',{w:.05});
+const gen=generator(s);
+pipe([gen,[gen[0],.25,gen[2]],[1.4,.25,s*.3]],EL,'gen',{w:.05});
 pipe([[1.0,.3,s*.35],[-1.941,.3,s*.35],[-1.941,.869,s*.392]],EL,'pzu'+d,{w:.05});
 pipe([[-.645,.869,s*.392],[-.645,.713,s*.392],[-1.815,.713,s*.392],[-1.815,.869,s*.392]],AIR,'air'+d,{w:.07,r:.08});
 pipe([[-1.355,.713,s*.392],[-1.355,.852,s*.392]],AIR,'air'+d,{w:.06,arrow:false});
 pipe([[-.645,.713,s*.392],[-.645,.713,s*.826],[-1.69,.713,s*.826],[-1.69,.913,s*.826]],AIR,'ej'+d,{w:.055,r:.08});
 pipe([[-1.272,1.348,s*.392],[-1.397,1.348,s*.392],[-1.397,1.27,s*.392]],OIL,'oil',{w:.05,arrow:false,r:.05});}
 pipe([[1.0,.25,0],[.5,.25,0]],EL,'busr',{w:.05,arrow:false});
-pipe([[.3,.4,0],[.3,.75,0],[RX,.75,0],[RX,2.62,0]],EL,'rotN',{w:.05});
-pipe([[.3,.1,0],[.3,-.2,0],[2.4,-.2,0],[5.3,.33,0],[10.8,.9,0],[TR[0],TR[1],0],[TR[0],TR[1],.5]],EL,'rotT',{w:.05});
+pipe([[.3,.4,0],[.3,.75,0],[RX,.75,0],RN],EL,'rotN',{w:.05});
+pipe([[.3,.1,0],[3.1,.45,0],[6.1,.88,0],intermediate,tailGearbox,tailMount],EL,'rotT',{w:.05});
 pipe([[1.2,.12,0],[1.2,-1.0,0],[-2.9,-1.0,0],[-2.9,-.38,0]],EL,'gl',{w:.05});
 pipe([[-2.9,-1.0,0],[-3.85,-1.0,0],[-3.85,-.88,0]],EL,'gl',{w:.05});
 pipe([[-2.9,-.18,0],[-3.05,.32,0]],EL,'gl',{w:.05,arrow:false});pipe([[-3.85,-.68,0],[-4.0,-.26,0]],EL,'gl',{w:.05,arrow:false});},
 build(st){if(!st.x.combo){XF=invT(TP);shell({skip:['r','t']});XF=null;}
 box([-2.9,-.28,0],[.16,.2,.2],'#5a52c0');box([-3.85,-.78,0],[.16,.2,.2],'#5a52c0');
-for(const s of[1,-1]){rbox([-1.188,1.357,s*.392],[.3,.14,.26],'#77756f',1);lathe([1.6,EY,s*.3],[1,0,0],[[0,.08],[.06,.13],[.36,.13],[.42,.07]],'#5a52c0',1,12);}
+for(const s of[1,-1]){rbox([-1.188,1.357,s*.392],[.3,.14,.26],'#77756f',1);lathe(generator(s),[0,0,s],[[-.136,.08],[-.091,.13],[.091,.13],[.136,.07]],'#5a52c0',1,12);}
 lathe([.15,1.6,0],[1,0,0],[[0,.27],[.08,.24],[.5,.24],[.55,.18]],'#6b6a66',.9,16);
-rbox([RX,EY,0],[.9,.7,.9],'#8a8880',.55);cyl([RX,1.55,0],[RX,2.36,0],.12,'#77756f',.65,12);cyl([RX,2.34,0],[RX,2.54,0],.3,'#6b6a66',1,16);lathe([RX,2.54,0],[0,1,0],[[0,.17],[.14,.17],[.2,.1]],'#c9a21a',1,14);
-rbox([TR[0],TR[1],.45],[.34,.32,.3],'#8a8880',1);cyl([TR[0],TR[1],.6],[TR[0],TR[1],.76],.1,'#c9a21a',1,12);
+rbox([RX,EY,0],[.9,.7,.9],'#8a8880',.55);cyl(local(MODEL_LAYOUT.mainRotorFoot),[RX,RN[1]-.06,RN[2]],.11,'#77756f',.65,12);
+cyl([RX,RN[1]-.06,RN[2]],[RX,RN[1]+.09,RN[2]],.25,'#6b6a66',1,16);
+lathe(RN,[0,1,0],[[0,.14],[.11,.14],[.16,.09]],'#c9a21a',1,14);
+rbox(tailGearbox,[.30,.29,.26],'#8a8880',1);cyl(tailMount,TR,.087,'#c9a21a',1,12);
 rbox([.3,.25,0],[.42,.3,.34],'#5a52c0',1);box([1.2,.25,0],[.4,.25,.8],'#77756f');},
 dyn(T,st){const G=g(T),on=k=>st.on.has(k);
 const gOn=on('gl');for(const q of[[[-4.25,-.55,-.38],[-4.25,-.55,.38],[-3.75,.08,.38],[-3.75,.08,-.38]],[[-3.3,.08,-.42],[-3.3,.08,.42],[-2.75,.72,.42],[-2.75,.72,-.42]]])poly(q,gOn?shade(HOT,G):'#7fb6e6',gOn?.62:.55,'rgba(40,60,90,.9)');
 for(const s of[1,-1]){const d=s>0?'L':'R',z=s*.392,pz=on('pzu'+d),ar=on('air'+d);
 engine(-2.024,.15,EYE,z,.261,{a:st.x.combo?.45:1,pzu:pz?hx(HOT,G):'#a9a79f',lip:ar?hx(AIR,G):'#8f8d86',inl:ar?hx('#e2602f',G):'#6f6d68'});
 tube([[-1.69,.869,s*.626],[-1.69,.826,s*.783],[-1.69,.869,s*.94]],.07,pz?hx(HOT,G):'#8a8880',1,10);}
-const rot=T*.25,sp=st.x.slow?3:1,k=Math.floor(T/sp)%6,secN=[0,1,2,3,0,1][k],aN=on('rotN'),aT=on('rotT'),y=2.45;
-for(let i=0;i<5;i++){const a=rot+i*1.2566;const d=[Math.cos(a),0,Math.sin(a)],e=[-Math.sin(a),0,Math.cos(a)];const pt=(r,o)=>[RX+d[0]*r+e[0]*o,y,d[2]*r+e[2]*o];
+const rot=T*.25,sp=st.x.slow?3:1,k=Math.floor(T/sp)%6,secN=[0,1,2,3,0,1][k],aN=on('rotN'),aT=on('rotT'),y=RN[1];
+for(let i=0;i<5;i++){const a=rot+i*1.2566;const d=[Math.cos(a),0,Math.sin(a)],e=[-Math.sin(a),0,Math.cos(a)];const pt=(r,o)=>[RX+d[0]*r+e[0]*o,y,RN[2]+d[2]*r+e[2]*o];
 cyl(pt(.25,.02),pt(.8,.02),.06,'#55534f',1,8);
 poly([pt(.7,-.08),pt(1.1,-.26),pt(7.95,-.26),pt(8.05,-.12),pt(8.0,0),pt(.7,0)],'#55534f',1,'rgba(0,0,0,.3)');
 for(let j=0;j<4;j++){const l=aN&&j===secN;poly([pt(.8,j*.07),pt(8.0-j*.01,j*.07),pt(8.0-j*.01-.01,j*.07+.07),pt(.8,j*.07+.07)],l?shade(HOT,G):'#b3a07c',1,'rgba(0,0,0,.25)',l?.02:0);}}
-const c=[TR[0],TR[1],.8],rv=T*.6;for(let i=0;i<3;i++){const a=rv+i*2.0944;const d=[Math.cos(a),Math.sin(a)],e=[-Math.sin(a),Math.cos(a)];const pt=(r,o)=>[c[0]+d[0]*r+e[0]*o,c[1]+d[1]*r+e[1]*o,c[2]];
+const c=TR,rv=T*.6;for(let i=0;i<4;i++){const a=rv+i*Math.PI/2;const d=[Math.cos(a),Math.sin(a)],e=[-Math.sin(a),Math.cos(a)];const pt=(r,o)=>[c[0]+d[0]*r+e[0]*o,c[1]+d[1]*r+e[1]*o,c[2]+(i%2?.082:-.082)];
 poly([pt(.12,-.1),pt(1.9,-.1),pt(1.9,0),pt(.12,0)],'#55534f',1,'rgba(0,0,0,.3)');
 for(let j=0;j<2;j++){const l=aT&&j===k%2;poly([pt(.25,j*.07),pt(1.9,j*.07),pt(1.9,j*.07+.07),pt(.25,j*.07+.07)],l?shade(HOT,G):'#b3a07c',1,'rgba(0,0,0,.25)',l?.02:0);}}},
 filters:[
@@ -689,19 +816,22 @@ theory:'<h2>Назначение</h2><p>Гидросистема питает ч
 /* ---------- ВОЗДУШНАЯ СИСТЕМА ---------- */
 (function(){
 const HP='#4bb3d4',BR='#E8A020',SE='#9a8be8',SP='#35c46a';
+const [LEFT_GEAR, RIGHT_GEAR] = MODEL_LAYOUT.mainGear;
+const strutMiddle = gear => gear.strutTop.map((v,i)=>(v+gear.strutBottom[i])/2);
+
 const comps=[
 mkC('Компрессор АК-50Т1',[-.9,2.35,-.75],'Двухступенчатый поршневой: в первой ступени воздух сжимается в 5–6 раз, во второй — в 9–10, итого до 60 кгс/см². Привод от главного редуктора, стоит справа. Подзаряжает баллоны в полёте, полностью наполняет не более чем за 25 мин.',{m:1,s:'Компрессор',lp:[-.9,2.2,-1.5],g:['chg']}),
 mkC('Автомат давления АД-50',[.9,1.55,.95],'Держит давление в баллонах. При 50 кгс/см² переключает компрессор на холостой ход — сброс воздуха в атмосферу. При падении до 40 кгс/см² снова подключает компрессор к системе.',{k:'c',g:['chg','bal']}),
 mkC('Фильтр-отстойник',[.9,1.85,.95],'Очищает воздух от влаги и масла, которое попадает из компрессора. Воздух ударяется в отражательный стакан, капли стекают вниз. Конденсат сливают краном после полёта.',{k:'f',g:['chg']}),
-mkC('Баллон в подкосе шасси (левый)',[.6,-.25,1.1],'Внутренняя полость V-образного подкоса основной опоры, 3 л. Таких баллонов два. Их воздух идёт только на торможение колёс.',{m:1,s:'Баллоны в подкосах',lp:[.6,-.2,1.9],g:['bal','bs'],q:'Баллон в подкосе шасси'}),
-mkC('Баллон в подкосе шасси (правый)',[.6,-.25,-1.1],'Второй баллон-подкос, 3 л.',{g:['bal','bs'],q:'Баллон в подкосе шасси'}),
+mkC('Баллон в подкосе шасси (левый)',strutMiddle(LEFT_GEAR),'Внутренняя полость V-образного подкоса основной опоры, 3 л. Таких баллонов два. Их воздух идёт только на торможение колёс.',{m:1,s:'Баллоны в подкосах',lp:[.65,.16,1.91],pp:[strutMiddle(RIGHT_GEAR)],g:['bal','bs'],q:'Баллон в подкосе шасси'}),
+mkC('Баллон в подкосе шасси (правый)',strutMiddle(RIGHT_GEAR),'Второй баллон-подкос, 3 л.',{g:['bal','bs'],q:'Баллон в подкосе шасси'}),
 mkC('Шаровой баллон УБШ-4',[-.2,2.45,-.75],'4 л, в редукторном отсеке справа. Только из него берётся воздух на герметизацию дверей и опрыск стёкол. Обратный клапан между ним и подкосами не даёт стравить воздух тормозов, если повреждены магистрали герметизации или опрыска.',{m:1,s:'Баллон УБШ-4',lp:[-.2,3.2,-.75],g:['sph','seal','spr']}),
 mkC('Зарядный клапан и манометр НТМ-100',[1.3,1.0,1.0],'В лючке на левом борту между шп. 12 и 13. Через него баллоны заряжают на земле от аэродромного источника. Манометр показывает давление в системе.',{k:'d',g:['bal']}),
 mkC('Редукционный клапан УП-25/2',[-4.6,.2,.3],'Под полом кабины лётчика. Лётчик нажимает тормозную гашетку на ручке управления — трос поворачивает рычаг клапана. Клапан выдаёт командное давление от 0 до 11 кгс/см², пропорциональное нажатию.',{m:1,s:'УП-25/2',lp:[-4.6,-.4,.9],g:['bs','bcmd']}),
 mkC('Ускоритель УП-03/2М',[.2,.45,.6],'На стенке шп. 9. Получает командное давление и подаёт в тормоза давление в три раза больше — напрямую из баллонов, по коротким трубам большого сечения. Поэтому тормоза срабатывают быстро. Отпустил гашетку — стравливает воздух из тормозов в атмосферу.',{m:1,s:'УП-03/2М',lp:[.2,.45,1.5],g:['bcmd','brk']}),
 mkC('Сигнализатор МСТ-25А',[.2,.1,.6],'При давлении в линии торможения выше 25 кгс/см² зажигает табло ТОРМОЗ КОЛЕС.',{k:'d',g:['brk']}),
-mkC('Тормоз левого колеса',[.9,-.85,1.3],'Сжатый воздух прижимает тормозные колодки к тормозной рубашке колеса. Давление в тормозах до 33 ± 3 кгс/см².',{g:['brk'],q:'Тормоз колеса'}),
-mkC('Тормоз правого колеса',[.9,-.85,-1.3],'Тормоз правого основного колеса. Оба колеса тормозятся одновременно.',{g:['brk'],q:'Тормоз колеса'}),
+mkC('Тормоз левого колеса',LEFT_GEAR.brake,'Сжатый воздух прижимает тормозные колодки к тормозной рубашке колеса. Давление в тормозах до 33 ± 3 кгс/см².',{g:['brk'],q:'Тормоз колеса'}),
+mkC('Тормоз правого колеса',RIGHT_GEAR.brake,'Тормоз правого основного колеса. Оба колеса тормозятся одновременно.',{g:['brk'],q:'Тормоз колеса'}),
 mkC('Вентиль герметизации кабин',[-4.9,.9,.75],'На левом боковом пульте лётчика. Открывает подачу воздуха в магистраль герметизации. Им же можно отключить магистраль от баллона.',{k:'v',g:['seal']}),
 mkC('Панель герметизации: РВ-2Т',[-4.2,1.0,.8],'За кабиной лётчика слева. На панели: силикагелевый влагопоглотитель, фильтр, редуктор РВ-2Т (снижает давление с 40–50 до 2,1 кгс/см²) и предохранительный клапан на 3,2 кгс/см², который спасает шланги при отказе редуктора.',{m:1,s:'Редуктор РВ-2Т',lp:[-4.2,1.7,1.3],g:['seal','sh']}),
 mkC('Шланг герметизации двери лётчика',[-5.0,1.3,.85],'Резиновый шланг по контуру двери. Под давлением 2,1 кгс/см² раздувается и уплотняет дверь. При открытии двери клапан герметизации стравливает воздух из шланга.',{k:'c',g:['sh'],q:'Шланг герметизации'}),
@@ -715,23 +845,32 @@ SYSS.air={id:'air',T:ID,comps,allOn:['chg','bal','sph','bs','seal','sh'],staticG
 legend:'<span class="lg"><i style="background:#4bb3d4"></i>воздух 40–50 кгс/см²</span><span class="lg"><i style="background:#E8A020"></i>торможение</span><span class="lg"><i style="background:#9a8be8"></i>герметизация 2,1 кгс/см²</span><span class="lg"><i style="background:#35c46a"></i>спирт</span>',
 tabs:[{id:'p',t:'Воздух: 40–50 кгс/см²',c:'z'},{id:'t',t:'ТОРМОЗ КОЛЕС',c:'g'},{id:'z',t:'ДВЕРИ ЗАГЕРМ.',c:'g'},{id:'r',t:'ДВЕРИ РАЗГЕРМ.',c:'y'}],tabNorm:['p','z'],
 mkPipes(){pipe([[-.9,2.15,-.8],[.9,2.15,-.8],[.9,2.15,.95],[.9,1.6,.95]],HP,'chg',{w:.05});
-pipe([[.9,1.5,.95],[.9,.1,.95],[.6,.05,1.1]],HP,'bal',{w:.05});pipe([[.9,.1,.95],[.9,.1,-1.1],[.6,.05,-1.1]],HP,'bal',{w:.05});pipe([[1.3,1.0,.98],[.9,1.0,.95]],HP,'bal',{w:.04,arrow:false});
+pipe([[.9,1.5,.95],[.9,.36,.95],LEFT_GEAR.strutTop],HP,'bal',{w:.05});
+pipe([[.9,.36,.95],[.9,.36,-.70],RIGHT_GEAR.strutTop],HP,'bal',{w:.05});pipe([[1.3,1.0,.98],[.9,1.0,.95]],HP,'bal',{w:.04,arrow:false});
 pipe([[.9,1.9,.95],[.9,1.9,-.75],[-.2,1.9,-.75],[-.2,2.3,-.75]],HP,'sph',{w:.045});
 pipe([[.9,.1,.95],[-4.6,.1,.95],[-4.6,.18,.4]],HP,'bs',{w:.045});pipe([[.9,.1,.75],[.3,.3,.65]],HP,'bs',{w:.045,arrow:false});
 pipe([[-4.6,.2,.2],[-4.6,-.02,.2],[.2,-.02,.5],[.2,.35,.55]],BR,'bcmd',{w:.04});
-for(const s of[1,-1])pipe([[.25,.45,s>0?.7:.5],[.25,-.5,s*.7],[.9,-.5,s*1.3],[.9,-.8,s*1.3]],BR,'brk',{w:.06});
+for(const gear of MODEL_LAYOUT.mainGear){
+  const [x,y,z]=gear.brake;
+  const sign=Math.sign(z);
+  pipe([[.25,.45,.55],[.49,.26,sign*.65],gear.strutTop,[x,y,z-sign*.13],gear.brake],BR,'brk',{w:.04,r:.055});
+}
 pipe([[-.2,2.45,-.6],[-.2,2.05,.6],[-.2,2.05,.9],[-4.2,2.05,.9],[-4.9,2.05,.9],[-4.9,1.0,.78]],SE,'seal',{w:.04});pipe([[-4.9,.9,.78],[-4.3,.95,.8]],SE,'seal',{w:.04,arrow:false});
 pipe([[-4.3,1.05,.82],[-5.0,1.3,.86]],SE,'sh',{w:.035,arrow:false});pipe([[-4.3,1.0,.8],[-4.3,.4,.6],[-6.4,.4,.6],[-6.4,1.15,.5]],SE,'sh',{w:.035});pipe([[-4.1,1.0,.82],[-2.1,1.0,1.0]],SE,'sh',{w:.035});pipe([[-2.1,1.0,1.0],[-2.1,1.9,.9],[-2.1,1.9,-.9],[-2.1,1.0,-1.0]],SE,'sh',{w:.035,arrow:false});
 pipe([[-.2,2.3,-.7],[-.1,1.3,-.6]],HP,'spr',{w:.035,arrow:false});
 pipe([[-.1,.8,-.6],[-.1,.38,-.6],[-5.6,.38,-.6],[-5.6,1.5,-.2],[-5.6,1.62,0]],SP,'spr',{w:.04});pipe([[-5.6,.38,-.6],[-6.9,.38,-.5],[-6.9,1.0,0]],SP,'spr',{w:.04,arrow:false});
 pipe([[-6.9,.38,-.5],[-7.3,.3,-.2],[-7.3,-.25,.25]],SP,'goes',{w:.04});},
 build(st){baseHeli(st);lathe([-.9,2.35,-.5],[0,0,-1],[[0,.12],[.3,.12],[.36,.16],[.5,.16],[.55,.08]],'#5a52c0',1,12);lathe([-.2,2.25,-.75],[0,1,0],[[0,.03],[.06,.15],[.2,.21],[.34,.15],[.4,.03]],'#3f9bc0',1,14);
-for(const s of[1,-1]){cyl([.5,.2,s*1.0],[.75,-.65,s*1.2],.075,'#3f9bc0',1,10);cyl([.9,-.9,s*1.2],[.9,-.9,s*1.42],.34,'#3a3936',.8,16);cyl([.9,-.9,s*1.27],[.9,-.9,s*1.36],.17,s&&'#b06a1a',1,12);}
+for(const gear of MODEL_LAYOUT.mainGear){
+  cyl(gear.strutTop,gear.strutBottom,.042,'#3f9bc0',.88,10);
+  const [x,y,z]=gear.brake;
+  cyl([x,y,z-Math.sign(z)*.062],gear.brake,.17,'#b06a1a',1,16);
+}
 box([.9,1.65,.97],[.5,.6,.06],'#77756f');rbox([-4.6,.2,.3],[.22,.16,.18],'#b06a1a',1);cyl([-5.0,.75,.25],[-4.95,1.25,.25],.03,'#d8d8d8',1,6);rbox([.2,.45,.6],[.2,.22,.2],'#b06a1a',1);
 box([-4.2,1.0,.86],[.45,.3,.06],'#77756f');cyl([-4.35,1.0,.8],[-4.1,1.0,.8],.06,'#7a6fd0',1,8);
 rbox([-.1,1.05,-.6],[.3,.5,.3],'#2d9a55',1);cyl([-.1,1.3,-.6],[-.1,1.36,-.6],.05,'#1d6a3a',1,8);lathe([-7.3,-.62,.3],[0,1,0],[[0,.05],[.1,.22],[.26,.26],[.42,.2],[.5,.05]],'#4a5a6a',1,14);},
 dyn(){},
-filters:[{t:'Зарядка и хранение',st:{},d:'Компрессор через фильтр-отстойник и автомат давления заряжает три баллона: два в подкосах шасси и шаровой. Всего 10 л воздуха под давлением 40–50 кгс/см².'},{t:'Торможение',st:{on:['bal','bs','bcmd','brk'],tab:['p','t']},view:{tg:[-1.8,-.1,0],yaw:-.5,pitch:.5,zoom:1.15},d:'Гашетка → УП-25/2 выдаёт командное давление до 11 кгс/см² → ускоритель УП-03/2М утраивает его и подаёт в тормоза до 33 кгс/см².'},{t:'Герметизация',st:{on:['sph','seal','sh'],tab:['p','z']},view:{tg:[-3.4,1.4,0],yaw:-.6,pitch:.45,zoom:1.2},d:'Воздух из шарового баллона через вентиль, влагопоглотитель и редуктор РВ-2Т (2,1 кгс/см²) раздувает шланги дверей и люка.'},{t:'Опрыск стёкол',st:{on:['sph','spr','goes'],tab:['p']},view:{tg:[-4.2,.9,0],yaw:-.35,pitch:.4,zoom:1.05},d:'Сжатый воздух толкает поршень насоса, и порция спирта попадает на стекло. Отдельный насос обслуживает иллюминаторы ГОЭС.'}],
+filters:[{t:'Зарядка и хранение',st:{},d:'Компрессор через фильтр-отстойник и автомат давления заряжает три баллона: два в подкосах шасси и шаровой. Всего 10 л воздуха под давлением 40–50 кгс/см².'},{t:'Торможение',st:{on:['bal','bs','bcmd','brk'],tab:['p','t']},view:{tg:[.53,.07,0],yaw:-.55,pitch:.38,zoom:2.55},d:'Гашетка → УП-25/2 выдаёт командное давление до 11 кгс/см² → ускоритель УП-03/2М утраивает его и подаёт в тормоза до 33 кгс/см².'},{t:'Герметизация',st:{on:['sph','seal','sh'],tab:['p','z']},view:{tg:[-3.4,1.4,0],yaw:-.6,pitch:.45,zoom:1.2},d:'Воздух из шарового баллона через вентиль, влагопоглотитель и редуктор РВ-2Т (2,1 кгс/см²) раздувает шланги дверей и люка.'},{t:'Опрыск стёкол',st:{on:['sph','spr','goes'],tab:['p']},view:{tg:[-4.2,.9,0],yaw:-.35,pitch:.4,zoom:1.05},d:'Сжатый воздух толкает поршень насоса, и порция спирта попадает на стекло. Отдельный насос обслуживает иллюминаторы ГОЭС.'}],
 steps:[
 {t:'Зачем нужен сжатый воздух',txt:'Три задачи: торможение колёс основных опор, герметизация дверей и люка, опрыск спиртом лобовых стёкол и иллюминаторов ГОЭС. Трубопроводы окрашены в чёрный цвет.',view:{tg:[-2.4,1.0,0],yaw:-.6,pitch:.42,zoom:1.05}},
 {t:'Баллоны',txt:'Воздух хранится в трёх баллонах, всего 10 л: полости двух подкосов шасси по 3 л и шаровой баллон 4 л. Давление 40–50 кгс/см².',focus:'Баллон в подкосе шасси (левый)',st:{on:['bal','sph']},hl:['bal','sph'],view:{tg:[.4,.6,0],yaw:-.6,pitch:.4,zoom:1.5}},
@@ -863,14 +1002,18 @@ theory:'<h2>Назначение</h2><p>Противопожарная сист�
 /* ---------- ОХЛАЖДЕНИЕ И СИЛОВАЯ УСТАНОВКА ---------- */
 (function(){
 const AIR='#6cc3e0',EJ='#D8452E',EX='#E8862A',DU='#b89a6a';
+const DRIVE=MODEL_LAYOUT.accessoryGearbox;
+const FAN=MODEL_LAYOUT.coolingFan;
+const COOLERS=MODEL_LAYOUT.gearboxOilCoolers;
+const atDrive=(x,y,z)=>[DRIVE[0]+x,DRIVE[1]+y,DRIVE[2]+z];
 const comps=[
-mkC('Вентиляторная установка',[-1.75,3.05,0],'Одноступенчатый осевой вентилятор большой производительности, 6000 об/мин. Привод карданным валом от главного редуктора. Забирает воздух из атмосферы и гонит его на радиаторы и агрегаты. Зимой дроссельное устройство в коке уменьшает производительность.',{m:1,s:'Вентилятор',lp:[-1.75,3.8,0],g:['rad','agr','grr']}),
-mkC('Воздушно-масляные радиаторы',[-2.05,3.0,.42],'Два блока на шп. 1 капота, в каждом секция двигателя и секция главного редуктора. Через них проходит основная часть воздуха от вентилятора и по кожухам выходит за капот.',{m:1,s:'Радиаторы',lp:[-2.3,3.6,.9],g:['rad'],pp:[[-2.05,3.0,-.42]]}),
+mkC('Вентиляторная установка',FAN,'Одноступенчатый осевой вентилятор большой производительности, 6000 об/мин. Привод карданным валом от главного редуктора. Забирает воздух из атмосферы и гонит его на радиаторы и агрегаты. Зимой дроссельное устройство в коке уменьшает производительность.',{m:1,s:'Вентилятор',lp:[-1.75,3.8,0],g:['rad','agr','grr']}),
+mkC('Воздушно-масляные радиаторы',COOLERS[0],'Два блока на шп. 1 капота, в каждом секция двигателя и секция главного редуктора. Через них проходит основная часть воздуха от вентилятора и по кожухам выходит за капот.',{m:1,s:'Радиаторы',lp:[-2.3,3.6,.9],g:['rad'],pp:[COOLERS[1]]}),
 mkC('Дополнительные радиаторы главного редуктора',[-.9,2.7,.6],'Стоят слева от главного редуктора. Воздух к ним идёт от большого патрубка на шп. 1 капота по гибкому трубопроводу.',{g:['grr']}),
 mkC('Обдув гидронасосов и компрессора',[-.9,2.5,.62],'От четырёх патрубков на шп. 1 капота воздух идёт к двум гидронасосам НП-92А-4, компрессору АК-50Т1 и четвёртой опоре каждого двигателя. Для равномерного охлаждения на них надеты кожухи.',{k:'f',g:['agr'],pp:[[-.9,2.5,-.62]]}),
 mkC('Обдув четвёртой опоры двигателя',[-2.329,2.546,.45],'Четвёртая опора — опора свободной турбины, самое горячее место двигателя снаружи. Её обдувает воздух от вентиляторной установки.',{k:'f',g:['agr'],pp:[[-2.329,2.546,-.45]]}),
-mkC('Коробка приводов и генераторы',[.75,2.55,0],'На коробке приводов трансмиссии стоят два генератора ГТ40ПЧ6. Их и саму коробку охлаждает отдельный центробежный вентилятор.',{m:1,s:'Генераторы',lp:[.75,2.1,1.0],g:['gen']}),
-mkC('Центробежный вентилятор',[1.1,2.8,0],'Стоит на коробке приводов. Засасывает воздух из хвостовой части фюзеляжа через заборный патрубок. Часть воздуха идёт под дефлекторы на коробку приводов, часть — в патрубки генераторов. Нагретый воздух отводится за борт.',{g:['gen']}),
+mkC('Коробка приводов и генераторы',DRIVE,'На коробке приводов трансмиссии стоят два генератора ГТ40ПЧ6. Их и саму коробку охлаждает отдельный центробежный вентилятор.',{m:1,s:'Генераторы',lp:[.75,2.1,1.0],g:['gen']}),
+mkC('Центробежный вентилятор',atDrive(.30,.29,0),'Стоит на коробке приводов. Засасывает воздух из хвостовой части фюзеляжа через заборный патрубок. Часть воздуха идёт под дефлекторы на коробку приводов, часть — в патрубки генераторов. Нагретый воздух отводится за борт.',{g:['gen']}),
 mkC('ПЗУ левого двигателя',[-4.298,2.42,.45],'Пылезащитное устройство инерционного типа, две ступени, очистка 70–75 %. Состоит из обтекателя («гриба»), сепаратора, эжектора и трубопровода отвода пыли. Крепится тремя стойками к губе воздухозаборника. Левое и правое ПЗУ одинаковы по конструкции, но не взаимозаменяемы.',{m:1,s:'ПЗУ',lp:[-4.526,3.041,.45],g:['ejL'],q:'Пылезащитное устройство (ПЗУ)'}),
 mkC('ПЗУ правого двигателя',[-4.298,2.42,-.45],'ПЗУ правого двигателя. Включается тем же выключателем ПЗУ — ОТКЛ., табло ПЗУ ПРАВ. ДВИГ. ВКЛЮЧЕН.',{g:['ejR'],q:'Пылезащитное устройство (ПЗУ)'}),
 mkC('Эжектор ПЗУ',[-4.147,2.186,.702],'Создаёт разрежение в трубе отвода пыли и выбрасывает пылевой концентрат за борт. Сжатый воздух к эжектору идёт из-за XII ступени компрессора.',{k:'c',g:['ejL'],pp:[[-4.147,2.186,-.702]]}),
@@ -888,15 +1031,17 @@ pipe([[-1.65,2.9,s*.15],[-2.329,2.609,s*.405]],AIR,'agr',{w:.04,arrow:false});pi
 pipe([[-2.632,2.573,s*.45],[-2.632,2.141,s*.72],[-4.033,2.141,s*.72]],EJ,'ej'+d,{w:.04,r:.08});pipe([[-4.185,2.231,s*.702],[-4.185,2.006,s*.855],[-3.95,1.95,s*1.15]],DU,'ej'+d,{w:.05,r:.06});
 pipe([[-2.15,2.95,s*.95],[-1.8,2.78,s*.98]],AIR,'ev'+d,{w:.05});pipe([[-1.3,2.66,s*1.1],[-1.05,2.85,s*1.7]],EX,'ex'+d,{w:.1});}
 pipe([[-1.65,3.15,.15],[-1.3,3.0,.55],[-.9,2.75,.6]],AIR,'grr',{w:.07,r:.1});
-pipe([[2.7,2.45,0],[1.6,2.7,0],[1.25,2.8,0]],AIR,'gen',{w:.06});for(const s of[1,-1])pipe([[1.0,2.8,s*.1],[.8,2.75,s*.38]],AIR,'gen',{w:.04,arrow:false});pipe([[.75,2.4,.5],[.75,2.2,1.05]],AIR,'gen',{w:.045});},
+pipe([atDrive(1.85,.07,0),atDrive(.85,.18,0),atDrive(.48,.29,0)],AIR,'gen',{w:.06});
+for(const s of[1,-1])pipe([atDrive(.25,.29,s*.10),atDrive(.05,.13,s*MODEL_LAYOUT.generatorOffset),atDrive(0,0,s*MODEL_LAYOUT.generatorOffset)],AIR,'gen',{w:.04,arrow:false});
+pipe([atDrive(0,0,MODEL_LAYOUT.generatorOffset),atDrive(0,-.1,.86)],AIR,'gen',{w:.045});},
 build(st){baseHeli(st,{ea:.75,ga:.7});
 lathe([-2.0,3.05,0],[1,0,0],[[0,.08],[.08,.26],[.45,.26],[.5,.2]],'#6b6a66',.9,18,{cap:false});cyl([-1.5,3.05,0],[-1.3,3.0,0],.04,'#d8d8d8',1,6);
 for(const s of[1,-1]){box([-2.1,3.0,s*.42],[.22,.4,.26],'#2f6fb5');for(let i=0;i<5;i++)poly([[-2.215,2.83+i*.08,s*.3],[-2.215,2.83+i*.08,s*.54],[-2.215,2.86+i*.08,s*.54],[-2.215,2.86+i*.08,s*.3]],'#9cc4ee',.9,null,.02);
 lathe([-.9,2.5,s*.47],[0,0,s],[[0,.12],[.22,.12],[.27,.07]],'#5a52c0',1,12);
-lathe([.75,2.55,s*.2],[0,0,s],[[0,.13],[.3,.13],[.36,.08]],'#5a52c0',1,12);
+lathe(atDrive(0,0,s*.20),[0,0,s],[[0,.11],[.28,.13],[.41,.13],[.46,.08]],'#5a52c0',1,12);
 loft([secX(-1.85,2.6,.24,.16,12,s*.93,4),secX(-1.3,2.66,.3,.2,12,s*1.02,4)],'#6f7a5a',.85,{});
 for(const dz of[.12,-.12])cyl([-4.15,2.68,s*.45+dz],[-3.77,2.28,s*.45+dz],.025,'#d8d8d8',1,6);cyl([-2.177,2.42,s*.45],[-2.102,2.42,s*.45],.34,'#c9a21a',.9,16,null,{cap:false});}
-box([-.9,2.7,.6],[.5,.3,.12],'#2f6fb5');rbox([.75,2.55,0],[.4,.35,.4],'#8a8880',1);lathe([1.0,2.8,0],[1,0,0],[[0,.16],[.16,.16],[.22,.08],[.3,.08]],'#6b6a66',1,14);},
+box([-.9,2.7,.6],[.5,.3,.12],'#2f6fb5');rbox(DRIVE,[.61,.44,.57],'#8a8880',1);lathe(atDrive(.22,.29,0),[1,0,0],[[0,.16],[.16,.16],[.22,.08],[.3,.08]],'#6b6a66',1,14);},
 dyn(T){const a0=T*5;for(let i=0;i<6;i++){const a=a0+i*1.047,c=Math.cos(a),s=Math.sin(a),c2=Math.cos(a+.45),s2=Math.sin(a+.45);poly([[-1.96,3.05+.06*c,.06*s],[-1.96,3.05+.24*c,.24*s],[-1.9,3.05+.24*c2,.24*s2],[-1.9,3.05+.06*c2,.06*s2]],'#9aa8a8',.9,'rgba(0,0,0,.3)');}},
 filters:[{t:'Всё',st:{},d:'Вентиляторная установка охлаждает масло в радиаторах и агрегаты на редукторе. Генераторы охлаждает отдельный центробежный вентилятор. ПЗУ на схеме выключено — включи фильтр «ПЗУ».'},{t:'Охлаждение',st:{on:['rad','agr','grr','gen']},d:'Воздух от осевого вентилятора: на воздушно-масляные радиаторы, на гидронасосы, компрессор и четвёртые опоры двигателей, на дополнительные радиаторы главного редуктора.'},{t:'ПЗУ',st:{on:['ejL','ejR'],tab:['l','r','n']},view:{tg:[-3.6,2.5,0],yaw:-.5,pitch:.45,zoom:2.2},d:'Выключатель ПЗУ — ОТКЛ. подаёт воздух из-за XII ступени компрессора на эжектор. Эжектор отсасывает пыль из сепаратора и выбрасывает её за борт.'},{t:'ЭВУ',st:{on:['evL','evR','exL','exR']},view:{tg:[-1.0,2.6,0],yaw:-.2,pitch:.6,zoom:2},d:'Выхлопные газы проходят по изогнутым каналам, стенки которых охлаждает холодный воздух, и смешиваются с ним на выходе.'}],
 steps:[
@@ -920,13 +1065,257 @@ qs:[['Степень очистки воздуха в ПЗУ','70–75 %','95–
 theory:'<h2>Система воздушного охлаждения</h2><p>Охлаждает масло в воздушно-масляных радиаторах двигателей и главного редуктора, генераторы ГТ40ПЧ6, гидронасосы НП-92А-4 и компрессор АК-50Т1.</p><ul><li><b>Вентиляторная установка</b> — одноступенчатый осевой вентилятор, 6000 об/мин: корпус, кок с дроссельным устройством, направляющий аппарат, рабочее колесо, спрямляющий аппарат, кожух карданного вала.</li><li><b>Три потока.</b> Через шп. 1 капота на радиаторы и за капот. От четырёх патрубков — к двум гидронасосам, компрессору и четвёртой опоре каждого двигателя. От большого патрубка — к дополнительным радиаторам главного редуктора слева.</li><li><b>Генераторы</b> и коробку приводов охлаждает центробежный вентилятор на ней: воздух берётся из хвостовой части фюзеляжа, нагретый — за борт.</li><li><b>Гибкие трубопроводы</b> — проволочный каркас в оболочке из стеклоткани.</li><li><b>Зимой</b> окна дроссельного устройства открыты, производительность меньше.</li></ul><h2>Крепление двигателей</h2><ul><li>Двигатели на потолочной панели, симметрично, 600 мм друг от друга, наклон вперёд вниз 4°30′ к строительной горизонтали — для минимального сопротивления на крейсерской скорости.</li><li>Спереди: силовое кольцо на корпусе первой опоры, четыре тяги к потолочной панели у шп. 6Н. Воспринимают только крутящий момент.</li><li>Сзади: сферическая опора главного редуктора. Воспринимает осевые силы.</li><li>Валы подключены к ВР-24 через муфты свободного хода.</li></ul><h2>ПЗУ</h2><ul><li>Инерционного типа, две ступени, очистка 70–75 %. Состав: обтекатель («гриб»), сепаратор, эжектор, трубопровод отвода пыли, противообледенительная система.</li><li><b>Первая ступень</b> — на обтекателе: центробежная сила прижимает пыль к его задней стенке.</li><li><b>Вторая</b> — в кольцах сепаратора: при повороте потока пыль отделяется, уходит в трубу и эжектором выбрасывается за борт.</li><li>Воздух на эжектор — из-за XII ступени компрессора. Включение — выключатель ПЗУ — ОТКЛ. под колпаком, табло ПЗУ ЛЕВ. (ПРАВ.) ДВИГ. ВКЛЮЧЕН.</li></ul><h2>ЭВУ</h2><ul><li>Снижает тепловое излучение — защита от ракет с инфракрасными головками.</li><li>Внутренний контур из титанового сплава: три изогнутых канала для газов. Наружный контур: холодный воздух, изнутри оклеен фольгой.</li><li>Холодный воздух засасывается за счёт эжекции, охлаждает стенки каналов и смешивается с газами через отверстия в концевом шпангоуте.</li><li>Подвеска: две тяги сверху, пилон снизу; откидывается для обслуживания.</li></ul><p class="note">По книге, разделы 7.6 и 7.7. Расположение агрегатов на схеме условное.</p>'};
 })();
 
+/* Учебная компоновка по РЛЭ, кн. 2, § 8.5.4–8.5.6 и рис. 4.1–4.11 учебника. */
+(function () {
+const MAIN = [-.92, 2.57, -.01];
+const DRIVE = MODEL_LAYOUT.accessoryGearbox;
+const INTER = MODEL_LAYOUT.intermediateGearbox;
+const TAIL = MODEL_LAYOUT.tailGearbox;
+const HUB = MODEL_LAYOUT.tailRotorHub;
+const MAST = MODEL_LAYOUT.mainRotorHub;
+const FAN = MODEL_LAYOUT.coolingFan;
+const SUMP = [MAIN[0], 2.03, MAIN[2]];
+const COOLERS = MODEL_LAYOUT.gearboxOilCoolers;
+const FRONT_END = [-.46, DRIVE[1], DRIVE[2]];
+const INPUTS = [[-2.24, 2.42, .46], [-2.24, 2.42, -.46]];
+const JOIN = [[-1.29, 2.42, .37], [-1.29, 2.42, -.37]];
+const FRONT = [FRONT_END, DRIVE];
+const MIDDLE = [DRIVE, INTER];
+const REAR = [INTER, TAIL];
+const OUTPUT = [TAIL, HUB];
+const ROTOR = [MAIN, MODEL_LAYOUT.mainRotorFoot, MAST];
+const ACC = [[-1.31, 2.80, -.01], FAN];
+
+function along(a,b,t) { return a.map((v,i)=>v+(b[i]-v)*t); }
+const FLYWHEEL = along(...FRONT,.20);
+const INPUT_CENTERS = INPUTS.map((p,i)=>along(p,JOIN[i],.60));
+const COLORS = {in:'#f4bc6c', main:'#83f1c5', tail:'#72caff', aux:'#c2a5fa'};
+const SRC_MAIN = 'РЛЭ, кн. 2, § 8.5.4 · стр. 79 PDF';
+const SRC_TAIL = 'РЛЭ, кн. 2, § 8.5.5 · стр. 81 PDF';
+const SRC_OIL = 'РЛЭ, кн. 2, § 8.5.6 · стр. 83–84 PDF';
+const SOURCE = [SRC_MAIN, SRC_TAIL, SRC_OIL];
+const VIEW = {tg:[4.95, 1.68, 0], yaw:-.19, pitch:.29, zoom:.67};
+const names = {
+  input:'Входные валы и муфты свободного хода', main:'Главный редуктор ВР-24',
+  mast:'Вал несущего винта', brake:'Тормоз несущего винта', fan:'Карданный привод вентилятора',
+  front:'Передняя часть хвостового вала', drive:'Коробка приводов',
+  middle:'Средняя часть хвостового вала', inter:'Промежуточный редуктор',
+  rear:'Концевая часть хвостового вала', tail:'Хвостовой редуктор', hub:'Втулка рулевого винта',
+  sump:'Поддон ВР-24', radiators:'Маслорадиаторы ВР-24'
+};
+function part(key, p, s, i, g, fz=4.8, options={}) {
+  return {n:names[key],p,s,i,g,fz,...options};
+}
+const components = [
+  part('input',INPUT_CENTERS[0],'Входные валы','Передают вращение от двух двигателей к ВР-24. Муфты свободного хода разъединяют остановившийся двигатель и редуктор.', ['in'], 4.9, {pp:[INPUT_CENTERS[1]]}),
+  part('main',MAIN,'ВР-24','Объединяет механическую мощность двух двигателей, понижает частоту вращения и распределяет крутящий момент между несущим винтом, хвостовой ветвью и приводами агрегатов.', ['in','main','front','aux'], 5.5, {m:1,lp:[-1.45,3.17,0],fy:-.61}),
+  part('mast',along(MODEL_LAYOUT.mainRotorFoot,MAST,.37),'Вал НВ','Вертикальный выход ВР-24 приводит несущий винт. Вал совмещён с осью втулки на 3D-модели.', ['main'],4.8,{m:1,lp:[-.9,4.12,0]}),
+  part('brake',FLYWHEEL,'Тормоз НВ','Колодочный тормоз действует на барабан у выхода ВР-24 к хвостовому валу. Барабан закреплён на фланце. См. РЛЭ, § 8.5.5, стр. 2 и рис. 4.11 учебника.', ['front'],5.8),
+  part('fan',FAN,'Привод вентилятора','Отдельная ветвь передаёт вращение от ВР-24 к вентилятору охлаждения. Карданная передача показана отдельно от воздушного потока.', ['aux'],5.2),
+  part('front',along(...FRONT,.60),'Передний вал','Соединяет главный редуктор и коробку приводов. Фланцы на модели помогают различить стыки.', ['front'],4.5),
+  part('drive',DRIVE,'Коробка приводов','Находится в хвостовой ветви. Понижает частоту вращения хвостового вала и приводит два генератора переменного тока.', ['front','middle','gen'],5.6,{m:1,lp:[DRIVE[0]+.4,DRIVE[1]+.65,DRIVE[2]],fy:-.65}),
+  part('middle',along(...MIDDLE,.52),'Средний вал','Связывает коробку приводов с промежуточным редуктором. На модели видны трубчатая часть и опоры.', ['middle'],3.2,{pp:[along(...MIDDLE,.24),along(...MIDDLE,.77)]}),
+  part('inter',INTER,'Промеж. редуктор','Поворачивает ось передачи на 45°. Пара конических колёс с отношением 1:1 меняет направление оси без изменения частоты вращения.', ['middle','rear'],6.0,{m:1,lp:[INTER[0]-.45,INTER[1]-.56,INTER[2]],fy:-.45}),
+  part('rear',along(...REAR,.50),'Концевой вал','Наклонная секция соединяет промежуточный и хвостовой редукторы внутри килевой балки.', ['rear'],4.7),
+  part('tail',TAIL,'Хвостовой редуктор','Коническая пара с осями под 90° передаёт вращение на рулевой винт. В этом же агрегате находится механизм изменения шага винта.', ['rear','rv'],6.0,{m:1,lp:[TAIL[0]+.42,TAIL[1]+.44,TAIL[2]],fy:-.75}),
+  part('hub',HUB,'Втулка РВ','Выходной вал хвостового редуктора соединён с втулкой рулевого винта. Выходной вал совмещён с осью втулки на 3D-модели.', ['rv'],5.2),
+  part('sump',SUMP,'Поддон ВР-24','Собирает масло. Из поддона масло поступает в нагнетающую магистраль к деталям редуктора.', ['oil-feed','oil-return'],5.7,{detail:'oil',m:1}),
+  part('radiators',COOLERS[0],'Радиаторы ВР-24','Воздушно-масляные радиаторы отводят тепло. В учебном виде выделены две ветви охлаждения.', ['oil-return'],5.7,{detail:'oil',m:1,pp:[COOLERS[1]]})
+];
+
+const qs = [
+  ['Сколько ступеней последовательно понижают частоту до вала несущего винта в ВР-24','3','2','4','5',SRC_MAIN],
+  ['Номинальная частота вращения вала несущего винта','240 об/мин','180 об/мин','320 об/мин','450 об/мин',SRC_MAIN],
+  ['Номинальная частота вращения вала привода вентилятора от ВР-24','6033 об/мин','3240 об/мин','2575 об/мин','1112 об/мин',SRC_MAIN],
+  ['Номинальная частота вращения входных валов ВР-24','15 000 об/мин','12 000 об/мин','18 000 об/мин','10 000 об/мин',SRC_MAIN],
+  ['Сколько основных частей у хвостового вала','3','2','4','5',SRC_TAIL],
+  ['Сколько генераторов приводит коробка приводов','2','1','3','4',SRC_TAIL],
+  ['На какой угол промежуточный редуктор меняет ось хвостового вала','45°','30°','60°','90°',SRC_TAIL],
+  ['Передаточное число промежуточного редуктора','1','1,257','2,316','62,5',SRC_TAIL],
+  ['Передаточное число хвостового редуктора','2,316','1','1,257','62,5',SRC_TAIL],
+  ['Угол между осями конических колёс хвостового редуктора','90°','45°','60°','120°',SRC_TAIL],
+  ['Номинальная сухая масса главного редуктора по РЛЭ','830 кг','610 кг','720 кг','950 кг',SRC_MAIN],
+  ['Заправка всей маслосистемы ВР-24, включая радиаторы и трубопроводы','55 л','39 л','45 л','60 л',SRC_OIL]
+];
+
+const DARK = '#39494b', CAST = '#839997', STEEL = '#b8cbc6', BOLT = '#d0d8ca';
+function axisHousing(center, direction, radius, length, tint=CAST) {
+  const d = nrm(direction);
+  lathe(center,d,[[-.55*length,.60*radius],[-.44*length,.88*radius],[-.39*length,radius],[-.29*length,radius],[.29*length,.90*radius],[.36*length,radius],[.46*length,radius],[.52*length,.62*radius]],tint,1,14);
+  for(const v of [-.40,.39]) {
+    const flange = center.map((q,i)=>q+d[i]*v*length);
+    for(const p of circ(flange,d,radius*.85,6)) {
+      const q = p.map((x,i)=>x+d[i]*(v<0?-.016:.016));
+      cyl(p,q,radius*.065,BOLT,1,5);
+    }
+  }
+}
+function shaft(a,b,r,col=STEEL) {
+  cyl(a,b,r,col,1,10);
+  for(const t of [0,.94]) cyl(along(a,b,t),along(a,b,t+.06),r*1.63,DARK,1,12);
+}
+function ribbedBox(c,s,col) {
+  rbox(c,s,col,1);
+  for(let i=-2;i<=2;i++) {
+    box([c[0]+i*s[0]*.14,c[1]+s[1]*.34,c[2]], [s[0]*.05,s[1]*.35,s[2]*.92],STEEL,.9);
+  }
+}
+function build(st) {
+  if(!st.x.combo) shell();
+  if(!st.x.combo) {
+    for(const p of INPUTS) engine(-4.45,-2.15,p[1],p[2],.26,{a:.44});
+  }
+  INPUTS.forEach((p,i)=>{
+    shaft(p,JOIN[i],.083);
+    axisHousing(INPUT_CENTERS[i],sub3(JOIN[i],p),.118,.24,DARK);
+  });
+  if(st.x.cutaway) {
+    const stages = [[-.28,.43],[.0,.38],[.26,.29]];
+    cyl([MAIN[0],2.01,0],MAST,.088,STEEL,1,12);
+    stages.forEach(([offset,r],i)=>{
+      const p=[MAIN[0],MAIN[1]+offset,0];
+      cyl([p[0],p[1]-.047,0],[p[0],p[1]+.047,0],r,i===1?'#879d9c':'#a3b4a5',1,20);
+      for(const q of circ(p,[0,1,0],r*.98,14)) box(q,[.057,.104,.057],BOLT,1);
+    });
+  } else {
+    axisHousing(MAIN,sub3(MAST,MAIN),.48,.80);
+    axisHousing([MAIN[0],FRONT_END[1],FRONT_END[2]],[1,0,0],.29,.94,DARK);
+    for(let i=0;i<9;i++) {
+      const t=i/9*Math.PI*2;
+      const x=MAIN[0]+Math.cos(t)*.47,z=Math.sin(t)*.47;
+      cyl([x,2.40,z],[x,2.76,z],.029,'#a6b2a2',1,6);
+    }
+  }
+  if(st.x.detail==='oil'){
+    rbox(SUMP,[.82,.23,.68],'#a7784c',1);
+    for(const p of COOLERS){
+      rbox(p,[.24,.38,.23],CAST,1);
+      for(let i=-2;i<=2;i++)box([p[0]+i*.043,p[1],p[2]],[.014,.37,.24],STEEL,1);
+    }
+  }
+  shaft(along(MAIN,MAST,.25),along(MODEL_LAYOUT.mainRotorFoot,MAST,.77),.095);
+  const brake=FLYWHEEL;
+  axisHousing(brake,[1,0,0],.26,.11,'#b88661');
+  box([brake[0],brake[1]-.29,0],[.13,.21,.43],DARK,1);
+  shaft(...FRONT,.057);
+  shaft(...MIDDLE,.052);
+  shaft(...REAR,.052);
+  for(const t of [.29,.61,.84]) {
+    const p=along(DRIVE,INTER,t);
+    axisHousing(p,sub3(INTER,DRIVE),.107,.14,DARK);
+  }
+  ribbedBox(DRIVE,[.61,.44,.57],CAST);
+  for(const sign of [-1,1]) {
+    const start=[DRIVE[0],DRIVE[1],DRIVE[2]+sign*.17];
+    const end=[DRIVE[0],DRIVE[1],DRIVE[2]+sign*MODEL_LAYOUT.generatorOffset];
+    shaft(start,end,.064);
+    axisHousing(end,[0,0,sign],.139,.27,DARK);
+  }
+  ribbedBox(INTER,[.39,.38,.30],'#738f8d');
+  axisHousing(INTER,sub3(INTER,DRIVE),.161,.33);
+  axisHousing(along(INTER,TAIL,.049),sub3(TAIL,INTER),.137,.28);
+  ribbedBox(TAIL,[.36,.35,.30],'#829998');
+  axisHousing(TAIL,[0,0,1],.204,.44);
+  shaft(...OUTPUT,.071);
+  shaft(...ACC,.057);
+  axisHousing(FAN,sub3(FAN,ACC[0]),.19,.16,DARK);
+}
+const tracks = [
+  ...INPUTS.map((p,i)=>({path:[p,JOIN[i],MAIN],g:'in',col:COLORS.in})),
+  {path:ROTOR,g:'main',col:COLORS.main},
+  {path:FRONT,g:'front',col:COLORS.tail},
+  {path:MIDDLE,g:'middle',col:COLORS.tail},
+  {path:REAR,g:'rear',col:COLORS.tail},
+  {path:OUTPUT,g:'rv',col:COLORS.tail},
+  {path:ACC,g:'aux',col:COLORS.aux},
+  ...[-1,1].map(s=>({path:[DRIVE,[DRIVE[0],DRIVE[1],DRIVE[2]+s*MODEL_LAYOUT.generatorOffset]],g:'gen',col:COLORS.aux}))
+];
+const oilTracks = [
+  {path:[SUMP,[-.58,2.03,0],[-.58,2.67,0],MAIN],g:'oil-feed',col:'#f2a74e',detail:'oil'},
+  ...COOLERS.map(p=>({path:[MAIN,[MAIN[0],2.4,p[2]],p,[p[0],SUMP[1],p[2]],SUMP],g:'oil-return',col:'#71caed',detail:'oil'}))
+];
+const lines=tracks.concat(oilTracks);
+function overlay(t,st) {
+  for(const {path,g,col,detail} of lines){
+    if(detail&&detail!==st.x.detail)continue;
+    if(!st.on.has(g)||HL&&!HL.has(g)) continue;
+    for(let i=1;i<path.length;i++){
+      const pos=along(path[i-1],path[i],(t*.65+i*.17)%1);
+      const q=P(pos);
+      if(q[2]>=DD-2) continue;
+      ctx.fillStyle=col;ctx.globalAlpha=.9;ctx.beginPath();ctx.arc(q[0],q[1],2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+    }
+  }
+}
+const every=['in','main','front','middle','rear','rv','aux','gen'];
+const tailGroups=['front','middle','rear','rv'];
+const mainView={tg:[-1.15,2.8,0],yaw:-.58,pitch:.37,zoom:4.3};
+const sourceNotes = [
+  'Учебник, гл. 4, с. 46–51 · рис. 4.1–4.5',
+  'Учебник, гл. 4, с. 55–63 · рис. 4.7–4.10',
+  'Учебник, гл. 4, с. 64–65 · рис. 4.11'
+];
+const rows = qs.map(q=>`<tr><td>${q[0]}</td><td>${q[1]}</td></tr>`).join('');
+SYSS.transmission = {
+  id:'transmission',comps:components,qs,view:VIEW,base:3.5,dd:38,fz:5,allOn:every,staticG:[],tabs:[],tabNorm:[],
+  legend:`<span class="lg"><i style="background:${COLORS.in}"></i>Вход от двигателей</span><span class="lg"><i style="background:${COLORS.main}"></i>На несущий винт</span><span class="lg"><i style="background:${COLORS.tail}"></i>На рулевой винт</span><span class="lg"><i style="background:${COLORS.aux}"></i>Приводы агрегатов</span><span class="lg"><i style="background:#f2a74e"></i>Нагнетание масла</span><span class="lg"><i style="background:#71caed"></i>Охлаждение и возврат</span>`,
+  mkPipes(){
+    for(const {path,col,g,detail} of lines){
+      pipe(path,col,g,{w:.047,r:.08});
+      if(detail)pipes.at(-1).detail=detail;
+    }
+  },
+  build,dyn(){},over:overlay,
+  filtT:'Что показать',
+  filters:[
+    {t:'Вся схема',st:{},d:'Общий вид. Выбери ветвь или нажми на подпись узла, чтобы приблизить его.'},
+    {t:'Несущий винт',st:{on:['in','main']},view:mainView,d:'Входы от двух двигателей сходятся в ВР-24. Зелёная ветвь ведёт к валу несущего винта.'},
+    {t:'Рулевой винт',st:{on:tailGroups},view:{tg:[6.24,2.73,-.06],yaw:-.20,pitch:.28,zoom:.93},d:'ВР-24 → коробка приводов → промежуточный редуктор → хвостовой редуктор → рулевой винт.'},
+    {t:'Приводы агрегатов',st:{on:['aux','gen']},view:{tg:[.5,2.35,0],yaw:-.52,pitch:.35,zoom:2.8},d:'Фиолетовым показаны ветви к вентилятору и генераторам.'},
+    {t:'Разрез ВР-24',st:{on:['in','main'],x:{cutaway:true}},view:mainView,d:'Три ступени показаны условными дисками. Разрез помогает проследить путь момента к несущему винту.'},
+    {t:'Смазка ВР-24',st:{on:['oil-feed','oil-return'],x:{detail:'oil'}},view:{tg:[-1.40,2.49,0],yaw:-.64,pitch:.43,zoom:4.2},d:'Нагнетание выделено янтарным, охлаждение и возврат масла — голубым. Линии и расположение радиаторов показаны условно.'}
+  ],
+  steps:[
+    {t:'Вход от двигателей',txt:'Вращение от двух двигателей приходит к главному редуктору через входные валы и муфты свободного хода.',focus:names.input,hl:['in']},
+    {t:'Главный редуктор',txt:'ВР-24 снижает частоту вращения и разделяет передачу момента на несколько ветвей.',view:mainView,st:{x:{cutaway:true}},hl:['in','main','front','aux']},
+    {t:'Несущий винт',txt:'Через три ступени редукции вращение передаётся на вал несущего винта.',focus:names.mast,hl:['main']},
+    {t:'Коробка приводов',txt:'Коробка находится между передней и средней секциями хвостового вала. От неё получают вращение два генератора.',focus:names.drive,hl:['front','middle','gen']},
+    {t:'Промежуточный редуктор',txt:'Передача меняет направление оси, а передаточное отношение остаётся 1:1.',focus:names.inter,hl:['middle','rear']},
+    {t:'Хвостовой редуктор и рулевой винт',txt:'Коническая пара переводит вращение на поперечную ось рулевого винта.',focus:names.tail,hl:['rear','rv']},
+    {t:'Тормоз несущего винта',txt:'Колодки действуют на барабан, закреплённый на фланце вывода к хвостовому валу.',focus:names.brake,hl:['front']}
+  ],
+  fails:[
+    {t:'Остановился один двигатель',txt:'Муфта свободного хода разъединяет остановившийся двигатель и коробку передачи. Найди входные муфты рядом с ВР-24.',focus:names.input,hl:['in']},
+    {t:'Масло и стружка',txt:'Масло смазывает и охлаждает трущиеся детали. Пробки-сигнализаторы обнаруживают ферромагнитные частицы в масле. Контроль смазки описан в § 8.5.6 РЛЭ.',focus:names.main,hl:['main']}
+  ],
+  theory:`
+    <div class="theory-hero"><h2>От двигателей к двум винтам</h2><p>Трансмиссия передаёт крутящий момент к несущему и рулевому винтам, вентилятору и приводам агрегатов.</p>
+    <div class="theory-actions"><button class="bt on" data-theory-view="route">Открыть 3D-схему</button><button class="bt" data-theory-numbers>Числа трансмиссии</button></div></div>
+    <h2>Главный редуктор ВР-24</h2>
+    <p>Принимает мощность двух двигателей. Муфты свободного хода автоматически отделяют остановившийся двигатель от редуктора. Три ступени понижают частоту до вала несущего винта. Отдельные выходы передают вращение к хвостовому валу и агрегатам.</p>
+    <p><button class="bt" data-theory-view="cutaway">Посмотреть разрез ВР-24</button></p>
+    <h2>Хвостовая ветвь</h2>
+    <ol><li><b>Передняя часть вала</b> соединяет ВР-24 с коробкой приводов.</li>
+    <li><b>Коробка приводов</b> понижает частоту в хвостовой ветви и приводит два генератора.</li>
+    <li><b>Средняя часть вала</b> передаёт вращение к промежуточному редуктору. Он поворачивает ось на 45° без изменения частоты.</li>
+    <li><b>Концевая часть вала</b> идёт от промежуточного к хвостовому редуктору. Хвостовой редуктор поворачивает ось передачи к рулевому винту; оси конических колёс расположены под углом 90°.</li></ol>
+    <h2>Тормоз и смазка</h2>
+    <p>Колодочный тормоз охватывает барабан на фланце хвостового выхода главного редуктора. ВР-24 и коробка приводов используют принудительную циркуляцию масла. Промежуточный и хвостовой редукторы смазываются разбрызгиванием.</p>
+    <p>В ВР-24 нагнетающая магистраль подаёт масло к деталям. Откачивающая магистраль проводит нагретое масло через воздушно-масляные радиаторы. Охлаждённое масло возвращается в поддон.</p>
+    <p><button class="bt" data-theory-view="oil">Посмотреть смазку ВР-24</button></p>
+    <h2>Основные числа</h2><table><tbody>${rows}</tbody></table>
+    <h2>Источники</h2><ul>${SOURCE.concat(sourceNotes).map(s=>'<li>'+s+'</li>').join('')}</ul>
+    <p class="note">Форма агрегатов восстановлена по учебным рисункам. Положение на модели, разрез и скорость анимации условны.</p>`
+};
+})();
+
 SYSS.fuel.qs=[['Вместимость расходного бака','320 л','480 л','575 л','120 л'],['Вместимость подвесного бака','575 л','320 л','460 л','1000 л'],['Вместимость бака № 3','480 л','320 л','500 л','575 л'],['Табло НАСОС РАБОТАЕТ горит при давлении за насосом более','0,18 кгс/см²','0,25 кгс/см²','1,2 кгс/см²','4 кгс/см²'],['Клапанная коробка срабатывает при разнице давлений более','0,25 кгс/см²','0,18 кгс/см²','1,2 кгс/см²','2 кгс/см²'],['Табло ВЫКЛЮЧИ ПЕРЕКАЧ загорается после выработки из бака № 3 около','150 л','120 л','30–50 л','320 л'],['Резервный остаток, при котором горит БАК ОСТАЛОСЬ','120 л в баке','150 л в баке','50 л в баке','320 л в баке'],['Какой бак вырабатывается первым','подвесные № 6–9','бак № 3','баки № 4 и 5','расходные № 1 и 2'],['Чем перекачивается топливо из подвесных баков','струйными насосами','электронасосами ЭЦН-91С','самотёком','сжатым воздухом'],['Как топливо из бака № 3 попадает в бак № 4','самотёком','насосом ЭЦН-91С','струйным насосом','через клапанную коробку'],['Сколько насосов ЭЦН-91С в топливной системе','4','2','6','9'],['Поплавковый клапан расходного бака открывается при снижении уровня на','30–50 л','120 л','150 л','5 л'],['Без подкачивающих насосов топливо идёт самотёком до высоты','3500 м','1000 м','5000 м','500 м']];
 SYSS.oil.qs=[['Давление масла на рабочих режимах','3–4 кгс/см²','0,5–1 кгс/см²','8–10 кгс/см²','65 кгс/см²'],['Минимальное давление масла на малом газе','2 кгс/см²','3 кгс/см²','0,5 кгс/см²','4,8 кгс/см²'],['Максимальная температура масла двигателя','150 °C','110 °C','90 °C','200 °C'],['Вместимость маслобака двигателя','13 л','8 л','20 л','4 л'],['Заправка маслобака','8–11 л','13 л','3–5 л','15–18 л'],['Сколько откачивающих насосов в МА-78','5','1','3','2'],['Отсечной клапан закрыт при оборотах ТК ниже','15 %','50 %','5 %','86 %'],['Термоклапан радиатора закрывается при температуре масла','60 ± 5 °C','30 °C','110 °C','150 °C'],['Ячейка сетки масляного фильтра','0,063 мм','0,8 мм','1 мм','0,005 мм'],['Перепускной клапан пускает масло мимо радиатора при давлении выше','1,25 кгс/см²','4 кгс/см²','0,18 кгс/см²','3 кгс/см²'],['Расход масла двигателем','не более 0,3 л/ч','не более 3 л/ч','не более 0,03 л/ч','не более 1 л/ч'],['Где измеряется давление масла','на подводе к 4-й и 5-й опорам','в маслобаке','перед радиатором','в коробке приводов'],['Выход на режим выше малого газа — при температуре масла не ниже','+30 °C','+70 °C','−40 °C','+5 °C']];
 SYSS.pos.qs=[['Ток секции нагревателя лопасти несущего винта','23–35 А','20–30 А','35–50 А','5–10 А'],['Ток пары лопастей рулевого винта','20–30 А','23–35 А','35–50 А','15–20 А'],['Ток электрообогрева ПЗУ','35–50 А','15–30 А','20–30 А','100 А'],['Сколько секций нагревателя на лопасти несущего винта','4','2','6','1'],['Сколько секций нагревателя на лопасти рулевого винта','2','4','1','3'],['ПОС автоматически отключается при температуре наружного воздуха выше','+20 °C','+5 °C','0 °C','+30 °C'],['Полёты в условиях обледенения разрешены до температуры','−20 °C','−5 °C','−40 °C','−10 °C'],['Обогрев двигателей и ПЗУ включают вручную при температуре','+5 °C и ниже','0 °C и ниже','−5 °C и ниже','+20 °C и ниже'],['Регулятор ТЭР-1М отключает обогрев стекла при','30 °C','60 °C','20 °C','90 °C'],['Положение СИЛЬНО обогрева стёкол включают после СЛАБО не ранее чем через','5 мин','1 мин','30 с','15 мин'],['Чем обогреваются вертикальные стойки первой опоры','горячим маслом','горячим воздухом','электричеством','не обогреваются'],['Защита от перегрева отключает секцию при обогреве дольше','30 с','5 с','2 мин','10 с'],['Цикл обогрева лопастей','6 импульсов по 5 с','3 импульса по 10 с','10 импульсов по 1 с','1 импульс 30 с'],['Что происходит с ПОС лопастей НВ при отказе одного генератора','отключается','работает от аккумуляторов','работает с половинной мощностью','ничего не меняется']];
 
 (function(){
 const TO={s:[.49,.49,.3],t:[-2.73,2.6,.52]},TOr={s:[.49,.49,-.3],t:[-2.73,2.6,-.52]};
-const I0={s:[1,1,1],t:[0,0,0]};const SUBS=()=>[['fuel',SYSS.fuel.T,1],['pos',SYSS.pos.T,1],['oil',TO,1],['oil',TOr,0],['hyd',ID,1],['air',ID,1],['skv',ID,1],['fire',ID,1],['cool',ID,1]];
+const I0={s:[1,1,1],t:[0,0,0]};const SUBS=()=>[['fuel',SYSS.fuel.T,1],['pos',SYSS.pos.T,1],['oil',TO,1],['oil',TOr,0],['hyd',ID,1],['air',ID,1],['skv',ID,1],['fire',ID,1],['cool',ID,1],['transmission',ID,1]];
 const sst={};const subSt=id=>sst[id]||(sst[id]={on:new Set(SYSS[id].allOn),lv:Object.assign({},SYSS[id].lv0||{}),tab:new Set(),broken:[],gauge:{},x:{combo:1}});
 const shown=(st,id)=>!st.x.show||st.x.show.includes(id);
 SYSS.all={id:'all',combo:true,base:3.5,dd:40,fz:2.6,view:{tg:[.6,1.5,0],yaw:-.75,pitch:.42,zoom:1},tabs:[],tabNorm:[],
@@ -938,64 +1327,107 @@ dyn(T0,st){for(const[id,T]of SUBS())if(shown(st,id)){XF=T;SYSS[id].dyn(T0,subSt(
 over(T0,st){if(shown(st,'fuel')){XF=SYSS.fuel.T;SYSS.fuel.over(T0,subSt('fuel'));XF=null;}},
 filtT:'Какие системы показать',
 filters:[
-{t:'Все системы',st:{},d:'Семь систем на своих местах в вертолёте. Вместе их много — выбери одну кнопкой. Топливная — баки в фюзеляже и под крылом. Масляная — на каждом двигателе. ПОС — лопасти, стёкла, ПЗУ и входы двигателей. Нажми на любой агрегат, чтобы узнать, что это.'},
+{t:'Все системы',st:{},d:'Системы на учебной модели вертолёта. Вместе их много — выбери одну кнопкой. Топливная — баки в фюзеляже и под крылом. Масляная — на каждом двигателе. ПОС — лопасти, стёкла, ПЗУ и входы двигателей. Нажми на любой агрегат, чтобы узнать, что это.'},
 {t:'Топливная',st:{x:{show:['fuel']}},d:'Расходные баки № 1, 2 — под капотом за главным редуктором. Бак № 3 — за грузовой кабиной. Баки № 4, 5 — под полом. Подвесные — под крылом.'},
 {t:'Масляная',st:{x:{show:['oil']}},view:{tg:[-2.8,2.5,0],zoom:3.2,yaw:-.6,pitch:.45},d:'У каждого двигателя своя маслосистема: бак, агрегат МА-78, фильтр и радиатор. На общей схеме она мелкая — подробно смотри во вкладке «Масляная».'},
-{t:'Гидро',st:{x:{show:['hyd']}},d:'Гидроблок и насосы у главного редуктора, четыре гидроусилителя под автоматом перекоса, линии к потребителям в кабинах.'},{t:'Воздух',st:{x:{show:['air']}},d:'Баллоны в подкосах шасси и шаровой баллон, компрессор на редукторе, тормоза, герметизация дверей, опрыск стёкол.'},{t:'СКВ',st:{x:{show:['skv']}},d:'Отбор воздуха от двигателей, радиатор под капотом, агрегаты под полом в носу, раздача по кабинам.'},{t:'Пожарная',st:{x:{show:['fire']}},d:'Два огнетушителя у редуктора и коллекторы в четырёх отсеках.'},{t:'Охлаждение',st:{x:{show:['cool']}},d:'Вентилятор и радиаторы перед редуктором, ПЗУ на входе двигателей, ЭВУ на выхлопе.'},{t:'ПОС',st:{x:{show:['pos']}},view:{tg:[1.0,2.4,0],zoom:.9,yaw:-.9,pitch:.5},d:'Электрообогрев лопастей несущего и рулевого винтов и стёкол, горячий воздух и электричество на ПЗУ, горячий воздух на вход двигателей.'}],
+{t:'Гидро',st:{x:{show:['hyd']}},d:'Гидроблок и насосы у главного редуктора, четыре гидроусилителя под автоматом перекоса, линии к потребителям в кабинах.'},{t:'Воздух',st:{x:{show:['air']}},d:'Баллоны в подкосах шасси и шаровой баллон, компрессор на редукторе, тормоза, герметизация дверей, опрыск стёкол.'},{t:'СКВ',st:{x:{show:['skv']}},d:'Отбор воздуха от двигателей, радиатор под капотом, агрегаты под полом в носу, раздача по кабинам.'},{t:'Пожарная',st:{x:{show:['fire']}},d:'Два огнетушителя у редуктора и коллекторы в четырёх отсеках.'},{t:'Охлаждение',st:{x:{show:['cool']}},d:'Вентилятор и радиаторы перед редуктором, ПЗУ на входе двигателей, ЭВУ на выхлопе.'},{t:'ПОС',st:{x:{show:['pos']}},view:{tg:[1.0,2.4,0],zoom:.9,yaw:-.9,pitch:.5},d:'Электрообогрев лопастей несущего и рулевого винтов и стёкол, горячий воздух и электричество на ПЗУ, горячий воздух на вход двигателей.'},{t:'Трансмиссия',st:{x:{show:['transmission']}},view:SYSS.transmission.view,d:'Главный редуктор, хвостовой вал и приводы агрегатов.'}],
 theory:'<h2>Как системы связаны между собой</h2><ul><li><b>Главный редуктор → всё остальное.</b> От ВР-24 вращаются гидронасосы обеих систем, компрессор АК-50Т1, вентиляторная установка и генераторы. Поэтому на самовращении гидравлика, воздух и электропитание сохраняются.</li><li><b>Двигатель → СКВ и ПЗУ.</b> Воздух для кондиционирования берётся за 12-й ступенью компрессора, для эжектора ПЗУ — из-за XII ступени.</li><li><b>Вентилятор → масло и СКВ.</b> Вентиляторная установка продувает воздушно-масляные радиаторы и первичный радиатор СКВ.</li><li><b>Воздух → СКВ.</b> Шланги герметизации дверей держат избыточное давление, которое создаёт СКВ.</li><li><b>Топливо → двигатели.</b> Расходные баки питают оба двигателя и ВСУ. Без подкачивающих насосов топливо идёт самотёком только до высоты 3500 м.</li><li><b>Двигатель → масло.</b> Маслосистема у каждого двигателя своя. Насосы МА-78 вращаются от самого двигателя, поэтому масло течёт только при работающем двигателе.</li><li><b>Двигатель → ПОС.</b> Горячий воздух для обогрева ПЗУ и входа двигателя берётся от его же компрессора. Поэтому при включении обогрева температура газов растёт на 50–60 °C, а обороты ТК — до 2 %.</li><li><b>Масло → ПОС.</b> Вертикальные стойки первой опоры греются горячим маслом двигателя.</li><li><b>Генераторы → ПОС.</b> Лопасти греются током от двух генераторов на главном редукторе. При отказе одного генератора обогрев лопастей несущего винта отключается.</li></ul><p class="note">Расположение агрегатов внутри корпуса условное: корпус — настоящая модель Ми-35М, а системы вписаны в него приблизительно. Маслосистема показана уменьшенной, в масштабе двигателя.</p>'};
 })();
 
 /* ---------- ИНТЕРФЕЙС: системы, режимы, нижняя панель, страницы ---------- */
-const SYSLIST=[['all','Все системы','#f2b01e','Как всё стоит в вертолёте'],['fuel','Топливная','#E8A020','Баки, насосы, перекачка'],['oil','Масляная','#E8862A','Маслосистема двигателя'],['pos','ПОС','#E8C020','Противообледенительная'],['hyd','Гидросистема','#5aa9ff','Основная и дублирующая'],['air','Воздушная','#9fd3e6','Тормоза, герметизация'],['skv','СКВ','#6cc3e0','Кондиционирование'],['fire','Пожарная','#ff5a4e','Датчики и огнетушители'],['cool','Охлаждение','#7fd1a8','Вентилятор, ПЗУ, ЭВУ']];
+const SYSLIST=[['all','Все системы','#f2b01e','Как всё стоит в вертолёте'],['fuel','Топливная','#E8A020','Баки, насосы, перекачка'],['oil','Масляная','#E8862A','Маслосистема двигателя'],['pos','ПОС','#E8C020','Противообледенительная'],['hyd','Гидросистема','#5aa9ff','Основная и дублирующая'],['air','Воздушная','#9fd3e6','Тормоза, герметизация'],['skv','СКВ','#6cc3e0','Кондиционирование'],['fire','Пожарная','#ff5a4e','Датчики и огнетушители'],['cool','Охлаждение','#7fd1a8','Вентилятор, ПЗУ, ЭВУ'],['transmission','Трансмиссия','#82ffcf','Редукторы, валы и приводы']];
 const sysInfo=id=>SYSLIST.find(s=>s[0]===id);
 const store={get(k,d){try{const v=localStorage.getItem('mi35_'+k);return v==null?d:JSON.parse(v);}catch(_){return d;}},set(k,v){try{localStorage.setItem('mi35_'+k,JSON.stringify(v));}catch(_){}}};
 
 /* bottom sheet */
 const sheet=$('sheet'),stage=$('stage');let shState='mid';
-const SHH={min:()=>62,mid:()=>Math.round(stage.clientHeight*.42),max:()=>Math.round(stage.clientHeight*.84)};
+const SHH={min:()=>62,peek:()=>Math.min(150,Math.round(stage.clientHeight*.34)),mid:()=>Math.round(stage.clientHeight*.42),max:()=>Math.round(stage.clientHeight*.84)};
 function SHEETPX(){return sheet.offsetHeight||0;}
 function setSheet(s){shState=s;sheet.style.setProperty('--sh',SHH[s]()+'px');}
 (function(){let y0=null,h0=0,moved=0;const g=$('grab');
 g.addEventListener('pointerdown',e=>{y0=e.clientY;h0=sheet.offsetHeight;moved=0;sheet.classList.add('drag');try{g.setPointerCapture(e.pointerId);}catch(_){}});
 g.addEventListener('pointermove',e=>{if(y0==null)return;const d=y0-e.clientY;moved=Math.max(moved,Math.abs(d));sheet.style.setProperty('--sh',Math.max(50,Math.min(stage.clientHeight-20,h0+d))+'px');});
 const end=()=>{if(y0==null)return;sheet.classList.remove('drag');const h=sheet.offsetHeight;y0=null;
-if(moved<6){setSheet(shState==='min'?'mid':shState==='mid'?'max':'min');return;}
+if(moved<6){setSheet(shState==='min'?'peek':shState==='peek'?'mid':shState==='mid'?'max':'min');return;}
 let best='mid',bd=1e9;for(const k in SHH){const d=Math.abs(SHH[k]()-h);if(d<bd){bd=d;best=k;}}setSheet(best);};
 g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);})();
 addEventListener('resize',()=>setSheet(shState));
 
 /* info card */
-function showOv(t,h,nav){$('ov').classList.remove('hide');$('ovT').innerHTML=t;$('ovB').innerHTML=h;$('ovN').classList.toggle('hide',!nav);$('sbody').scrollTop=0;if(shState==='min')setSheet('mid');}
+function showOv(t,h,nav){$('ov').classList.remove('hide');$('ovT').innerHTML=t;$('ovB').innerHTML=h;$('ovN').classList.toggle('hide',!nav);$('sbody').scrollTop=0;if(shState==='min'||shState==='peek')setSheet('mid');}
 function hideOv(){$('ov').classList.add('hide');}
 function showComp(c){showOv(c.n,c.i,false);}
 
 /* systems */
-function setSys(id){SYS=SYSS[id];if(SYS.init&&!SYS.comps)SYS.init();
+let insideView, insideSheet;
+function outsideView(){
+  const t=SYS.T;
+  const tg=t?xfT(invT(t),[1.95,1.5,0]):[1.95,1.5,0];
+  return {tg,yaw:-.28,pitch:.29,zoom:DD*(t?t.s[0]:1)/(BASE*30.5)};
+}
+function setExterior(on){
+  if(exterior===on)return;
+  if(on){
+    insideView={tg:VT.tg.slice(),yaw:VT.yaw,pitch:VT.pitch,zoom:VT.zoom};
+    insideSheet=shState;
+    const prev=CUR;
+    CUR=[];
+    XF=SYS.T?invT(SYS.T):null;
+    shell();
+    XF=null;
+    exteriorMesh=CUR;
+    CUR=prev;
+    fly(outsideView());
+  }else{
+    fly(insideView);
+    setSheet(insideSheet);
+    exteriorMesh=[];
+  }
+  exterior=on;
+  stage.classList.toggle('exterior',on);
+  $('hullOutside').setAttribute('aria-pressed',String(on));
+  $('hullInside').setAttribute('aria-pressed',String(!on));
+}
+$('hullOutside').onclick=()=>setExterior(true);
+$('hullInside').onclick=()=>setExterior(false);
+function setSys(id){if(exterior)setExterior(false);SYS=SYSS[id];if(SYS.init&&!SYS.comps)SYS.init();
 $('modes').classList.toggle('hide',!!SYS.combo);
 if(!SYS.pipes){pipes=[];SYS.mkPipes();SYS.pipes=pipes;}pipes=SYS.pipes;BASE=SYS.base;DD=SYS.dd;
-const si=sysInfo(id);for(const k of['','2']){$('sysName'+k).textContent=si[1];$('sysDot'+k).style.background=si[2];}
+const si=sysInfo(id);
+$('sceneName').textContent=si[1];
+$('sceneContext').textContent=si[3];
+$('hullControls').classList.toggle('hide',id==='oil');
+for(const k of['','2']){$('sysName'+k).textContent=si[1];$('sysDot'+k).style.background=si[2];}
 document.querySelectorAll('[data-sys]').forEach(b=>b.classList.toggle('on',b.dataset.sys===id));
 $('lg').innerHTML=SYS.legend||'';$('legW').classList.toggle('hide',!SYS.legend);$('thBody').innerHTML=SYS.theory||'';
 for(const k of['yaw','pitch','zoom'])V[k]=VT[k]=SYS.view[k];V.tg=SYS.view.tg.slice();VT.tg=SYS.view.tg.slice();store.set('sys',id);setMode('scheme');}
-function setMode(m){mode=m;quiz=null;sel=null;HL=null;hideOv();document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+function setMode(m){if(exterior)setExterior(false);mode=m;quiz=null;sel=null;HL=null;hideOv();document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
 if(m==='scheme'){filtI=0;setState(SYS.filters?SYS.filters[0].st:{});}
 else if(m==='steps'){stepI=0;}
 else if(m==='fails'){failI=-1;setState({});}
 else{setState({});}
-renderPanel();if(m==='steps')applyStep(0);if(m==='quiz')nextQ();if(m!=='steps')fly(SYS.view);if(m==='scheme')setSheet('mid');}
+renderPanel();if(m==='steps')applyStep(0);if(m==='quiz')nextQ();if(m!=='steps')fly(SYS.view);if(m==='scheme')setSheet('peek');}
 function applyStep(i){stepI=i;const s=SYS.steps[i];setState(s.st||{});sel=null;HL=s.hl?new Set(s.hl):null;if(s.focus){focus(s.focus);if(!s.hlc)HL=s.hl?new Set(s.hl):null;}if(s.view)fly(s.view);else if(!s.focus)fly(SYS.view);
 showOv(s.t,s.txt+'<div class="prog"><i style="width:'+((i+1)/SYS.steps.length*100)+'%"></i></div>',true);$('ovC').textContent=(i+1)+' из '+SYS.steps.length;$('prev').disabled=i===0;$('next').disabled=i===SYS.steps.length-1;document.querySelectorAll('[data-step]').forEach(b=>b.classList.toggle('on',+b.dataset.step===i));}
 function applyFail(i){failI=i;const f=SYS.fails[i];setState(f.st||{});sel=null;if(f.focus)focus(f.focus);HL=f.hl?new Set(f.hl):null;if(f.view)fly(f.view);else if(!f.focus)fly(SYS.view);showOv(f.t,f.txt,false);document.querySelectorAll('[data-fail]').forEach(b=>b.classList.toggle('on',+b.dataset.fail===i));}
 const li=(attr,i,t)=>'<button class="bt li" '+attr+'="'+i+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></button>';
 function renderPanel(){const p=$('pn');let h='';
 if(mode==='scheme'){if(SYS.filters)h+='<div class="lbl">'+(SYS.filtT||'Показать')+'</div><div class="chips">'+SYS.filters.map((f,i)=>'<button class="chip'+(i===filtI?' on':'')+'" data-filt="'+i+'">'+f.t+'</button>').join('')+'</div><div id="fd" class="card sm" style="margin-top:10px">'+(SYS.filters[filtI].d||'')+'</div>';
-const seen=new Set();h+='<div class="lbl">Агрегаты — нажми, чтобы найти</div><div class="row">'+SYS.comps.filter(c=>{const k=c.q||c.n;if(seen.has(k))return false;seen.add(k);return true;}).map(c=>'<button class="bt sm2" data-comp="'+c.n+'">'+(c.q||c.s||c.n)+'</button>').join('')+'</div>';}
+const seen=new Set();h+='<div class="lbl">Агрегаты — нажми, чтобы найти</div><div class="row">'+SYS.comps.filter(c=>{if(c.detail&&!vis(c))return false;const k=c.q||c.n;if(seen.has(k))return false;seen.add(k);return true;}).map(c=>'<button class="bt sm2" data-comp="'+c.n+'">'+(c.q||c.s||c.n)+'</button>').join('')+'</div>';}
 else if(mode==='steps'){h='<div class="lbl">Все шаги</div><div class="col list">'+SYS.steps.map((s,i)=>li('data-step',i,s.t)).join('')+'</div>';}
 else if(mode==='fails'){h='<div class="lbl">Выбери ситуацию</div><div class="col list">'+SYS.fails.map((s,i)=>li('data-fail',i,s.t)).join('')+'</div><p class="note">Пометка «по логике схемы» — вывод из устройства системы, в книге и РЛЭ прямо не написано.</p>';if(shState!=='max')setSheet('max');}
 else if(mode==='quiz'){h='<p class="note" style="margin-top:4px">Схему можно крутить и приближать. Все цифры этой системы — в разделе «Цифры» внизу.</p>';}
 p.innerHTML=h;}
 $('pn').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-if(b.dataset.filt!=null){filtI=+b.dataset.filt;const f=SYS.filters[filtI];setState(f.st);sel=null;HL=null;hideOv();if(f.view)fly(f.view);else fly(SYS.view);document.querySelectorAll('[data-filt]').forEach(x=>x.classList.toggle('on',x===b));$('fd').innerHTML=f.d||'';}
+if(b.dataset.filt!=null){filtI=+b.dataset.filt;const f=SYS.filters[filtI];setState(f.st);sel=null;HL=null;hideOv();if(f.view)fly(f.view);else fly(SYS.view);
+if(SYS.id==='transmission'){
+  const scroller=b.parentElement,scrollLeft=scroller.scrollLeft;
+  renderPanel();
+  $('pn').querySelector('.chips').scrollLeft=scrollLeft;
+}else{
+  document.querySelectorAll('[data-filt]').forEach(x=>x.classList.toggle('on',x===b));
+  $('fd').innerHTML=f.d||'';
+}}
 else if(b.dataset.comp){const c=comp(b.dataset.comp);focus(c.n);showComp(c);if(shState==='max')setSheet('mid');}
 else if(b.dataset.step!=null){applyStep(+b.dataset.step);setSheet('mid');}
 else if(b.dataset.fail!=null){applyFail(+b.dataset.fail);setSheet('mid');}});
@@ -1004,15 +1436,15 @@ else if(b.dataset.fail!=null){applyFail(+b.dataset.fail);setSheet('mid');}});
 let score=[0,0];const qname=c=>c.q||c.n;
 const quizAns=()=>quiz.type==='num'?quiz.q[1]:qname(quiz.c);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
-function nextQ(){const pool=[];const seen=new Set();for(const c of SYS.comps){if(seen.has(qname(c)))continue;seen.add(qname(c));pool.push(c);}const c=pool[Math.random()*pool.length|0];const types=SYS.qs?['name','find','num','num']:['name','find'];const type=types[Math.random()*types.length|0];quiz={c,type,done:false};const sc='<div class="sm">Счёт: '+score[0]+' из '+score[1]+'</div>';
+function nextQ(){const pool=[];const seen=new Set();for(const c of SYS.comps){if(c.detail&&!vis(c))continue;if(seen.has(qname(c)))continue;seen.add(qname(c));pool.push(c);}const c=pool[Math.random()*pool.length|0];const types=SYS.qs?['name','find','num','num']:['name','find'];const type=types[Math.random()*types.length|0];quiz={c,type,done:false};const sc='<div class="sm">Счёт: '+score[0]+' из '+score[1]+'</div>';
 const opt=o=>'<button class="bt li" data-ans="'+o.replace(/"/g,'&quot;')+'">'+o+'</button>';
-if(type==='num'){const q=SYS.qs[Math.random()*SYS.qs.length|0];quiz.q=q;sel=null;HL=null;showOv(q[0]+'?','<div id="qz">'+sc+'<div class="col">'+shuffle(q.slice(1)).map(opt).join('')+'</div><div id="qr"></div></div>',false);}
+if(type==='num'){const q=SYS.qs[Math.random()*SYS.qs.length|0];quiz.q=q;sel=null;HL=null;showOv(q[0]+'?','<div id="qz">'+sc+'<div class="col">'+shuffle(q.slice(1,5)).map(opt).join('')+'</div><div id="qr"></div></div>',false);}
 else if(type==='name'){focus(c.n);const opts=[c];while(opts.length<Math.min(4,pool.length)){const o=pool[Math.random()*pool.length|0];if(!opts.includes(o))opts.push(o);}showOv('Что подсвечено на схеме?','<div id="qz">'+sc+'<div class="col">'+shuffle(opts).map(o=>opt(qname(o))).join('')+'</div><div id="qr"></div></div>',false);}
 else{sel=null;HL=null;fly(SYS.view);showOv('Покажи на схеме: '+qname(c),'<div id="qz"><div class="sm">Счёт: '+score[0]+' из '+score[1]+'. Нажми на этот агрегат на схеме.</div><div id="qr"></div></div>',false);setSheet('min');}
 if(type!=='find'&&shState==='min')setSheet('mid');}
 function answer(ok,picked){if(!quiz||quiz.done)return;quiz.done=true;score[1]++;if(ok)score[0]++;const right=quizAns();document.querySelectorAll('[data-ans]').forEach(b=>{b.disabled=true;if(b.dataset.ans===right)b.classList.add('ok');else if(picked&&b===picked)b.classList.add('no');});
 if(quiz.type==='find')setSheet('mid');
-if(quiz.type==='num'){$('qr').innerHTML='<div class="'+(ok?'okT':'badT')+'">'+(ok?'Верно.':'Неверно. Правильный ответ: '+right+'.')+'</div><button class="bt on" id="qn" style="margin-top:10px;width:100%">Следующий вопрос</button>';return;}
+if(quiz.type==='num'){$('qr').innerHTML='<div class="'+(ok?'okT':'badT')+'">'+(ok?'Верно.':'Неверно. Правильный ответ: '+right+'.')+'</div>'+(quiz.q[5]?'<p class="note">'+quiz.q[5]+'</p>':'')+'<button class="bt on" id="qn" style="margin-top:10px;width:100%">Следующий вопрос</button>';return;}
 const c=quiz.c;focus(c.n);$('qr').innerHTML='<div class="'+(ok?'okT':'badT')+'">'+(ok?'Верно.':'Неверно. Это «'+qname(c)+'» — он подсвечен на схеме.')+'</div><div class="sm" style="margin:6px 0 10px">'+c.i+'</div><button class="bt on" id="qn" style="width:100%">Следующий вопрос</button>';}
 $('ov').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!quiz)return;if(b.dataset.ans!=null)answer(b.dataset.ans===quizAns(),b);else if(b.id==='qn')nextQ();});
 
@@ -1023,11 +1455,11 @@ document.querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{$('msys').clas
 document.querySelectorAll('[data-open="sys"]').forEach(b=>b.onclick=()=>$('msys').classList.remove('hide'));
 $('msys').addEventListener('click',e=>{if(e.target.id==='msys')$('msys').classList.add('hide');});
 const vm=$('vmenu');$('vbtn').onclick=()=>vm.classList.toggle('hide');
-document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const v=b.dataset.v;vm.classList.add('hide');if(v==='iso')fly(SYS.view);else if(v==='left')fly({yaw:0,pitch:.12});else if(v==='front')fly({yaw:1.5708,pitch:.12});else if(v==='top')fly({yaw:0,pitch:1.4});else if(v==='in'){VT.zoom=Math.min(8,VT.zoom*1.35);}else if(v==='out'){VT.zoom=Math.max(.5,VT.zoom/1.35);}});
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const v=b.dataset.v;vm.classList.add('hide');if(v==='iso')fly(exterior?outsideView():SYS.view);else if(v==='left')fly({yaw:0,pitch:.12});else if(v==='front')fly({yaw:1.5708,pitch:.12});else if(v==='top')fly({yaw:0,pitch:1.4});else if(v==='in'){VT.zoom=Math.min(8,VT.zoom*1.35);}else if(v==='out'){VT.zoom=Math.max(exterior?.24:.5,VT.zoom/1.35);}});
 cv.addEventListener('pointerdown',()=>{vm.classList.add('hide');$('hint').style.opacity=0;});
 $('lbb').onclick=()=>{lbm=lbm?0:1;$('lbb').classList.toggle('on',!!lbm);};
 $('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶':'❚❚';};
-$('fsb').onclick=()=>{const on=document.body.classList.toggle('fs');if(on)setSheet('min');setTimeout(()=>{size();setSheet(shState);},30);};
+$('fsb').onclick=()=>{const on=document.body.classList.toggle('fs');if(on&&!exterior)setSheet('min');setTimeout(()=>{size();setSheet(shState);},30);};
 $('ovX').onclick=()=>{hideOv();if(mode==='scheme'){sel=null;HL=null;}};
 $('prev').onclick=()=>{if(stepI>0)applyStep(stepI-1);};$('next').onclick=()=>{if(stepI<SYS.steps.length-1)applyStep(stepI+1);};
 /* pages */
@@ -1035,6 +1467,17 @@ let page='p3d';
 function showPage(id){page=id;for(const p of['p3d','pnum','pth'])$(p).classList.toggle('hide',p!==id);document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
 if(id==='p3d')setTimeout(()=>{size();setSheet(shState);},0);if(id==='pnum'&&typeof NUM!=='undefined')NUM.show();if(id==='pth')$('pth').querySelector('.scroll').scrollTop=0;store.set('page',id);}
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$('thBody').addEventListener('click',e=>{
+  const b=e.target.closest('button');
+  if(!b)return;
+  if(b.hasAttribute('data-theory-numbers')){showPage('pnum');NUM.openSystem(SYS.id);}
+  else if(b.dataset.theoryView){
+    showPage('p3d');
+    setMode('scheme');
+    const index=SYS.filters?.findIndex(f=>b.dataset.theoryView==='cutaway'?f.st?.x?.cutaway:f.st?.x?.detail===b.dataset.theoryView);
+    if(index>=0)$('pn').querySelector('[data-filt="'+index+'"]')?.click();
+  }
+});
 function boot(){size();setSheet('mid');const s=store.get('sys','all');setSys(SYSS[s]?s:'all');const pg=store.get('page','p3d');if(pg!=='p3d')showPage(pg);frame();}
 
 /* Сгенерировано tools/extract_numq.py из vk2500/src/data*.js — не править вручную */
@@ -1049,7 +1492,7 @@ const GR=[['main','Главное'],['tth','ТТХ'],['ltx','ЛТХ'],['osob','�
 const GCOL={tth:'#5aa9ff',ltx:'#3ccf7a',osob:'#ff5a4e',sys:'#f2b01e',other:'#8fa3a5'};
 const inG=(x,g)=>g==='all'||(g==='main'?['tth','ltx','osob'].includes(x.g):x.g===g);
 const Q=[];const seenQ=new Set();
-for(const[id]of SYSLIST){if(id==='all'||!SYSS[id]||!SYSS[id].qs)continue;for(const q of SYSS[id].qs){if(seenQ.has(q[0]))continue;seenQ.add(q[0]);Q.push({g:'sys',cat:sysInfo(id)[1],col:sysInfo(id)[2],q:q[0],a:q[1],w:q.slice(2,5),k:id+'|'+q[0]});}}
+for(const[id]of SYSLIST){if(id==='all'||!SYSS[id]||!SYSS[id].qs)continue;for(const q of SYSS[id].qs){if(seenQ.has(q[0]))continue;seenQ.add(q[0]);Q.push({g:'sys',cat:sysInfo(id)[1],col:sysInfo(id)[2],q:q[0],a:q[1],w:q.slice(2,5),src:q[5],k:id+'|'+q[0]});}}
 if(typeof NUMQ_EXT!=='undefined')for(const x of NUMQ_EXT){if(seenQ.has(x.q))continue;seenQ.add(x.q);Q.push({g:x.g,cat:x.c,col:GCOL[x.g],q:x.q,a:x.a,w:x.o,src:x.s,k:'x|'+x.q});}
 /* разбор чисел: «3–4» → [3,4], «100 ± 5» → [100,5], «−60» → [-60], «1 650» → [1650] */
 function nums(s){s=String(s).replace(/(\d)[\s  ](?=\d{3}(\D|$))/g,'$1');const out=[];const re=/(\d+(?:[.,]\d+)?)/g;let m;while((m=re.exec(s))){let v=parseFloat(m[1].replace(',','.'));const i=m.index,pc=s[i-1],pp=s[i-2];if((pc==='-'||pc==='−')&&(i<2||/[\s(:]/.test(pp)))v=-v;out.push(v);}return out;}
@@ -1076,19 +1519,26 @@ function chipsHTML(){const okM=x=>M==='choice'||x.inp;let h='<div class="chips">
 if(!['main','all'].includes(G)){const cats=[...new Set(Q.filter(x=>inG(x,G)&&okM(x)).map(x=>x.cat))];
 h+='<div class="chips" style="margin-top:8px">'+['all'].concat(cats).map(c=>'<button class="chip sub'+(C===c?' on':'')+'" data-nc="'+c.replace(/"/g,'&quot;')+'">'+(c==='all'?'Все темы':c)+cnt(Q.filter(x=>inG(x,G)&&okM(x)&&(c==='all'||x.cat===c)).length)+'</button>').join('')+'</div>';}
 return h;}
-function head(){const[k,t]=known();return '<div class="top" style="padding-left:0;padding-right:0"><div class="h1" style="margin:0">Цифры</div></div>'+
+function statsHTML(){const[k,t]=known();return '<div><b>'+streak+'</b><span>подряд верно</span></div><div><b>'+today.ok+'<span style="font-size:14px;color:var(--ink3)"> / '+today.n+'</span></b><span>за сеанс</span></div><div><b>'+k+'<span style="font-size:14px;color:var(--ink3)"> / '+t+'</span></b><span>выучено</span></div>';}
+function head(){return '<div class="top" style="padding-left:0;padding-right:0"><div class="h1" style="margin:0">Цифры</div></div>'+
 '<div class="seg" style="margin:0 0 12px"><button data-nm="choice" class="'+(M==='choice'?'on':'')+'">Выбор ответа</button><button data-nm="input" class="'+(M==='input'?'on':'')+'">Ввод цифр</button></div>'+chipsHTML()+
-'<div class="nstat" style="margin-top:12px"><div><b>'+streak+'</b><span>подряд верно</span></div><div><b>'+today.ok+'<span style="font-size:14px;color:var(--ink3)"> / '+today.n+'</span></b><span>за сеанс</span></div><div><b>'+k+'<span style="font-size:14px;color:var(--ink3)"> / '+t+'</span></b><span>выучено</span></div></div>';}
+'<div class="nstat" id="numStats" style="margin-top:12px">'+statsHTML()+'</div>';}
 function render(){if(!cur){const p=pick();cur=p?Object.assign({},p):null;typed='';}
 if(!cur){root.innerHTML=head()+'<div class="card sm">Здесь нет вопросов для этого режима.</div>';return;}
 const gn=GR.find(g=>g[0]===cur.g)[1];let h=head()+'<div class="qcard"><div class="qsys"><i class="dot" style="background:'+cur.col+'"></i>'+gn+(cur.cat!==gn?' · '+cur.cat:'')+'</div><div class="qtext">'+cur.q+'?</div><div id="qa"></div></div>'+weakHTML();
-root.innerHTML=h;M==='choice'?renderChoice():renderInput();}
+root.innerHTML=h;
+for(const chip of root.querySelectorAll('.chips .chip.on')){
+  const strip=chip.parentElement;
+  const right=chip.getBoundingClientRect().right-strip.getBoundingClientRect().right;
+  if(right>0)strip.scrollLeft+=right+14;
+}
+M==='choice'?renderChoice():renderInput();}
 function renderChoice(){const opts=shuffle([cur.a].concat(cur.w));$('qa').innerHTML='<div class="opts">'+opts.map((o,i)=>'<button class="opt" data-o="'+o.replace(/"/g,'&quot;')+'"><span class="k">'+'АБВГ'[i]+'</span><span>'+o+'</span></button>').join('')+'</div><div id="fb"></div>';}
 function renderInput(){const sh=shape(cur.a);$('qa').innerHTML='<div class="inp"><input id="ni" inputmode="none" autocomplete="off" placeholder="Набери цифры" value="'+typed+'"></div><div class="unit">Формат ответа: <b style="color:var(--ink2)">'+sh+'</b></div>'+
 '<div class="kp" id="kp">'+['1','2','3','⌫','4','5','6','–','7','8','9',',','−','0'].map(k=>'<button data-k="'+k+'">'+(k==='–'?'–<small>до, ±</small>':k==='−'?'−<small>минус</small>':k)+'</button>').join('')+'<button data-k="ok" class="go">Проверить</button></div>'+
 '<div class="acts" style="margin-top:8px"><button class="bt" id="idk" style="min-height:44px;background:none;border-color:transparent;color:var(--ink3)">Не знаю — показать ответ</button></div><div id="fb"></div>';
 const ni=$('ni');ni.addEventListener('input',()=>{typed=ni.value;});ni.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput();});}
-function finish(ok,html){$('fb').innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+html+(cur.src?'<div style="font-size:12.5px;opacity:.7;margin-top:6px">Источник: '+cur.src+'</div>':'')+'</div><div class="acts"><button class="bt on" id="nx">Дальше</button></div>';const n=$('nx');n.scrollIntoView({block:'nearest',behavior:'smooth'});}
+function finish(ok,html){$('numStats').innerHTML=statsHTML();$('fb').innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+html+(cur.src?'<div style="font-size:12.5px;opacity:.7;margin-top:6px">Источник: '+cur.src+'</div>':'')+'</div><div class="acts"><button class="bt on" id="nx">Следующий вопрос</button></div>';const n=$('nx');n.scrollIntoView({block:'nearest',behavior:'smooth'});}
 function checkInput(){if(cur.done)return;const ni=$('ni');const u=nums(ni.value),r=nums(wordsToDigits(cur.a));if(!u.length){ni.focus();return;}cur.done=true;const ok=eq(u,r);const part=!ok&&u.length<r.length&&eq(u,r.slice(0,u.length));grade(ok);
 ni.classList.add(ok?'ok':'no');ni.readOnly=true;$('kp').classList.add('hide');$('idk').parentNode.classList.add('hide');
 finish(ok,ok?'<b>Верно!</b> '+cur.a:(part?'<b>Почти.</b> Полный ответ: <b>'+cur.a+'</b>':'<b>Неверно.</b> Правильно: <b>'+cur.a+'</b>'));}
@@ -1103,7 +1553,7 @@ else if(b.dataset.k){const ni=$('ni');if(cur.done)return;const k=b.dataset.k;if(
 else if(b.id==='idk'){if(cur.done)return;cur.done=true;grade(false);$('kp').classList.add('hide');b.parentNode.classList.add('hide');finish(false,'Правильно: <b>'+cur.a+'</b>. Вопрос вернётся через пару заданий.');}
 else if(b.id==='nx'){cur=null;render();root.scrollTop=0;}
 else if(b.id==='nreset'){if(confirm('Сбросить весь прогресс по цифрам?')){S={};save();streak=0;today={ok:0,n:0};cur=null;render();}}});
-return{show(){render();},nums,Q};
+return{show(){if(!root.firstElementChild)render();},openSystem(id){G='sys';C=sysInfo(id)[1];store.set('numG',G);store.set('numC',C);cur=null;render();root.scrollTop=0;},nums,Q};
 })();
 
 boot();
