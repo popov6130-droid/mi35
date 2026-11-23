@@ -1522,6 +1522,271 @@ SYSS.transmission = {
   };
 })();
 
+/* Винты по главе 5, рис. 5.1–5.9, стр. 67–87 присланного учебника. */
+(function () {
+  const mainHub = MODEL_LAYOUT.mainRotorHub;
+  const mainFoot = MODEL_LAYOUT.mainRotorFoot;
+  const tailHub = MODEL_LAYOUT.tailRotorHub;
+  const tailMount = MODEL_LAYOUT.tailRotorMount;
+  const mainAxis = nrm(sub3(mainHub, mainFoot));
+  const tailAxis = nrm(sub3(tailHub, tailMount));
+  const mainRadius = 17.2 / 2;
+  const tailRadius = 3.84 / 2;
+  const tailStagger = 36 * Math.PI / 180;
+  const turn = Math.PI * 2;
+  const metal = '#809595', light = '#b6c8c5', dark = '#43595d';
+  const mainColor = '#718b80', tailColor = '#879597', heatColor = '#d4a24c';
+  const source = 'Учебник, гл. 5, стр. 67–87, рис. 5.1–5.9.';
+
+  const add = (p, v, k = 1) => p.map((x, i) => x + v[i] * k);
+  const at = (origin, radial, tangent, axis, r, t = 0, h = 0) =>
+    add(add(add(origin, radial, r), tangent, t), axis, h);
+  function frameFor(axis, a) {
+    const u = nrm(sub3([1, 0, 0], axis.map(x => x * axis[0])));
+    const v = crs(axis, u);
+    const radial = add(u.map(x => x * Math.cos(a)), v, Math.sin(a));
+    return [radial, crs(axis, radial)];
+  }
+  const name = {
+    mast:'Вал несущего винта', main:'Втулка несущего винта', bearing:'Эластомерный подшипник НВ',
+    damper:'Гидродемпфер НВ', swash:'Автомат перекоса', link:'Тяга поворота лопасти НВ',
+    collector:'Токосъёмник НВ', pendulum:'Маятниковый гаситель вибрации', droop:'Ограничитель свеса',
+    mainBlade:'Лопасть несущего винта', mainCore:'Лонжерон и хвостовые отсеки НВ', mainHeat:'Обогрев лопасти НВ',
+    tail:'Ступица рулевого винта', tailPair:'Два модуля рулевого винта', tailPitch:'Механизм шага рулевого винта',
+    tailBlade:'Лопасть рулевого винта', tailCore:'Лонжерон и сотовое заполнение РВ', tailHeat:'Обогрев лопасти РВ'
+  };
+  const view = {
+    all:{tg:[2.25, 2.35, 0], yaw:-.28, pitch:.41, zoom:.51},
+    main:{tg:[...mainHub], yaw:-.30, pitch:.78, zoom:.67},
+    head:{tg:[-.95, 3.75, 0], yaw:-.52, pitch:.36, zoom:3.5},
+    mainCut:{tg:[-3.58, 3.80, 0], yaw:-.28, pitch:.72, zoom:2.55},
+    tail:{tg:[...tailHub], yaw:-.11, pitch:.16, zoom:2.55},
+    tailHead:{tg:[11.65, 4.06, .74], yaw:-.52, pitch:.26, zoom:5.8},
+    tailCut:{tg:[10.61, 3.74, .87], yaw:-.20, pitch:.19, zoom:5.6}
+  };
+  const mainAngle = Math.PI;
+  const tailAngle = Math.PI + .32;
+  const mainPoint = (r, t, h) => at(mainHub, ...frameFor(mainAxis, mainAngle), mainAxis, r, t, h);
+  const tailPoint = (r, t, h) => at(tailHub, ...frameFor(tailAxis, tailAngle), tailAxis, r, t, h);
+  const sets = {
+    main:['mast','main','bearing','damper','swash','link','collector','pendulum','droop','mainBlade'],
+    mainCut:['mainBlade','mainCore','mainHeat'],
+    tail:['tail','tailPair','tailPitch','tailBlade'],
+    tailCut:['tailBlade','tailCore','tailHeat']
+  };
+  const part = (id, p, s, i, zoom, fy, fp, extra = {}) => ({n:name[id], p, s, i, sys:id, fz:zoom, fy, fp, ...extra});
+  const comps = [
+    part('mast',add(mainFoot,sub3(mainHub,mainFoot),.33),'Вал НВ','Передаёт вращение от главного редуктора ВР-24 к втулке.',4.6,-.54,.34),
+    part('main',mainHub,'Втулка НВ','Соединяет пять лопастей с валом главного редуктора. Через неё вращение приходит на лопасти, а их нагрузка передаётся на вертолёт.',4.1,-.55,.40,{m:1}),
+    part('bearing',mainPoint(.37,0,0),'Эластомерный подшипник','Слои резины и металла позволяют лопасти менять угол, немного взмахивать и двигаться в плоскости вращения.',5.2,-.50,.43,{m:1}),
+    part('damper',mainPoint(.56,-.24,-.14),'Гидродемпфер','Похож на амортизатор. Масло замедляет движение лопасти вперёд и назад в плоскости вращения.',5.2,-.50,.43),
+    part('swash',add(mainHub,mainAxis,-.36),'Автомат перекоса','Ползун поднимает или опускает тарелку, а кольца кардана позволяют ей наклоняться. Вращающаяся часть тарелки передаёт движение пяти тягам.',5.2,-.56,.30,{m:1}),
+    part('link',mainPoint(.59,.11,-.19),'Тяга шага НВ','Связывает тарелку автомата перекоса с рычагом лопасти. Тяга поворачивает лопасть вокруг её продольной оси.',5.1,-.46,.39),
+    part('collector',add(mainHub,mainAxis,.24),'Токосъёмник','Передаёт электричество с неподвижной части вертолёта к обогреву вращающихся лопастей.',5.2,-.45,.40),
+    part('pendulum',mainPoint(.72,0,.28),'Гаситель вибрации','Если он установлен, пять маятников над втулкой уменьшают её колебания в плоскости вращения.',5.0,-.47,.46),
+    part('droop',mainPoint(.24,.13,-.10),'Ограничитель свеса','На стоянке и малых оборотах ограничивает опускание лопасти. При раскрутке его положение меняется под действием центробежной силы.',5.3,-.48,.37),
+    part('mainBlade',mainPoint(4.30,0,0),'Лопасть НВ','Лопасть создаёт аэродинамическую силу. На вертолёте пять таких лопастей. Золотистая полоса обозначает переднюю кромку с электрообогревом.',1.75,-.20,.79,
+      {pp:Array.from({length:5},(_,i)=>at(mainHub,...frameFor(mainAxis,mainAngle+i*turn/5),mainAxis,5.3))}),
+    part('mainCore',mainPoint(2.72,0,0),'Лонжерон и отсеки НВ','Лонжерон несёт основную нагрузку. За ним расположены 15 хвостовых отсеков с сотовым заполнением, которые удерживают форму лопасти.',3.7,-.24,.79,{m:1}),
+    part('mainHeat',mainPoint(3.55,.24,0),'Обогрев НВ','Нагревательные элементы лежат вдоль носовой части лопасти. У каждой лопасти четыре секции обогрева.',3.6,-.24,.79),
+    part('tail',tailHub,'Ступица РВ','Посажена на выходной вал хвостового редуктора и передаёт вращение двум модулям.',5.3,-.28,.22,{m:1}),
+    part('tailPair',tailPoint(.34,0,-.09),'Модули РВ','Два двухлопастных модуля находятся на одной оси, в соседних плоскостях. Их оси повёрнуты друг относительно друга на 36°.',4.5,-.39,.25),
+    part('tailPitch',tailPoint(.18,0,.25),'Механизм шага РВ','Шток двигает ползун, а поводок и четыре тяги поворачивают лопасти. На схеме видны также рычаги, осевые шарниры и торсионы модулей.',5.8,-.42,.25,{m:1}),
+    part('tailBlade',tailPoint(1.25,0,-.09),'Лопасть РВ','Изменение угла всех четырёх лопастей меняет боковую тягу. Так рулевой винт уравновешивает стремление фюзеляжа вращаться и позволяет менять курс.',3.5,-.14,.17,
+      {pp:[0,Math.PI,tailStagger,tailStagger+Math.PI].map(a=>at(tailHub,...frameFor(tailAxis,tailAngle+a),tailAxis,1.30))}),
+    part('tailCore',tailPoint(1.03,.035,-.09),'Лонжерон и соты РВ','Стеклопластиковый лонжерон воспринимает нагрузку. Сотовое заполнение под оболочкой помогает сохранить профиль при небольшой массе.',6.9,-.15,.18,{m:1}),
+    part('tailHeat',tailPoint(1.36,.09,-.09),'Обогрев РВ','Электронагревательная накладка защищает переднюю часть лопасти. На модели она выделена золотистым цветом.',6.9,-.15,.18)
+  ];
+
+  // Радиусы заданы в масштабе корпуса. Профили сечений нужны для учебного изображения.
+  function blade(origin, radial, tangent, axis, pitch, tail, cut) {
+    const end = tail ? tailRadius : mainRadius;
+    const root = tail ? .39 : .75;
+    const chord = tail ? .24 : .62;
+    const sweep = tail ? .08 : 0;
+    const coords = (r, x, z) => {
+      const fraction = (r-root)/(end-root);
+      const a = pitch-(tail?.10:.13)*fraction;
+      return at(origin,radial,tangent,axis,r,x*Math.cos(a)-z*Math.sin(a)+sweep*fraction,
+        x*Math.sin(a)+z*Math.cos(a));
+    };
+    const stations = tail
+      ? [[root,.56],[.55,1],[1.76,.99],[1.86,.82],[end,.38]]
+      : [[root,.57],[1.0,.81],[1.44,1],[7.95,1],[8.45,.90],[end,.63]];
+    const skin = [[.50,0],[.38,.036],[.14,.081],[-.17,.077],[-.47,.031],[-.51,0],[-.36,-.028],[.12,-.041],[.38,-.027]];
+    const sections = stations.map(([r,s])=>skin.map(([x,z])=>coords(r,x*s*chord,z*s*chord)));
+    if(!cut) {
+      loft(sections,tail?tailColor:mainColor,1,{cols:stations.slice(1).map((_,i)=>
+        i===stations.length-2?'#b8c1b8':i===0?dark:tail?tailColor:mainColor)});
+    } else {
+      const spar = [[.48,0],[.37,.06],[.04,.073],[-.13,.045],[-.13,-.025],[.31,-.041]];
+      loft(stations.map(([r,s])=>spar.map(([x,z])=>coords(r,x*s*chord,z*s*chord))),
+        '#71ad9d',1);
+      const cells = tail?6:15;
+      const min = tail?.54:1.43, max = tail?1.82:8.34;
+      for(let i=0;i<cells;i++){
+        const a=min+(max-min)*i/cells, b=min+(max-min)*(i+1)/cells;
+        poly([coords(a,-.16*chord,-.025*chord),coords(b-.025,-.16*chord,-.025*chord),
+          coords(b-.025,-.47*chord,-.014*chord),coords(a,-.47*chord,-.014*chord)],
+          i%2?'#be9b69':'#d8b67a',1,'#866b49',.005);
+        poly([coords(a,-.16*chord,-.025*chord),coords(a,-.47*chord,-.014*chord),
+          coords(a,-.47*chord,.01*chord),coords(a,-.16*chord,.04*chord)],light,1);
+      }
+    }
+    const strips = tail?1:4;
+    for(let i=0;i<strips;i++){
+      const start=root+.18+(end-root-.37)*i/strips;
+      const finish=root+.18+(end-root-.37)*(i+1)/strips-.026;
+      poly([coords(start,.27*chord,.071*chord),coords(finish,.27*chord,.071*chord),
+        coords(finish,.37*chord,.058*chord),coords(start,.37*chord,.058*chord)],
+        heatColor,1,'#88652f',.035);
+    }
+  }
+  function disk(origin,axis,offset,radius,thickness,color) {
+    cyl(add(origin,axis,offset-thickness/2),add(origin,axis,offset+thickness/2),radius,color,1,18);
+  }
+  function annulus(origin,axis,radius,halfWidth,color) {
+    const points=circ(origin,axis,radius,20);
+    tube([...points,points[0]],halfWidth,color,1,7,{cap:false});
+  }
+  function mainHead(detailed, t, motion) {
+    const pitch = motion ? Math.sin(t*2) : 0;
+    const slider = motion==='collective' ? .07*pitch : 0;
+    cyl(mainFoot, add(mainHub, mainAxis,.24), .12, dark,1,14);
+    lathe(mainHub, mainAxis,[[-.17,.16],[-.11,.25],[.075,.27],[.14,.19]],metal,1,18);
+    disk(mainHub,mainAxis,.20,.135,.12,dark);
+    disk(mainHub,mainAxis,.28,.11,.055,light);
+    if (detailed) {
+      const plate=add(mainHub,mainAxis,-.36+slider);
+      const plateAxis=motion==='cyclic' ? nrm(add(mainAxis,[1,0,0],-.20*pitch)) : mainAxis;
+      disk(plate,plateAxis,-.06,.26,.11,dark);
+      annulus(plate,plateAxis,.34,.052,'#5e9db0');
+      annulus(add(plate,mainAxis,-.075),plateAxis,.29,.047,'#9eb8bc');
+      cyl(add(plate,mainAxis,-.10),add(mainFoot,mainAxis,.06),.155,metal,1,12);
+      cyl(add(plate,[0,0,1],.28),add(mainFoot,[0,0,1],.36),.027,light,1,8);
+      for(let i=0;i<5;i++) {
+        const [r,u]=frameFor(mainAxis,mainAngle+i*turn/5);
+        const a=(d,s=0,h=0)=>at(mainHub,r,u,mainAxis,d,s,h);
+        lathe(a(.16),r,[[0,.12],[.14,.105],[.20,.083],[.27,.093]],dark,1,10);
+        for(let layer=0;layer<4;layer++)
+          cyl(a(.29+.027*layer),a(.306+.027*layer),.10,layer%2?light:metal,1,9);
+        for(const side of [-1,1]) {
+          cyl(a(.36,.084*side),a(.70,.102*side),.040,light,1,8);
+          cyl(a(.22,.085*side,-.09),a(.31,.105*side,-.11),.027,heatColor,1,8);
+        }
+        cyl(a(.71,-.14),a(.71,.14),.046,dark,1,9);
+        cyl(a(.30,-.19,-.12),a(.61,-.25,-.13),.045,'#6a8a8b',1,9);
+        cyl(a(.57,-.24,-.13),a(.76,-.20,-.02),.023,light,1,8);
+        cyl(a(.45,-.22,-.10),a(.45,-.22,-.035),.035,metal,1,8);
+        const tilt=motion==='cyclic' ? .07*pitch*Math.cos(mainAngle+i*turn/5) : 0;
+        cyl(a(.31,.11,-.36+slider+tilt),a(.65,.14,-.04),.021,'#e2c881',1,8);
+        cyl(a(.10,0,.29),a(.64,0,.29),.023,dark,1,8);
+        loft([circ(a(.63,0,.29),r,.065,8),circ(a(.80,0,.29),r,.064,8)],metal,1);
+      }
+    } else {
+      for(let i=0;i<5;i++) {
+        const [r,u]=frameFor(mainAxis,mainAngle+i*turn/5);
+        cyl(at(mainHub,r,u,mainAxis,.19),at(mainHub,r,u,mainAxis,.82),.086,metal,1,8);
+      }
+    }
+  }
+  function drawMain(t, motion, detail, cut) {
+    if(!cut)mainHead(detail,t,motion);
+    const v=Math.sin(t*2);
+    for(let i=0;i<(cut?1:5);i++) {
+      const a=mainAngle+i*turn/5;
+      const angle=motion==='collective'?.19*v:motion==='cyclic'?.20*v*Math.cos(a):0;
+      blade(mainHub,...frameFor(mainAxis,a),mainAxis,angle,false,cut);
+    }
+  }
+  function drawTail(t, motion, detailed, cut) {
+    if(!cut){
+      cyl(tailMount,add(tailHub,tailAxis,.23),.10,dark,1,12);
+      lathe(tailHub,tailAxis,[[-.22,.16],[-.14,.21],[.09,.21],[.18,.13]],metal,1,16);
+      disk(tailHub,tailAxis,.21,.135,.06,light);
+    }
+    const displacement=motion==='tail'?.09*Math.sin(t*2):0;
+    if(detailed&&!cut)disk(tailHub,tailAxis,.29+displacement,.125,.072,'#6babb6');
+    for(let i=0;i<(cut?1:4);i++){
+      const b=i%2, a=tailAngle+b*tailStagger+(i>=2?Math.PI:0);
+      const origin=add(tailHub,tailAxis,b?.09:-.09);
+      const [r,u]=frameFor(tailAxis,a);
+      const q=(d,s=0,h=0)=>at(origin,r,u,tailAxis,d,s,h);
+      if(!cut){
+        cyl(q(.08),q(.42),b?.060:.071,b?'#71878d':'#a4b5b6',1,10);
+        if(detailed){
+          cyl(q(.24),q(.35),.089,dark,1,10);
+          cyl(q(.26,-.057),q(.43,-.057),.022,heatColor,1,8);
+          cyl(q(.06,.066,.29+(b?-.09:.09)+displacement),q(.37,.082,.045),.018,light,1,8);
+        }
+      }
+      blade(origin,r,u,tailAxis,motion==='tail'?displacement*2.6:0,true,cut);
+    }
+  }
+
+  const filter = (t, detail, show, v, d) => ({t,st:{x:{detail,show}},view:v,d});
+  const allParts=['main','mainBlade','tail','tailBlade'];
+  SYSS.rotors = {
+    id:'rotors',base:2.2,dd:27,view:view.all,fz:3.5,staticG:[],allOn:[],tabNorm:[],tabs:[],comps,
+    refreshCompList:true,
+    modeLabels:{fails:'Что меняется'},
+    mkPipes(){},
+    exterior(){shell({skip:['r','t']});drawMain(0,null,false,false);drawTail(0,null,false,false);},
+    build(st){
+      const d=st.x.detail;
+      shell({skip:['r','t'],k:d?.56:1.55});
+      if(!st.x.motion){
+        if(!d||d==='main'||d==='head'||d==='mainCut')drawMain(0,null,d==='head',d==='mainCut');
+        if(!d||d==='tail'||d==='tailHead'||d==='tailCut')drawTail(0,null,d==='tailHead',d==='tailCut');
+      }
+    },
+    dyn(t,st){
+      if(st.x.motion==='tail')drawTail(t,'tail',true,false);
+      else if(st.x.motion)drawMain(t,st.x.motion,true,false);
+    },
+    filters:[
+      filter('Оба винта',null,allParts,view.all,'Оси втулок общие с разделом «Трансмиссия». Диаметры 17,2 и 3,84 м показаны в масштабе корпуса.'),
+      filter('Несущий винт','main',['mast','main','mainBlade'],view.main,'Главный редуктор вращает пять лопастей через вал и втулку.'),
+      filter('Втулка НВ','head',sets.main,view.head,'Рамки лопастей, эластомерные опоры, демпферы, автомат перекоса и токосъёмник. Маятниковый гаситель показан в варианте с его установкой.'),
+      filter('Разрез лопасти НВ','mainCut',sets.mainCut,view.mainCut,'Зелёный лонжерон несёт нагрузку. За ним видны хвостовые отсеки, а спереди — секции электрообогрева.'),
+      filter('Рулевой винт','tail',['tail','tailPair','tailBlade'],view.tail,'Две пары лопастей на одной оси образуют вытянутую букву Х.'),
+      filter('Втулка РВ','tailHead',sets.tail,view.tailHead,'На крупном плане видны отдельные модули, ползун, тяги и соединение с хвостовым редуктором.'),
+      filter('Разрез лопасти РВ','tailCut',sets.tailCut,view.tailCut,'Снаружи расположена обогреваемая передняя кромка, внутри — лонжерон и сотовое заполнение.')
+    ],
+    steps:[
+      {t:'От редуктора к лопастям',txt:'Вал ВР-24 вращает ступицу. Через рамки втулки вращение передаётся всем пяти лопастям.',st:{x:{detail:'head',show:sets.main}},view:view.head},
+      {t:'Общий шаг',txt:'Обе части тарелки поднимаются или опускаются, и тяги меняют угол всех пяти лопастей вместе. Вращение остановлено, чтобы было видно движение деталей.',st:{x:{detail:'head',motion:'collective',show:sets.main}},view:view.head},
+      {t:'Циклический шаг',txt:'Тарелка наклоняется. На одной стороне диск получает больший шаг, на другой меньший. У каждой лопасти шаг меняется по мере её прохода через эти стороны.',st:{x:{detail:'head',motion:'cyclic',show:sets.main}},view:view.head},
+      {t:'Как меняется тяга рулевого винта',txt:'Педали перемещают шток. Ползун через четыре тяги поворачивает лопасти. Изменение их угла меняет боковую тягу.',st:{x:{detail:'tailHead',motion:'tail',show:sets.tail}},view:view.tailHead}
+    ],
+    fails:[
+      {t:'Колебания лопасти',txt:'Гидродемпфер тормозит движение лопасти вперёд и назад в плоскости вращения. Маятниковый гаситель, если установлен, уменьшает колебания самой втулки.',st:{x:{detail:'head',show:sets.main}},focus:name.damper,view:view.head},
+      {t:'Лёд на передней кромке',txt:'Лёд меняет форму профиля и мешает потоку правильно обтекать лопасть. Электрический нагрев защищает переднюю кромку. На разрезе нагревательные секции выделены золотистым.',st:{x:{detail:'mainCut',show:sets.mainCut}},focus:name.mainHeat,view:view.mainCut}
+    ],
+    qs:[
+      ['Сколько лопастей у несущего винта','5','3','4','6','Учебник, гл. 5, стр. 67–68'],
+      ['Каков диаметр несущего винта','17,2 м','16,0 м','18,0 м','19,3 м','Учебник, гл. 5, стр. 68'],
+      ['Сколько лопастей у рулевого винта','4','2','3','5','Учебник, гл. 5, стр. 82'],
+      ['Каков диаметр рулевого винта','3,84 м','3,24 м','4,20 м','4,84 м','Учебник, гл. 5, стр. 82'],
+      ['Под каким углом расположены модули рулевого винта','36°','45°','60°','90°','Учебник, гл. 5, стр. 82'],
+      ['Сколько секций обогрева на одной лопасти несущего винта','4','2','3','5','Учебник, гл. 5, стр. 76']
+    ],
+    theory:`
+      <div class="theory-hero"><h2>Два винта, две задачи</h2>
+      <p>Несущий винт сверху поднимает вертолёт и тянет его в нужную сторону. Рулевой винт на хвосте удерживает фюзеляж от разворота и помогает менять курс.</p>
+      <div class="theory-actions"><button class="bt on" data-theory-view="head">Втулка в 3D</button><button class="bt" data-theory-steps>Посмотреть движение тяг</button><button class="bt" data-theory-numbers>Тест по цифрам</button></div></div>
+      <h2>Несущий винт</h2><p>Пять лопастей образуют диск диаметром 17,2 м. Втулка соединяет их с валом ВР-24. Эластомерные опоры дают лопастям немного двигаться, а гидродемпферы гасят их колебания вперёд-назад. Ограничители свеса поддерживают лопасти при малых оборотах.</p>
+      <p><b>Общий шаг.</b> Тарелка автомата перекоса поднимается или опускается. Тяги одновременно поворачивают все лопасти, и общая тяга винта меняется.</p>
+      <p><b>Циклический шаг.</b> Тарелка наклоняется. У каждой лопасти угол меняется один раз за оборот. За счёт этого наклоняется тяга винта, и вертолёт может двигаться вперёд, назад или вбок.</p>
+      <p>Токосъёмник подаёт электричество на вращающиеся лопасти. При наличии маятникового гасителя его пять маятников снижают вибрацию втулки.</p>
+      <h2>Рулевой винт</h2><p>Четыре лопасти образуют две пары на общей оси. Пары расположены в двух соседних плоскостях и повёрнуты на 36° друг к другу. Диаметр — 3,84 м. Хвостовой редуктор приводит ступицу, а педали через шток, ползун и тяги меняют угол лопастей.</p>
+      <p><button class="bt" data-theory-view="tailHead">Посмотреть втулку рулевого винта</button></p>
+      <h2>Что внутри лопасти</h2><p>Лонжерон — прочная основа лопасти. Хвостовые отсеки и лёгкое сотовое заполнение держат её форму. Переднюю кромку защищают от льда электрические нагреватели.</p>
+      <div class="theory-actions"><button class="bt" data-theory-view="mainCut">Разрез лопасти НВ</button><button class="bt" data-theory-view="tailCut">Разрез лопасти РВ</button></div>
+      <p class="note">${source} Оси и диаметры согласованы с корпусом. Мелкие детали, профили и ход учебной анимации приближённые.</p>`
+  };
+})();
+
 SYSS.fuel.qs=[['Вместимость расходного бака','320 л','480 л','575 л','120 л'],['Вместимость подвесного бака','575 л','320 л','460 л','1000 л'],['Вместимость бака № 3','480 л','320 л','500 л','575 л'],['Табло НАСОС РАБОТАЕТ горит при давлении за насосом более','0,18 кгс/см²','0,25 кгс/см²','1,2 кгс/см²','4 кгс/см²'],['Клапанная коробка срабатывает при разнице давлений более','0,25 кгс/см²','0,18 кгс/см²','1,2 кгс/см²','2 кгс/см²'],['Табло ВЫКЛЮЧИ ПЕРЕКАЧ загорается после выработки из бака № 3 около','150 л','120 л','30–50 л','320 л'],['Резервный остаток, при котором горит БАК ОСТАЛОСЬ','120 л в баке','150 л в баке','50 л в баке','320 л в баке'],['Какой бак вырабатывается первым','подвесные № 6–9','бак № 3','баки № 4 и 5','расходные № 1 и 2'],['Чем перекачивается топливо из подвесных баков','струйными насосами','электронасосами ЭЦН-91С','самотёком','сжатым воздухом'],['Как топливо из бака № 3 попадает в бак № 4','самотёком','насосом ЭЦН-91С','струйным насосом','через клапанную коробку'],['Сколько насосов ЭЦН-91С в топливной системе','4','2','6','9'],['Поплавковый клапан расходного бака открывается при снижении уровня на','30–50 л','120 л','150 л','5 л'],['Без подкачивающих насосов топливо идёт самотёком до высоты','3500 м','1000 м','5000 м','500 м']];
 SYSS.oil.qs=[['Давление масла на рабочих режимах','3–4 кгс/см²','0,5–1 кгс/см²','8–10 кгс/см²','65 кгс/см²'],['Минимальное давление масла на малом газе','2 кгс/см²','3 кгс/см²','0,5 кгс/см²','4,8 кгс/см²'],['Максимальная температура масла двигателя','150 °C','110 °C','90 °C','200 °C'],['Вместимость маслобака двигателя','13 л','8 л','20 л','4 л'],['Заправка маслобака','8–11 л','13 л','3–5 л','15–18 л'],['Сколько откачивающих насосов в МА-78','5','1','3','2'],['Отсечной клапан закрыт при оборотах ТК ниже','15 %','50 %','5 %','86 %'],['Термоклапан радиатора закрывается при температуре масла','60 ± 5 °C','30 °C','110 °C','150 °C'],['Ячейка сетки масляного фильтра','0,063 мм','0,8 мм','1 мм','0,005 мм'],['Перепускной клапан пускает масло мимо радиатора при давлении выше','1,25 кгс/см²','4 кгс/см²','0,18 кгс/см²','3 кгс/см²'],['Расход масла двигателем','не более 0,3 л/ч','не более 3 л/ч','не более 0,03 л/ч','не более 1 л/ч'],['Где измеряется давление масла','на подводе к 4-й и 5-й опорам','в маслобаке','перед радиатором','в коробке приводов'],['Выход на режим выше малого газа — при температуре масла не ниже','+30 °C','+70 °C','−40 °C','+5 °C']];
 SYSS.pos.qs=[['Ток секции нагревателя лопасти несущего винта','23–35 А','20–30 А','35–50 А','5–10 А'],['Ток пары лопастей рулевого винта','20–30 А','23–35 А','35–50 А','15–20 А'],['Ток электрообогрева ПЗУ','35–50 А','15–30 А','20–30 А','100 А'],['Сколько секций нагревателя на лопасти несущего винта','4','2','6','1'],['Сколько секций нагревателя на лопасти рулевого винта','2','4','1','3'],['ПОС автоматически отключается при температуре наружного воздуха выше','+20 °C','+5 °C','0 °C','+30 °C'],['Полёты в условиях обледенения разрешены до температуры','−20 °C','−5 °C','−40 °C','−10 °C'],['Обогрев двигателей и ПЗУ включают вручную при температуре','+5 °C и ниже','0 °C и ниже','−5 °C и ниже','+20 °C и ниже'],['Регулятор ТЭР-1М отключает обогрев стекла при','30 °C','60 °C','20 °C','90 °C'],['Положение СИЛЬНО обогрева стёкол включают после СЛАБО не ранее чем через','5 мин','1 мин','30 с','15 мин'],['Чем обогреваются вертикальные стойки первой опоры','горячим маслом','горячим воздухом','электричеством','не обогреваются'],['Защита от перегрева отключает секцию при обогреве дольше','30 с','5 с','2 мин','10 с'],['Цикл обогрева лопастей','6 импульсов по 5 с','3 импульса по 10 с','10 импульсов по 1 с','1 импульс 30 с'],['Что происходит с ПОС лопастей НВ при отказе одного генератора','отключается','работает от аккумуляторов','работает с половинной мощностью','ничего не меняется']];
@@ -1548,7 +1813,7 @@ theory:'<h2>Как системы связаны между собой</h2><ul><
 })();
 
 /* ---------- ИНТЕРФЕЙС: системы, режимы, нижняя панель, страницы ---------- */
-const SYSLIST=[['all','Все системы','#f2b01e','Как всё стоит в вертолёте'],['fuel','Топливная','#E8A020','Баки, насосы, перекачка'],['oil','Масляная','#E8862A','Маслосистема двигателя'],['pos','ПОС','#E8C020','Противообледенительная'],['hyd','Гидросистема','#5aa9ff','Основная и дублирующая'],['air','Воздушная','#9fd3e6','Тормоза, герметизация'],['skv','СКВ','#6cc3e0','Кондиционирование'],['fire','Пожарная','#ff5a4e','Датчики и огнетушители'],['cool','Охлаждение','#7fd1a8','Вентилятор, ПЗУ, ЭВУ'],['transmission','Трансмиссия','#82ffcf','Редукторы, валы и приводы'],['starting','Система запуска','#72cef8','ВСУ, воздушный стартер и фазы раскрутки']];
+const SYSLIST=[['all','Все системы','#f2b01e','Как всё стоит в вертолёте'],['fuel','Топливная','#E8A020','Баки, насосы, перекачка'],['oil','Масляная','#E8862A','Маслосистема двигателя'],['pos','ПОС','#E8C020','Противообледенительная'],['hyd','Гидросистема','#5aa9ff','Основная и дублирующая'],['air','Воздушная','#9fd3e6','Тормоза, герметизация'],['skv','СКВ','#6cc3e0','Кондиционирование'],['fire','Пожарная','#ff5a4e','Датчики и огнетушители'],['cool','Охлаждение','#7fd1a8','Вентилятор, ПЗУ, ЭВУ'],['transmission','Трансмиссия','#82ffcf','Редукторы, валы и приводы'],['starting','Система запуска','#72cef8','ВСУ, воздушный стартер и фазы раскрутки'],['rotors','Винты','#d3c38c','Несущий и рулевой винты, втулки и лопасти']];
 const sysInfo=id=>SYSLIST.find(s=>s[0]===id);
 const store={get(k,d){try{const v=localStorage.getItem('mi35_'+k);return v==null?d:JSON.parse(v);}catch(_){return d;}},set(k,v){try{localStorage.setItem('mi35_'+k,JSON.stringify(v));}catch(_){}}};
 
@@ -1586,7 +1851,7 @@ function setExterior(on){
     const prev=CUR;
     CUR=[];
     XF=SYS.T?invT(SYS.T):null;
-    shell();
+    if(SYS.exterior)SYS.exterior();else shell();
     XF=null;
     exteriorMesh=CUR;
     CUR=prev;
@@ -1630,14 +1895,14 @@ function applyFail(i){failI=i;const f=SYS.fails[i];setState(f.st||{});sel=null;i
 const li=(attr,i,t)=>'<button class="bt li" '+attr+'="'+i+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></button>';
 function renderPanel(){const p=$('pn');let h='';
 if(mode==='scheme'){if(SYS.filters)h+='<div class="lbl">'+(SYS.filtT||'Показать')+'</div><div class="chips">'+SYS.filters.map((f,i)=>'<button class="chip'+(i===filtI?' on':'')+'" data-filt="'+i+'">'+f.t+'</button>').join('')+'</div><div id="fd" class="card sm" style="margin-top:10px">'+(SYS.filters[filtI].d||'')+'</div>';
-const seen=new Set();h+='<div class="lbl">Агрегаты — нажми, чтобы найти</div><div class="row">'+SYS.comps.filter(c=>{if(c.detail&&!vis(c))return false;const k=c.q||c.n;if(seen.has(k))return false;seen.add(k);return true;}).map(c=>'<button class="bt sm2" data-comp="'+c.n+'">'+(c.q||c.s||c.n)+'</button>').join('')+'</div>';}
+const seen=new Set();h+='<div class="lbl">Агрегаты — нажми, чтобы найти</div><div class="row">'+SYS.comps.filter(c=>{if((c.detail||SYS.refreshCompList)&&!vis(c))return false;const k=c.q||c.n;if(seen.has(k))return false;seen.add(k);return true;}).map(c=>'<button class="bt sm2" data-comp="'+c.n+'">'+(c.q||c.s||c.n)+'</button>').join('')+'</div>';}
 else if(mode==='steps'){h='<div class="lbl">Все шаги</div><div class="col list">'+SYS.steps.map((s,i)=>li('data-step',i,s.t)).join('')+'</div>';}
 else if(mode==='fails'){h='<div class="lbl">Выбери ситуацию</div><div class="col list">'+SYS.fails.map((s,i)=>li('data-fail',i,s.t)).join('')+'</div><p class="note">Пометка «по логике схемы» — вывод из устройства системы, в книге и РЛЭ прямо не написано.</p>';if(shState!=='max')setSheet('max');}
 else if(mode==='quiz'){h='<p class="note" style="margin-top:4px">Схему можно крутить и приближать. Все цифры этой системы — в разделе «Цифры» внизу.</p>';}
 p.innerHTML=h;}
 $('pn').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
 if(b.dataset.filt!=null){filtI=+b.dataset.filt;const f=SYS.filters[filtI];setState(f.st);sel=null;HL=null;hideOv();if(f.view)fly(f.view);else fly(SYS.view);
-if(SYS.id==='transmission'){
+if(SYS.id==='transmission'||SYS.refreshCompList){
   const scroller=b.parentElement,scrollLeft=scroller.scrollLeft;
   renderPanel();
   $('pn').querySelector('.chips').scrollLeft=scrollLeft;
