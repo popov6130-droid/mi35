@@ -380,6 +380,11 @@ const P_TH="<h2>Общий принцип</h2>\n<p>Система не даёт 
 
 /* Привязки к сетке shell.json. Единицы и координаты относятся к этой учебной модели. */
 const MODEL_LAYOUT = {
+  gearboxCenter: [-.92,2.57,-.01],
+  engineFront: -4.45, engineRadius: .26,
+  engineOutputs: [[-2.24,2.42,.46],[-2.24,2.42,-.46]],
+  gearboxInputs: [[-1.29,2.42,.37],[-1.29,2.42,-.37]],
+  assemblyView: {tg:[2.05,2.67,0],yaw:-.27,pitch:.32,zoom:.46},
   mainRotorFoot: [-.93, 3.10, 0],
   mainRotorHub: [-.95, 3.85, .01],
   tailRotorHub: [11.65, 4.06, .96],
@@ -397,6 +402,44 @@ const MODEL_LAYOUT = {
     {strutTop:[.58,.35,-.84], strutBottom:[.60,-.19,-1.62], brake:[.60,-.21,-1.39]}
   ]
 };
+
+// Наружные поверхности коробки и навесных агрегатов в координатах эскиза двигателя.
+function engineCasting(face, segments=16) {
+  const alloy='#9aa4a5', rim='#c4cdcb', seal='#424d52', paint='#8c4b3b';
+  function shell(rows,color) {
+    const last=rows.length-1;
+    face(rows[0].slice().reverse(),color);
+    for(let i=0;i<last;i++) for(let j=0;j<rows[i].length;j++){
+      const k=(j+1)%rows[i].length;
+      face([rows[i][j],rows[i][k],rows[i+1][k],rows[i+1][j]],color);
+    }
+    face(rows[last],color);
+  }
+  const circle=(x,y,z,r,n)=>Array.from({length:n},(_,j)=>{
+    const a=2*Math.PI*j/n;
+    return [x,y+r*Math.cos(a),z+r*Math.sin(a)];
+  });
+  const turned=(y,z,profile,color,n=segments)=>shell(profile.map(([x,r])=>circle(x,y,z,r,n)),color);
+  // Один выпуклый контур обеспечивает общую торцевую плоскость для трёх крышек.
+  const contour=[[.93,-.39],[.99,-.55],[1.17,-.62],[1.32,-.55],[1.55,-.33],
+    [1.69,-.20],[1.74,0],[1.69,.20],[1.55,.33],[1.32,.55],[1.17,.62],[.99,.55],[.93,.39]];
+  shell([[-3.49,.94],[-3.45,1],[-3.02,1],[-2.94,.91]].map(([x,s])=>
+    contour.map(([y,z])=>[x,1.27+(y-1.27)*s,z*s]).reverse()),alloy);
+  for(const [y,z,r] of [[1.40,0,.295],[1.13,-.4,.153],[1.13,.4,.153]]){
+    turned(y,z,[[-3.565,r*.93],[-3.55,r],[-3.498,r]],rim);
+    turned(y,z,[[-3.581,r*.79],[-3.571,r*.82],[-3.561,r*.82]],seal);
+    turned(y,z,[[-3.615,r*.47],[-3.605,r*.56],[-3.577,r*.56]],alloy);
+    for(let i=0;i<6;i++){
+      const a=i*Math.PI/3;
+      turned(y+Math.cos(a)*r*.89,z+Math.sin(a)*r*.89,[[-3.578,.017],[-3.562,.018]],seal,6);
+    }
+  }
+  turned(1.32,.24,[[-2.96,.19],[-2.86,.23],[-2.76,.21],[-2.68,.20],[-2.62,.25],[-2.16,.25],[-2.11,.21],[-2.04,.12]],alloy);
+  turned(1.32,.24,[[-2.48,.256],[-2.44,.256]],seal);
+  turned(1.29,-.29,[[-2.97,.17],[-2.87,.22],[-2.76,.19],[-2.08,.19],[-1.97,.15]],alloy);
+  turned(1.29,-.29,[[-2.30,.196],[-2.24,.196]],rim);
+  turned(1.29,-.29,[[-1.98,.095],[-1.87,.095],[-1.82,.067]],paint,8);
+}
 
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');let Wd=360,H=480;
 function size(){Wd=cv.clientWidth||360;H=cv.clientHeight||480;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Wd*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
@@ -435,6 +478,31 @@ loft(EPROF.map(([t,r])=>circ([xf+L*t,y,z],[1,0,0],r*R,16)),'#777777',AL,{cols});
 const q=R/.3;tube([[xr-.04,y,z],[xr+.1*q,y+.02*q,z+s*.04*q],[xr+.2*q,y+.08*q,z+s*.2*q],[xr+.24*q,y+.17*q,z+s*.44*q]],[.8*R,.8*R,.78*R,.75*R],'#4a4945',AL,12);
 if(c.shaft!==false)cyl([xr-.02,y,z],[xr+2.2*R,y,z],.16*R,'#8b8983',AL,8);
 for(let k=0;k<3;k++)cyl([xf+L*(.42+k*.06),y,z],[xf+L*(.44+k*.06),y,z],R*1.02,'#8b8983',AL,16,R*1.02,{cap:false});}
+// Облегчённая геометрия для общей сцены. Границы по X задаются выходом и носом двигателя.
+function installedEngine(output,front,radius){
+  const [end,y,z]=output, side=Math.sign(z);
+  const point=([x,h,w])=>[front+(end-front)*(x+4.32)/8.07,y+h*radius,z+w*radius];
+  const ring=(x,r)=>circ(point([x,0,0]),[1,0,0],r*radius,18);
+  const skin=(profile,color)=>loft(profile.map(([x,r])=>ring(x,r)),color,1,{cap:false,stroke:null});
+  skin([[-4.32,.02],[-4.23,.29],[-4.06,.43],[-3.85,.49],[-3.35,.49]],'#6d704d');
+  skin([[-3.54,1.15],[-3.49,1.18],[-3.32,1.13],[-2.62,.95],[-1.7,.83],[-.8,.76],[-.58,.89],[.4,.91],[.56,.83],[1.05,.89],[1.76,.96]],'#5c6867');
+  for(const [x,r] of [[-3.53,1.16],[-2.52,.95],[-2.25,.92],[-1.97,.89],[-1.7,.86],[-1.42,.84],[-.60,.91],[.4,.93],[1.07,.92],[1.73,.98]])
+    skin([[x-.026,r],[x,r+.035],[x+.045,r+.035],[x+.065,r]],'#b1b9b3');
+  for(let i=0;i<4;i++){
+    const a=(i+.5)*Math.PI/2;
+    cyl(point([-3.38,.40*Math.cos(a),.40*Math.sin(a)]),point([-3.38,1.11*Math.cos(a),1.11*Math.sin(a)]),radius*.065,'#a59661',1,6);
+  }
+  tube([[1.75,0,0],[2.13,0,0],[2.34,.06,.22*side],[2.53,.19,.62*side],[2.61,.32,side]].map(point),
+    [.96,.99,1.02,1.09,1.20].map(r=>r*radius),'#41494a',1,16,{cap:false,stroke:null});
+  engineCasting((points,color)=>{
+    const vertices=points.map(point);
+    const normal=nrm(crs(sub3(vertices[1],vertices[0]),sub3(vertices[2],vertices[0])));
+    poly(vertices,shade(color,lit(normal)),1,null);
+  },12);
+  for(const sign of [-1,1])for(let i=0;i<3;i++)
+    tube([[-2.54+i*.15,1.17,.28*sign],[-2.39+i*.12,.82,.66*sign],[-1.97+i*.12,.66,.80*sign],[-.9+i*.10,.58,.79*sign],[-.68+i*.10,.13,.91*sign]].map(point),.02*radius,'#b4bdba',1,5,{cap:false,stroke:null});
+  cyl(point([1.7,0,0]),output,radius*.12,'#adb6b4',1,10);
+}
 function heli(Tf,o){o=o||{};const A=o.a||.1,F='#a9c4c1',ST='rgba(170,200,196,.2)';const M=s=>s.map(Tf);
 const S=[[-4.6,-.25,.1,.1],[-4.2,-.2,.38,.36],[-3.6,-.1,.6,.56],[-3.0,0,.75,.7],[-2.2,.05,.85,.8],[1.8,.05,.85,.82],[2.5,.18,.72,.66],[3.3,.34,.48,.4],[4.6,.55,.3,.24],[6.3,.82,.18,.14]];
 loft(S.map(s=>M(secX(s[0],s[1],s[2],s[3],14,0,2.7))),F,A,{stroke:ST,bias:-.3});
@@ -625,6 +693,7 @@ pipe([[-4.27,1.25,.8],[-3.3,1.25,.8],[-3.3,1.25,1.6],[-3.3,.6,1.6]],BL,'cool',{w
 pipe([[-4.0,.5,-.15],[-4.0,1.25,-.15],[-4.0,1.25,.8]],GR,'byp',{w:.06});
 pipe([[-2.6,1.45,.35],[-2.6,1.95,.35],[2.7,1.95,.35],[2.7,.75,.35]],GR,'br',{w:.05});},
 build(st){
+if(!st.x.sharedEngine){
 loft(PROF.map(([x,r])=>circ([x,0,0],[1,0,0],r,22)),'#a9c4c1',.14,{cap:false,stroke:'rgba(170,200,196,.25)',bias:-.25});
 tube([[3.1,0,0],[3.5,0,-.08],[3.85,0,-.4],[4.0,0,-.95]],.8,'#a9c4c1',.14,18,{stroke:'rgba(170,200,196,.25)',bias:-.25,cap:false});
 lathe([-3.25,0,0],[1,0,0],[[0,.03],[.12,.16],[.3,.24],[.4,.24]],'#77756f',1,14);
@@ -636,6 +705,7 @@ SUPX.forEach((x,i)=>{cyl([x-.1,0,0],[x+.1,0,0],.22,'#6f66d8',1,16);cyl([x-.11,0,
 cyl([-2.6,.2,0],[-2.6,.95,0],.05,'#77756f',1,8);
 rbox([-2.3,1.2,0],[1.1,.5,1.0],'#8a8880',1);
 lathe([-2.35,1.7,-.2],[1,0,0],[[0,.1],[.08,.2],[.6,.2],[.7,.14],[.78,.05]],'#6b6a66',1,14);
+}
 cyl([-3.15,1.1,.3],[-2.85,1.1,.3],.14,'#5a52c0',1,12);cyl([-2.6,1.45,.35],[-2.6,1.62,.35],.08,'#9a9890',1,10);cyl([-2.6,1.62,.35],[-2.6,1.66,.35],.11,'#77756f',1,10);
 rbox([-2.2,-1.25,0],[.9,.4,.6],'#5a52c0',1);for(let k=0;k<3;k++)cyl([-2.5+k*.3,-1.25,-.3],[-2.5+k*.3,-1.25,-.4],.11,'#4a43a8',1,10);
 cyl([-1.5,-1.45,.6],[-1.5,-.98,.6],.17,'#77756f',1,14);cyl([-1.5,-.98,.6],[-1.5,-.92,.6],.12,'#55534f',1,6);
@@ -713,16 +783,17 @@ build(st){if(!st.x.combo){XF=invT(TP);shell({skip:['r','t']});XF=null;}
 box([-2.9,-.28,0],[.16,.2,.2],'#5a52c0');box([-3.85,-.78,0],[.16,.2,.2],'#5a52c0');
 for(const s of[1,-1]){rbox([-1.188,1.357,s*.392],[.3,.14,.26],'#77756f',1);lathe(generator(s),[0,0,s],[[-.136,.08],[-.091,.13],[.091,.13],[.136,.07]],'#5a52c0',1,12);}
 lathe([.15,1.6,0],[1,0,0],[[0,.27],[.08,.24],[.5,.24],[.55,.18]],'#6b6a66',.9,16);
-rbox([RX,EY,0],[.9,.7,.9],'#8a8880',.55);cyl(local(MODEL_LAYOUT.mainRotorFoot),[RX,RN[1]-.06,RN[2]],.11,'#77756f',.65,12);
+if(!st.x.sharedRotors){rbox([RX,EY,0],[.9,.7,.9],'#8a8880',.55);cyl(local(MODEL_LAYOUT.mainRotorFoot),[RX,RN[1]-.06,RN[2]],.11,'#77756f',.65,12);
 cyl([RX,RN[1]-.06,RN[2]],[RX,RN[1]+.09,RN[2]],.25,'#6b6a66',1,16);
 lathe(RN,[0,1,0],[[0,.14],[.11,.14],[.16,.09]],'#c9a21a',1,14);
-rbox(tailGearbox,[.30,.29,.26],'#8a8880',1);cyl(tailMount,TR,.087,'#c9a21a',1,12);
+rbox(tailGearbox,[.30,.29,.26],'#8a8880',1);cyl(tailMount,TR,.087,'#c9a21a',1,12);}
 rbox([.3,.25,0],[.42,.3,.34],'#5a52c0',1);box([1.2,.25,0],[.4,.25,.8],'#77756f');},
 dyn(T,st){const G=g(T),on=k=>st.on.has(k);
 const gOn=on('gl');for(const q of[[[-4.25,-.55,-.38],[-4.25,-.55,.38],[-3.75,.08,.38],[-3.75,.08,-.38]],[[-3.3,.08,-.42],[-3.3,.08,.42],[-2.75,.72,.42],[-2.75,.72,-.42]]])poly(q,gOn?shade(HOT,G):'#7fb6e6',gOn?.62:.55,'rgba(40,60,90,.9)');
 for(const s of[1,-1]){const d=s>0?'L':'R',z=s*.392,pz=on('pzu'+d),ar=on('air'+d);
-engine(-2.024,.15,EYE,z,.261,{a:st.x.combo?.45:1,pzu:pz?hx(HOT,G):'#a9a79f',lip:ar?hx(AIR,G):'#8f8d86',inl:ar?hx('#e2602f',G):'#6f6d68'});
+if(!st.x.sharedRotors)engine(-2.024,.15,EYE,z,.261,{a:st.x.combo?.45:1,pzu:pz?hx(HOT,G):'#a9a79f',lip:ar?hx(AIR,G):'#8f8d86',inl:ar?hx('#e2602f',G):'#6f6d68'});
 tube([[-1.69,.869,s*.626],[-1.69,.826,s*.783],[-1.69,.869,s*.94]],.07,pz?hx(HOT,G):'#8a8880',1,10);}
+if(st.x.sharedRotors)return;
 const rot=T*.25,sp=st.x.slow?3:1,k=Math.floor(T/sp)%6,secN=[0,1,2,3,0,1][k],aN=on('rotN'),aT=on('rotT'),y=RN[1];
 for(let i=0;i<5;i++){const a=rot+i*1.2566;const d=[Math.cos(a),0,Math.sin(a)],e=[-Math.sin(a),0,Math.cos(a)];const pt=(r,o)=>[RX+d[0]*r+e[0]*o,y,RN[2]+d[2]*r+e[2]*o];
 cyl(pt(.25,.02),pt(.8,.02),.06,'#55534f',1,8);
@@ -761,7 +832,52 @@ theory:P_TH};
 })();
 
 const ID={s:[1,1,1],t:[0,0,0]};
-function baseHeli(st,o){o=o||{};if(st.x.combo)return;shell({skip:['r','t']});for(const s of[1,-1])engine(-4.45,-1.95,2.42,s*.45,.27,{a:o.ea==null?.4:o.ea});rbox([-.9,2.6,0],[.9,.8,.9],'#8a8880',o.ga==null?.4:o.ga);cyl([-.9,3.0,0],[-.9,3.75,0],.1,'#77756f',.5,10);}
+// Наружный силуэт трёх частей корпуса ВР-24 по рис. 4.2 и 4.3.
+function gearboxCase(alpha=1){
+  const center=MODEL_LAYOUT.gearboxCenter, up=[0,1,0], casting='#829088', flange='#a4afa7';
+  lathe(center,up,[[-.57,.22],[-.54,.32],[-.49,.34],[-.47,.32],[-.31,.34],[-.28,.39],
+    [-.23,.39],[-.21,.36],[.02,.46],[.14,.49],[.15,.53],[.19,.53],[.20,.48],
+    [.26,.45],[.37,.36],[.43,.26],[.46,.17],[.49,.15]],casting,alpha,26);
+  for(const p of circ([center[0],2.76,center[2]],up,.50,14)){
+    cyl(p,[p[0],p[1]+.027,p[2]],.023,flange,alpha,6);
+    const dx=p[0]-center[0],dz=p[2]-center[2];
+    cyl([center[0]+dx*.72,2.94,center[2]+dz*.72],p,.018,flange,alpha,6);
+  }
+  const point=(x,y,z)=>[center[0]+x,y,center[2]+z];
+  const steel='#99a4a4', dark='#475451';
+  const rear=point(.52,2.735,0);
+  function lug(p){
+    cyl([p[0],p[1]-.04,p[2]],[p[0],p[1]+.026,p[2]],.061,casting,alpha,10);
+    cyl(p,[p[0],p[1]+.034,p[2]],.026,steel,alpha,6);
+  }
+  function brace(top,foot){
+    const delta=sub3(foot,top);
+    const along=k=>top.map((v,i)=>v+k*delta[i]);
+    cyl(top,foot,.022,steel,alpha,10);
+    for(const k of [.06,.85])cyl(along(k),along(k+.09),.031,flange,alpha,8);
+  }
+  lug(rear);
+  for(const side of [-1,1]){
+    const input=side>0?0:1;
+    const mouth=MODEL_LAYOUT.gearboxInputs[input];
+    const axis=nrm(sub3(mouth,MODEL_LAYOUT.engineOutputs[input]));
+    lathe(mouth,axis,[[-.102,.096],[-.094,.126],[-.067,.126],[-.06,.109],
+      [.075,.113],[.093,.144],[.115,.144],[.13,.122],[.26,.144],[.32,.151]],casting,alpha,20);
+    lathe(mouth,axis,[[-.104,.081],[-.103,.096]],dark,alpha,20);
+    const face=mouth.map((v,i)=>v-.095*axis[i]);
+    for(const bolt of circ(face,axis,.111,8))
+      cyl(bolt,bolt.map((v,i)=>v-.012*axis[i]),.009,steel,alpha,6);
+    const forward=point(-.24,2.735,side*.463), lateral=point(.055,2.735,side*.51);
+    lug(forward);lug(lateral);
+    for(const end of [-1,1]){
+      const foot=point(end*.63,2.015,side*.84);
+      brace(end<0?forward:rear,foot);
+      brace(lateral,foot);
+      cyl([foot[0],1.981,foot[2]],foot,.062,dark,alpha,12);
+    }
+  }
+}
+function baseHeli(st,o){o=o||{};if(st.x.combo)return;shell({skip:['r','t']});for(const s of[1,-1])engine(-4.45,-1.95,2.42,s*.45,.27,{a:o.ea==null?.4:o.ea});gearboxCase(o.ga==null?.4:o.ga);cyl([-.9,3.0,0],[-.9,3.75,0],.1,'#77756f',.5,10);}
 const mkC=(n,p,i,o)=>Object.assign({n,p,i},o||{});
 const NV={tg:[-1.2,1.7,0],yaw:-.75,pitch:.42,zoom:1};
 /* ---------- ГИДРОСИСТЕМА ---------- */
@@ -1073,7 +1189,7 @@ theory:'<h2>Система воздушного охлаждения</h2><p>Ох
 
 /* Учебная компоновка по РЛЭ, кн. 2, § 8.5.4–8.5.6 и рис. 4.1–4.11 учебника. */
 (function () {
-const MAIN = [-.92, 2.57, -.01];
+const MAIN = MODEL_LAYOUT.gearboxCenter;
 const DRIVE = MODEL_LAYOUT.accessoryGearbox;
 const INTER = MODEL_LAYOUT.intermediateGearbox;
 const TAIL = MODEL_LAYOUT.tailGearbox;
@@ -1083,8 +1199,8 @@ const FAN = MODEL_LAYOUT.coolingFan;
 const SUMP = [MAIN[0], 2.03, MAIN[2]];
 const COOLERS = MODEL_LAYOUT.gearboxOilCoolers;
 const FRONT_END = [-.46, DRIVE[1], DRIVE[2]];
-const INPUTS = [[-2.24, 2.42, .46], [-2.24, 2.42, -.46]];
-const JOIN = [[-1.29, 2.42, .37], [-1.29, 2.42, -.37]];
+const INPUTS = MODEL_LAYOUT.engineOutputs;
+const JOIN = MODEL_LAYOUT.gearboxInputs;
 const FRONT = [FRONT_END, DRIVE];
 const MIDDLE = [DRIVE, INTER];
 const REAR = [INTER, TAIL];
@@ -1100,7 +1216,7 @@ const SRC_MAIN = 'РЛЭ, кн. 2, § 8.5.4 · стр. 79 PDF';
 const SRC_TAIL = 'РЛЭ, кн. 2, § 8.5.5 · стр. 81 PDF';
 const SRC_OIL = 'РЛЭ, кн. 2, § 8.5.6 · стр. 83–84 PDF';
 const SOURCE = [SRC_MAIN, SRC_TAIL, SRC_OIL];
-const VIEW = {tg:[4.95, 1.68, 0], yaw:-.19, pitch:.29, zoom:.67};
+const VIEW = MODEL_LAYOUT.assemblyView;
 const names = {
   input:'Входные валы и муфты свободного хода', main:'Главный редуктор ВР-24',
   mast:'Вал несущего винта', brake:'Тормоз несущего винта', fan:'Карданный привод вентилятора',
@@ -1166,31 +1282,39 @@ function ribbedBox(c,s,col) {
     box([c[0]+i*s[0]*.14,c[1]+s[1]*.34,c[2]], [s[0]*.05,s[1]*.35,s[2]*.92],STEEL,.9);
   }
 }
+function gearboxSection(){
+  const up=[0,1,0], [x,y,z]=MAIN;
+  const profile=[[-.57,.22],[-.49,.34],[-.29,.35],[-.24,.39],[.12,.49],[.16,.53],[.20,.49],[.37,.36],[.46,.17],[.49,.15]];
+  const pos=(h,r,a)=>[x+r*Math.cos(a),y+h,z+r*Math.sin(a)];
+  for(let row=1;row<profile.length;row++){
+    const [h0,r0]=profile[row-1], [h1,r1]=profile[row];
+    for(let k=0;k<18;k++){
+      const a=Math.PI+k*Math.PI/18,b=a+Math.PI/18;
+      for(const wall of [0,.032])poly([pos(h0,r0-wall,a),pos(h0,r0-wall,b),pos(h1,r1-wall,b),pos(h1,r1-wall,a)],shade(wall?'#536462':'#81928b',.79+.20*Math.cos(a)),1,null);
+    }
+    for(const a of [0,Math.PI])poly([pos(h0,r0,a),pos(h0,r0-.032,a),pos(h1,r1-.032,a),pos(h1,r1,a)],'#d29569',1,null);
+  }
+  cyl(pos(-.53,0,0),MODEL_LAYOUT.mainRotorFoot,.07,STEEL,1,14);
+  for(const [h,r,color] of [[-.32,.265,'#9faea4'],[-.04,.33,'#91a39c'],[.22,.30,'#a9b5aa']]){
+    const contour=height=>Array.from({length:72},(_,i)=>pos(height,r*(i%4===1||i%4===2?1:.91),Math.PI*i/36));
+    loft([contour(h-.031),contour(h+.031)],color,1,{stroke:null});
+    lathe(pos(h,0,0),up,[[.032,r*.53],[.049,r*.53],[.058,r*.34]],STEEL,1,18);
+  }
+}
 function build(st) {
-  if(!st.x.combo) shell();
-  if(!st.x.combo) {
-    for(const p of INPUTS) engine(-4.45,-2.15,p[1],p[2],.26,{a:.44});
+  if(!st.x.combo) shell(st.x.assembled?{skip:['r','t'],k:.55}:{});
+  if(!st.x.combo||st.x.engines) {
+    for(const p of INPUTS) installedEngine(p,MODEL_LAYOUT.engineFront,MODEL_LAYOUT.engineRadius);
   }
   INPUTS.forEach((p,i)=>{
     shaft(p,JOIN[i],.083);
     axisHousing(INPUT_CENTERS[i],sub3(JOIN[i],p),.118,.24,DARK);
   });
   if(st.x.cutaway) {
-    const stages = [[-.28,.43],[.0,.38],[.26,.29]];
-    cyl([MAIN[0],2.01,0],MAST,.088,STEEL,1,12);
-    stages.forEach(([offset,r],i)=>{
-      const p=[MAIN[0],MAIN[1]+offset,0];
-      cyl([p[0],p[1]-.047,0],[p[0],p[1]+.047,0],r,i===1?'#879d9c':'#a3b4a5',1,20);
-      for(const q of circ(p,[0,1,0],r*.98,14)) box(q,[.057,.104,.057],BOLT,1);
-    });
+    gearboxSection();
   } else {
-    axisHousing(MAIN,sub3(MAST,MAIN),.48,.80);
-    axisHousing([MAIN[0],FRONT_END[1],FRONT_END[2]],[1,0,0],.29,.94,DARK);
-    for(let i=0;i<9;i++) {
-      const t=i/9*Math.PI*2;
-      const x=MAIN[0]+Math.cos(t)*.47,z=Math.sin(t)*.47;
-      cyl([x,2.40,z],[x,2.76,z],.029,'#a6b2a2',1,6);
-    }
+    gearboxCase();
+    axisHousing(FRONT_END,[1,0,0],.15,.23,DARK);
   }
   if(st.x.detail==='oil'){
     rbox(SUMP,[.82,.23,.68],'#a7784c',1);
@@ -1199,7 +1323,7 @@ function build(st) {
       for(let i=-2;i<=2;i++)box([p[0]+i*.043,p[1],p[2]],[.014,.37,.24],STEEL,1);
     }
   }
-  shaft(along(MAIN,MAST,.25),along(MODEL_LAYOUT.mainRotorFoot,MAST,.77),.095);
+  shaft(along(MAIN,MAST,.25),st.x.assembled?MODEL_LAYOUT.mainRotorFoot:along(MODEL_LAYOUT.mainRotorFoot,MAST,.77),.095);
   const brake=FLYWHEEL;
   axisHousing(brake,[1,0,0],.26,.11,'#b88661');
   box([brake[0],brake[1]-.29,0],[.13,.21,.43],DARK,1);
@@ -1222,7 +1346,8 @@ function build(st) {
   axisHousing(along(INTER,TAIL,.049),sub3(TAIL,INTER),.137,.28);
   ribbedBox(TAIL,[.36,.35,.30],'#829998');
   axisHousing(TAIL,[0,0,1],.204,.44);
-  shaft(...OUTPUT,.071);
+  shaft(TAIL,st.x.assembled?MODEL_LAYOUT.tailRotorMount:HUB,.071);
+  if(st.x.assembled)SYSS.rotors.assembled();
   shaft(...ACC,.057);
   axisHousing(FAN,sub3(FAN,ACC[0]),.19,.16,DARK);
 }
@@ -1274,7 +1399,8 @@ SYSS.transmission = {
   build,dyn(){},over:overlay,
   filtT:'Что показать',
   filters:[
-    {t:'Вся схема',st:{},d:'Общий вид. Выбери ветвь или нажми на подпись узла, чтобы приблизить его.'},
+    {t:'Вся схема',st:{x:{assembled:true}},view:MODEL_LAYOUT.assemblyView,d:'Общий вид. Выбери ветвь или нажми на подпись узла, чтобы приблизить его.'},
+    {t:'Двигатели',st:{x:{assembled:true}},view:{tg:[-3.50,2.53,0],yaw:.65,pitch:.52,zoom:5.4},d:'Два двигателя и коробки приводов над входами. Поверните модель, чтобы рассмотреть крышки и навесные агрегаты.'},
     {t:'Несущий винт',st:{on:['in','main']},view:mainView,d:'Входы от двух двигателей сходятся в ВР-24. Зелёная ветвь ведёт к валу несущего винта.'},
     {t:'Рулевой винт',st:{on:tailGroups},view:{tg:[6.24,2.73,-.06],yaw:-.20,pitch:.28,zoom:.93},d:'ВР-24 → коробка приводов → промежуточный редуктор → хвостовой редуктор → рулевой винт.'},
     {t:'Приводы агрегатов',st:{on:['aux','gen']},view:{tg:[.5,2.35,0],yaw:-.52,pitch:.35,zoom:2.8},d:'Фиолетовым показаны ветви к вентилятору и генераторам.'},
@@ -1585,7 +1711,7 @@ SYSS.transmission = {
     part('collector',add(mainHub,mainAxis,.24),'Токосъёмник','Передаёт электричество с неподвижной части вертолёта к обогреву вращающихся лопастей.',5.2,-.45,.40),
     part('pendulum',mainPoint(.72,0,.28),'Гаситель вибрации','Если он установлен, пять маятников над втулкой уменьшают её колебания в плоскости вращения.',5.0,-.47,.46),
     part('droop',mainPoint(.24,.13,-.10),'Ограничитель свеса','На стоянке и малых оборотах ограничивает опускание лопасти. При раскрутке его положение меняется под действием центробежной силы.',5.3,-.48,.37),
-    part('mainBlade',mainPoint(4.30,0,0),'Лопасть НВ','Лопасть создаёт аэродинамическую силу. На вертолёте пять таких лопастей. Золотистая полоса обозначает переднюю кромку с электрообогревом.',1.75,-.20,.79,
+    part('mainBlade',mainPoint(4.30,0,0),'Лопасть НВ','Лопасть создаёт аэродинамическую силу. На вертолёте пять таких лопастей. В разрезе золотистая полоса обозначает переднюю кромку с электрообогревом.',1.75,-.20,.79,
       {pp:Array.from({length:5},(_,i)=>at(mainHub,...frameFor(mainAxis,mainAngle+i*turn/5),mainAxis,5.3))}),
     part('mainCore',mainPoint(2.72,0,0),'Лонжерон и отсеки НВ','Лонжерон несёт основную нагрузку. За ним расположены 15 хвостовых отсеков с сотовым заполнением, которые удерживают форму лопасти.',3.7,-.24,.79,{m:1}),
     part('mainHeat',mainPoint(3.55,.24,0),'Обогрев НВ','Нагревательные элементы лежат вдоль носовой части лопасти. У каждой лопасти четыре секции обогрева.',3.6,-.24,.79),
@@ -1601,7 +1727,7 @@ SYSS.transmission = {
   // Радиусы заданы в масштабе корпуса. Профили сечений нужны для учебного изображения.
   function blade(origin, radial, tangent, axis, pitch, tail, cut) {
     const end = tail ? tailRadius : mainRadius;
-    const root = tail ? .39 : .75;
+    const root = tail ? .39 : .84;
     const chord = tail ? .24 : .62;
     const sweep = tail ? .08 : 0;
     const coords = (r, x, z) => {
@@ -1611,8 +1737,8 @@ SYSS.transmission = {
         x*Math.sin(a)+z*Math.cos(a));
     };
     const stations = tail
-      ? [[root,.56],[.55,1],[1.76,.99],[1.86,.82],[end,.38]]
-      : [[root,.57],[1.0,.81],[1.44,1],[7.95,1],[8.45,.90],[end,.63]];
+      ? [[root,.42],[.48,.49],[.61,.91],[.69,1],[1.71,1],[1.83,.95],[1.90,.81],[end,.68]]
+      : [[root,.29],[1.04,.38],[1.20,.65],[1.46,.94],[1.60,1],[7.95,1],[8.43,.98],[8.54,.89],[end,.77]];
     const skin = [[.50,0],[.38,.036],[.14,.081],[-.17,.077],[-.47,.031],[-.51,0],[-.36,-.028],[.12,-.041],[.38,-.027]];
     const sections = stations.map(([r,s])=>skin.map(([x,z])=>coords(r,x*s*chord,z*s*chord)));
     if(!cut) {
@@ -1635,11 +1761,11 @@ SYSS.transmission = {
     }
     const strips = tail?1:4;
     for(let i=0;i<strips;i++){
-      const start=root+.18+(end-root-.37)*i/strips;
-      const finish=root+.18+(end-root-.37)*(i+1)/strips-.026;
+      const start=(tail?.68:1.60)+(end-(tail?.72:1.67))*i/strips;
+      const finish=(tail?.68:1.60)+(end-(tail?.72:1.67))*(i+1)/strips-.012;
       poly([coords(start,.27*chord,.071*chord),coords(finish,.27*chord,.071*chord),
         coords(finish,.37*chord,.058*chord),coords(start,.37*chord,.058*chord)],
-        heatColor,1,'#88652f',.035);
+        cut?heatColor:'#9ba59c',1,null,.012);
     }
   }
   function disk(origin,axis,offset,radius,thickness,color) {
@@ -1649,49 +1775,94 @@ SYSS.transmission = {
     const points=circ(origin,axis,radius,20);
     tube([...points,points[0]],halfWidth,color,1,7,{cap:false});
   }
-  function mainHead(detailed, t, motion) {
-    const pitch = motion ? Math.sin(t*2) : 0;
-    const slider = motion==='collective' ? .07*pitch : 0;
-    cyl(mainFoot, add(mainHub, mainAxis,.24), .12, dark,1,14);
-    lathe(mainHub, mainAxis,[[-.17,.16],[-.11,.25],[.075,.27],[.14,.19]],metal,1,18);
-    disk(mainHub,mainAxis,.20,.135,.12,dark);
-    disk(mainHub,mainAxis,.28,.11,.055,light);
-    if (detailed) {
-      const plate=add(mainHub,mainAxis,-.36+slider);
-      const plateAxis=motion==='cyclic' ? nrm(add(mainAxis,[1,0,0],-.20*pitch)) : mainAxis;
-      disk(plate,plateAxis,-.06,.26,.11,dark);
-      annulus(plate,plateAxis,.34,.052,'#5e9db0');
-      annulus(add(plate,mainAxis,-.075),plateAxis,.29,.047,'#9eb8bc');
-      cyl(add(plate,mainAxis,-.10),add(mainFoot,mainAxis,.06),.155,metal,1,12);
-      cyl(add(plate,[0,0,1],.28),add(mainFoot,[0,0,1],.36),.027,light,1,8);
-      for(let i=0;i<5;i++) {
-        const [r,u]=frameFor(mainAxis,mainAngle+i*turn/5);
-        const a=(d,s=0,h=0)=>at(mainHub,r,u,mainAxis,d,s,h);
-        lathe(a(.16),r,[[0,.12],[.14,.105],[.20,.083],[.27,.093]],dark,1,10);
-        for(let layer=0;layer<4;layer++)
-          cyl(a(.29+.027*layer),a(.306+.027*layer),.10,layer%2?light:metal,1,9);
-        for(const side of [-1,1]) {
-          cyl(a(.36,.084*side),a(.70,.102*side),.040,light,1,8);
-          cyl(a(.22,.085*side,-.09),a(.31,.105*side,-.11),.027,heatColor,1,8);
-        }
-        cyl(a(.71,-.14),a(.71,.14),.046,dark,1,9);
-        cyl(a(.30,-.19,-.12),a(.61,-.25,-.13),.045,'#6a8a8b',1,9);
-        cyl(a(.57,-.24,-.13),a(.76,-.20,-.02),.023,light,1,8);
-        cyl(a(.45,-.22,-.10),a(.45,-.22,-.035),.035,metal,1,8);
-        const tilt=motion==='cyclic' ? .07*pitch*Math.cos(mainAngle+i*turn/5) : 0;
-        cyl(a(.31,.11,-.36+slider+tilt),a(.65,.14,-.04),.021,'#e2c881',1,8);
-        cyl(a(.10,0,.29),a(.64,0,.29),.023,dark,1,8);
-        loft([circ(a(.63,0,.29),r,.065,8),circ(a(.80,0,.29),r,.064,8)],metal,1);
-      }
-    } else {
-      for(let i=0;i<5;i++) {
-        const [r,u]=frameFor(mainAxis,mainAngle+i*turn/5);
-        cyl(at(mainHub,r,u,mainAxis,.19),at(mainHub,r,u,mainAxis,.82),.086,metal,1,8);
+  function hubCasting(){
+    const Y=mainAxis, O=mainHub, cast='#84918c', steel='#bec7c4', boot='#323a3d', brass='#a59370';
+ const drum=(p,axis,profile,color,n=14)=>lathe(p,axis,profile,color,1,n);
+ drum(O,Y,[[-.66,.105],[-.6,.14],[-.19,.14],[-.15,.23],[-.08,.26],[.075,.26],[.11,.215],[.13,.17]],cast,20);
+ drum(O,Y,[[.105,.169],[.13,.175],[.148,.14],[.179,.14],[.19,.119]],steel,12);
+ drum(O,Y,[[.182,.11],[.20,.116],[.213,.09],[.216,.04]],cast);
+ for(let i=0;i<5;i++){
+  const [r,u]=frameFor(Y,mainAngle+i*turn/5);
+  const p=(x,y=0,z=0)=>at(O,r,u,Y,x,y,z);
+  // Выпуклые наружные кромки и открытые окна в литых рамках.
+  function beam(rows,color){
+   const ring=[[1,.65],[.76,1],[-.76,1],[-1,.65],[-1,-.65],[-.76,-1],[.76,-1],[1,-.65]];
+   loft(rows.map(([x,y,z,w,h])=>ring.map(([s,t])=>p(x,y+s*w,z+t*h))),color,1);
+  }
+  const bolt=(x,y,h,rad=.033)=>{
+   drum(p(x,y,h),Y,[[0,rad*1.25],[.008,rad*1.25]],steel,10);
+   drum(p(x,y,h+.008),Y,[[0,rad],[.016,rad],[.02,rad*.87]],brass,6);
+  };
+  for(const sign of [-1,1])beam([[.15,sign*.099,0,.08,.079],[.245,sign*.138,0,.07,.07],[.34,sign*.196,0,.043,.053],[.47,sign*.207,0,.039,.049],[.55,sign*.186,0,.047,.055],[.62,sign*.137,0,.058,.065],[.64,sign*.084,0,.061,.064]],cast);
+  beam([[.565,0,0,.13,.049],[.60,0,0,.17,.069],[.66,0,0,.14,.065]],cast);
+  drum(p(.365),r,[[0,.052],[.025,.077],[.065,.095],[.106,.099],[.14,.089],[.155,.075]],boot);
+  for(let k=0;k<6;k++){
+   let x=.39+k*.018; const rad=.075+.023*Math.sin(Math.PI*(k+1)/8);
+   drum(p(x),r,[[0,rad],[.005,rad+.003],[.008,rad]],'#83908c',10);
+  }
+  drum(p(.45),r,[[0,.054],[.21,.055],[.225,.08],[.26,.082],[.276,.071],[.34,.068]],steel);
+  for(const h of [-.054,.054])beam([[.723,0,h,.065,.027],[.78,0,h,.09,.033],[.91,0,h,.113,.031],[.99,0,h,.094,.029],[1.015,0,h,.074,.025]],cast);
+  bolt(.925,.061,.086);bolt(.925,-.061,.086);
+  const left=p(.48,-.212,.043), right=p(.91,-.235,.024);
+  const axis=nrm(sub3(right,left)), L=Math.hypot(...sub3(right,left));
+  drum(left,axis,[[0,.027],[.052,.032],[.07,.047],[.084,.05],[.24,.046],[.25,.053],[.268,.052],[.276,.022],[L,.021]],steel);
+  beam([[.85,-.09,.006,.04,.032],[.9,-.16,.009,.044,.03],[.92,-.225,.016,.038,.03]],cast);
+  bolt(.91,-.235,.045,.023);bolt(.48,-.212,.06,.022);
+  beam([[.69,.052,-.025,.038,.038],[.70,.13,-.045,.041,.03],[.65,.218,-.062,.039,.025]],cast);
+    bolt(.19,0,.095,.027);
+    cyl(p(.12,0,.27),p(.64,0,.27),.023,dark,1,8);
+    cyl(p(.63,0,.27),p(.80,0,.27),.062,metal,1,10);
+   }
+   disk(mainHub,mainAxis,.25,.13,.09,dark);
+  }
+
+  function swashplate(t,motion){
+    const wave=Math.sin(t*2);
+    const lift=motion==='collective'?.07*wave:0;
+    const pivot=add(mainHub,mainAxis,-.40+lift);
+    const normal=motion==='cyclic'?nrm(add(mainAxis,[1,0,0],-.21*wave)):mainAxis;
+    const point=(angle,radius,h)=>{
+      const [r,u]=frameFor(normal,angle);
+      return at(pivot,r,u,normal,radius,0,h);
+    };
+    lathe(mainFoot,mainAxis,[[0,.17],[.03,.18],[.05,.135],[.47,.135]],dark,1,20);
+    lathe(pivot,mainAxis,[[-.15,.15],[-.12,.17],[.035,.17],[.05,.15]],light,1,20);
+    for(const [rad,h,w,c] of [[.215,-.018,.034,metal],[.283,-.022,.031,dark],[.34,0,.036,'#849e9e'],[.34,.048,.032,light]])
+      annulus(add(pivot,normal,h),normal,rad,w,c);
+    for(let i=0;i<5;i++){
+      const angle=mainAngle+i*turn/5,[r,u]=frameFor(mainAxis,angle);
+      const pin=point(angle+.38,.43,.045);
+      const elbow=at(mainHub,r,u,mainAxis,.65,.216,-.064);
+      cyl(point(angle+.38,.31,.046),pin,.036,metal,1,9);
+      cyl(pin,elbow,.019,light,1,9);
+      cyl(add(pin,sub3(elbow,pin),.22),add(pin,sub3(elbow,pin),.70),.028,metal,1,8);
+      cyl(add(pin,u,-.032),add(pin,u,.032),.033,dark,1,10);
+    }
+    for(let i=0;i<4;i++){
+      const angle=i*Math.PI/2;
+      cyl(point(angle,.15,-.018),point(angle,.29,-.018),.032,metal,1,10);
+      if(i<3){
+        const foot=at(mainFoot,...frameFor(mainAxis,angle),mainAxis,.43,0,.035);
+        const hinge=point(angle,.39,-.082);
+        cyl(point(angle,.27,-.026),hinge,.034,metal,1,9);
+        cyl(foot,hinge,.026,light,1,9);
       }
     }
   }
+  function mainHead(detailed,t,motion){
+    if(detailed){hubCasting();swashplate(t,motion);return;}
+    lathe(mainHub,mainAxis,[[-.73,.12],[-.16,.12],[-.12,.23],[.08,.24],[.17,.14]],metal,1,16);
+    for(let i=0;i<5;i++){
+      const [r,u]=frameFor(mainAxis,mainAngle+i*turn/5);
+      for(const side of [-1,1])
+        tube([[.14,.08],[.42,.18],[.64,.12],[.93,.06]].map(([d,w])=>at(mainHub,r,u,mainAxis,d,side*w)),.043,metal,1,6);
+    }
+  }
   function drawMain(t, motion, detail, cut) {
-    if(!cut)mainHead(detail,t,motion);
+    if(!cut){
+      if(motion)swashplate(t,motion);
+      else mainHead(detail,t,motion);
+    }
     const v=Math.sin(t*2);
     for(let i=0;i<(cut?1:5);i++) {
       const a=mainAngle+i*turn/5;
@@ -1706,18 +1877,30 @@ SYSS.transmission = {
       disk(tailHub,tailAxis,.21,.135,.06,light);
     }
     const displacement=motion==='tail'?.09*Math.sin(t*2):0;
-    if(detailed&&!cut)disk(tailHub,tailAxis,.29+displacement,.125,.072,'#6babb6');
+    if(detailed&&!cut){
+      lathe(tailHub,tailAxis,[[.07,.13],[.11,.145],[.135,.13],[.15,.091],[.25,.087],[.28,.064]],metal,1,20);
+      lathe(add(tailHub,tailAxis,displacement),tailAxis,[[.255,.075],[.27,.116],[.31,.116],[.326,.082],[.344,.052]],light,1,18);
+    }
     for(let i=0;i<(cut?1:4);i++){
       const b=i%2, a=tailAngle+b*tailStagger+(i>=2?Math.PI:0);
       const origin=add(tailHub,tailAxis,b?.09:-.09);
       const [r,u]=frameFor(tailAxis,a);
       const q=(d,s=0,h=0)=>at(origin,r,u,tailAxis,d,s,h);
       if(!cut){
-        cyl(q(.08),q(.42),b?.060:.071,b?'#71878d':'#a4b5b6',1,10);
+        const pitch=motion==='tail'?displacement*2.6:0;
+        const grip=(d,t,h)=>q(d,t*Math.cos(pitch)-h*Math.sin(pitch),t*Math.sin(pitch)+h*Math.cos(pitch));
+        const shoe=(d,w,h,z)=>[[-1,-.65],[-.8,-1],[.8,-1],[1,-.65],[1,.65],[.8,1],[-.8,1],[-1,.65]].map(([x,y])=>grip(d,w*x,z+y*h));
+        for(const side of [-1,1])
+          cyl(q(.035,side*.042),q(.31,side*.042),.026,metal,1,8);
+        lathe(q(.10),r,[[0,.061],[.025,.071],[.056,.069],[.065,.049],[.20,.046],[.22,.06]],b?metal:light,1,12);
+        for(const side of [-1,1])
+          loft([shoe(.30,.048,.016,side*.026),shoe(.39,.075,.016,side*.028),shoe(.48,.079,.013,side*.028)],metal,1);
+        for(const [d,w] of [[.395,0],[.45,-.046],[.45,.046]])
+          cyl(grip(d,w,-.047),grip(d,w,.048),.016,light,1,8);
         if(detailed){
-          cyl(q(.24),q(.35),.089,dark,1,10);
-          cyl(q(.26,-.057),q(.43,-.057),.022,heatColor,1,8);
-          cyl(q(.06,.066,.29+(b?-.09:.09)+displacement),q(.37,.082,.045),.018,light,1,8);
+          const elbow=grip(.27,.108,.028);
+          cyl(grip(.29,.038,0),elbow,.025,metal,1,8);
+          cyl(q(.07,.065,.29+(b?-.09:.09)+displacement),elbow,.015,light,1,9);
         }
       }
       blade(origin,r,u,tailAxis,motion==='tail'?displacement*2.6:0,true,cut);
@@ -1731,10 +1914,14 @@ SYSS.transmission = {
     refreshCompList:true,
     modeLabels:{fails:'Что меняется'},
     mkPipes(){},
+    assembled(){drawMain(0,null,true,false);drawTail(0,null,true,false);},
     exterior(){shell({skip:['r','t']});drawMain(0,null,false,false);drawTail(0,null,false,false);},
     build(st){
       const d=st.x.detail;
+      if(d==='assembled'){SYSS.transmission.build({x:{assembled:true}});return;}
       shell({skip:['r','t'],k:d?.56:1.55});
+      if(st.x.motion && st.x.motion!=='tail')hubCasting();
+      if(d==='swash'){swashplate(0,null);return;}
       if(!st.x.motion){
         if(!d||d==='main'||d==='head'||d==='mainCut')drawMain(0,null,d==='head',d==='mainCut');
         if(!d||d==='tail'||d==='tailHead'||d==='tailCut')drawTail(0,null,d==='tailHead',d==='tailCut');
@@ -1751,7 +1938,9 @@ SYSS.transmission = {
       filter('Разрез лопасти НВ','mainCut',sets.mainCut,view.mainCut,'Зелёный лонжерон несёт нагрузку. За ним видны хвостовые отсеки, а спереди — секции электрообогрева.'),
       filter('Рулевой винт','tail',['tail','tailPair','tailBlade'],view.tail,'Две пары лопастей на одной оси образуют вытянутую букву Х.'),
       filter('Втулка РВ','tailHead',sets.tail,view.tailHead,'На крупном плане видны отдельные модули, ползун, тяги и соединение с хвостовым редуктором.'),
-      filter('Разрез лопасти РВ','tailCut',sets.tailCut,view.tailCut,'Снаружи расположена обогреваемая передняя кромка, внутри — лонжерон и сотовое заполнение.')
+      filter('Разрез лопасти РВ','tailCut',sets.tailCut,view.tailCut,'Снаружи расположена обогреваемая передняя кромка, внутри — лонжерон и сотовое заполнение.'),
+      filter('Автомат перекоса','swash',['swash','link'],{tg:add(mainHub,mainAxis,-.39),yaw:-.72,pitch:.28,zoom:7.5},'В центре виден ползун, вокруг него — кольца кардана и тарелка. От пяти её выступов вверх идут тяги поворота лопастей.'),
+      filter('В сборе','assembled',allParts,MODEL_LAYOUT.assemblyView,'Двигатели, ВР-24, автомат перекоса, хвостовая передача и оба винта в общем масштабе.')
     ],
     steps:[
       {t:'От редуктора к лопастям',txt:'Вал ВР-24 вращает ступицу. Через рамки втулки вращение передаётся всем пяти лопастям.',st:{x:{detail:'head',show:sets.main}},view:view.head},
@@ -1800,7 +1989,11 @@ SYSS.all={id:'all',combo:true,base:3.5,dd:40,fz:2.6,view:{tg:[.6,1.5,0],yaw:-.75
 legend:'<span class="lg"><i style="background:#E8A020"></i>топливо к двигателям, масло под давлением</span><span class="lg"><i style="background:#378ADD"></i>перекачка топлива, охлаждённое масло</span><span class="lg"><i style="background:#1D9E75"></i>топливо из ПТБ</span><span class="lg"><i style="background:#E8C020"></i>электрообогрев</span><span class="lg"><i style="background:#D8452E"></i>горячий воздух, откачка масла</span>',
 init(){this.comps=[];this.allOn=[];this.staticG=[];for(const[id,T,withC]of SUBS()){const s=SYSS[id];this.allOn.push(...s.allOn);this.staticG.push(...s.staticG);if(!withC)continue;const m=p=>xfT(T,p);for(const c of s.comps)this.comps.push(Object.assign({},c,{p:m(c.p),lp:c.lp?m(c.lp):null,pp:(c.pp||[]).map(m),sys:id,m:0,br:(c.br||.075)*Math.abs(T.s[0]),fz:null,fy:null,fp:null}));}},
 mkPipes(){for(const[id,T]of SUBS()){const n0=pipes.length;XF=T;SYSS[id].mkPipes();XF=null;for(let i=n0;i<pipes.length;i++)pipes[i].sys=id;}},
-build(st){shell({skip:['r','t']});for(const[id,T]of SUBS())if(shown(st,id)){XF=T;SYSS[id].build(subSt(id));XF=null;}},
+build(st){shell({skip:['r','t']});for(const[id,T]of SUBS())if(shown(st,id)){XF=T;const state=subSt(id);
+if(id==='transmission'){state.x.assembled=true;state.x.engines=true;}
+if(id==='oil')state.x.sharedEngine=shown(st,'transmission');
+if(id==='pos')state.x.sharedRotors=shown(st,'transmission');
+SYSS[id].build(state);XF=null;}},
 dyn(T0,st){for(const[id,T]of SUBS())if(shown(st,id)){XF=T;SYSS[id].dyn(T0,subSt(id));XF=null;}},
 over(T0,st){if(shown(st,'fuel')){XF=SYSS.fuel.T;SYSS.fuel.over(T0,subSt('fuel'));XF=null;}},
 filtT:'Какие системы показать',
